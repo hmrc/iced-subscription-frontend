@@ -53,4 +53,13 @@ class SubscriptionControllerSpec extends AnyWordSpec with Matchers with GuiceOne
       charset(result)     shouldBe Some("utf-8")
     }
   }
+
+  "GET /start" when {
+    "not authenticated" should {
+      "redirect to a login page" in {
+        val result = controller.start(fakeRequest)
+        redirectLocation(result) shouldBe Some("http://localhost:9949/auth-login-stub/gg-sign-in")
+      }
+    }
+  }
 }
