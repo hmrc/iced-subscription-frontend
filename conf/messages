@@ -2,6 +2,10 @@ service.name = #FIX THIS LINK TEXT#
 service.homePageUrl = /safety-and-security-subscription
 service.text = This is your new service
 
+## Landing page
+landing.start=Start now
+
+## Footer
 footer.cookies.text = Cookies
 footer.cookies.url = /help/cookies
 footer.privacy.text = Privacy policy
