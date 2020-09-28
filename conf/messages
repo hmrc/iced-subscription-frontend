@@ -1,5 +1,5 @@
-service.name = iced-subscription-frontend
-service.homePageUrl = /iced-subscription-frontend
+service.name = #FIX THIS LINK TEXT#
+service.homePageUrl = /safety-and-security-subscription
 service.text = This is your new service
 
 footer.cookies.text = Cookies
