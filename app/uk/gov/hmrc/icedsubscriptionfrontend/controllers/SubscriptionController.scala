@@ -38,6 +38,6 @@ class SubscriptionController @Inject()(
   }
 
   def start : Action[AnyContent] = Action.async{
-    Future.successful(Redirect("http://localhost:9949/auth-login-stub/gg-sign-in"))
+    Future.successful(Redirect(appConfig.loginUrl))
   }
 }

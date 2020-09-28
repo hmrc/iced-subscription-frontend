@@ -16,18 +16,15 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.config
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
 
-trait AppConfig {
-  def footerLinkItems: Seq[String]
-  def loginUrl: String
-}
+trait MockAppConfig extends MockFactory {
+  val mockAppConfig: AppConfig = mock[AppConfig]
 
-@Singleton
-class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesConfig) extends AppConfig {
-  val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
+  object MockAppConfig {
+    def footerLinkItems: CallHandler[Seq[String]] = (mockAppConfig.footerLinkItems _).expects()
 
-  val loginUrl: String = config.get[String]("login.url")
+    def loginUrl: CallHandler[String] = (mockAppConfig.loginUrl _).expects()
+  }
 }

@@ -16,18 +16,10 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.config
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import com.google.inject.AbstractModule
 
-trait AppConfig {
-  def footerLinkItems: Seq[String]
-  def loginUrl: String
-}
-
-@Singleton
-class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesConfig) extends AppConfig {
-  val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
-
-  val loginUrl: String = config.get[String]("login.url")
+ class DIModule extends AbstractModule {
+ override def configure(): Unit = {
+   bind(classOf[AppConfig]).to(classOf[AppConfigImpl])
+ }
 }

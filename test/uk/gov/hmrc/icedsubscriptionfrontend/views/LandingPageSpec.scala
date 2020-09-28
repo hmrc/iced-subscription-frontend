@@ -31,7 +31,7 @@ class LandingPageSpec extends SpecBase {
     val startButton = ".govuk-button--start"
   }
 
-  lazy val html: Html         = view()(fakeRequest, messages, frontendAppConfig)
+  lazy val html: Html         = view()(fakeRequest, messages, appConfig)
   lazy val document: Document = Jsoup.parse(html.toString)
 
   "LandingPage" must {
