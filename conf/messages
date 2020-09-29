@@ -1,7 +1,35 @@
-service.name = iced-subscription-frontend
-service.homePageUrl = /iced-subscription-frontend
+service.name = #FIX THIS SERVICE NAME#
+service.homePageUrl = /safety-and-security-subscription
 service.text = This is your new service
 
+## Landing page
+landing.title=#FIX THIS PAGE TITLE#
+landing.heading=Access Advanced Tariff Rulings (ATaR)
+landing.para.1=From this page you can enrol to the Advanced Tariff Rulings (ATaR) service.
+landing.para.2=You can use this service to obtain a written tariff classification of your goods. It's not a legal requirement, but provides assurance that your goods have the correct commodity code.
+landing.para.3=Before you move goods in or out of the UK, or carry out other customs activities, you may need a GB Economic Operator and Registration Identification (EORI) number. HMRC use this to identify you and collect duty on your goods.
+landing.dontHaveEori=Don't have a GB EORI yet?
+landing.registerEori=Register for an EORI
+landing.neededCredentials.intro=You will also need the Government Gateway user ID and password that you use:
+landing.neededCredentials.1=for your business or organisation
+landing.neededCredentials.2=for yourself, if you are applying as an individual
+landing.tellUs.heading=You might need to tell us
+landing.tellUs.para.1=If you haven't registered for a customs service before you may need:
+landing.tellUs.1=A GB EORI number
+landing.tellUs.2=National Insurance number (if you are an individual or sole trader)
+landing.tellUs.3=your Unique Taxpayer Reference (UTR)
+landing.start.para.1=It takes around 5 to 10 minutes to apply to access the service. You should get it immediately
+landing.start=Start now
+landing.beforeYouStart.heading=Before you start
+landing.companiesHouseInfo.para.1=You can find the following information on the
+landing.companiesHouseInfo.1=the date you started your business
+landing.companiesHouseInfo.linkText=Companies House register
+landing.byPost.para.1=You can also
+landing.byPost.linkText=register by post
+landing.welsh.para.1=The online service is also available in
+landing.welsh.linkText=Welsh (Cymraeg)
+
+## Footer
 footer.cookies.text = Cookies
 footer.cookies.url = /help/cookies
 footer.privacy.text = Privacy policy

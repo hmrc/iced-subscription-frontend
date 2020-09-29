@@ -1,0 +1,87 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
+@import uk.gov.hmrc.icedsubscriptionfrontend.controllers
+@import uk.gov.hmrc.hmrcfrontend.views.html.components._
+@import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers
+
+@this(layout: Layout,
+        hmrcPageHeading: HmrcPageHeading,
+        p: helpers.p,
+        paragraph: helpers.paragraph,
+        heading1: helpers.heading1,
+        bulletList: helpers.bulletList,
+        link: helpers.link,
+        govukButton: GovukButton)
+
+@()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@layout(pageTitle = Some(messages("landing.title"))) {
+
+    @hmrcPageHeading(PageHeading(text = messages("landing.heading")))
+
+    @paragraph("landing.para.1")
+    @paragraph("landing.para.2")
+    @paragraph("landing.para.3")
+
+    @p {
+        @messages("landing.dontHaveEori") <a href="#" class="govuk-link">@messages("landing.registerEori")</a>
+    }
+
+    @paragraph("landing.neededCredentials.intro")
+    @bulletList(Seq(
+        "landing.neededCredentials.1",
+        "landing.neededCredentials.2"))
+
+    @heading1("landing.tellUs.heading")
+
+    @paragraph("landing.tellUs.para.1")
+    @bulletList(Seq(
+        "landing.tellUs.1",
+        "landing.tellUs.2",
+        "landing.tellUs.3"
+    ))
+
+    @p {
+        @messages("landing.companiesHouseInfo.para.1")
+        @link(href = "https://www.gov.uk/get-information-about-a-company?_ga=2.26343229.109169500.1597498674-807405893.1594043735",
+            messageKey = "landing.companiesHouseInfo.linkText")
+    }
+    @bulletList(Seq(
+        "landing.companiesHouseInfo.1"
+    ))
+
+    @paragraph("landing.start.para.1")
+
+    @govukButton(Button(
+        isStartButton = true,
+        href = Some(controllers.routes.SubscriptionController.start.url),
+        content = Text(messages("landing.start"))
+    ))
+
+    @heading1("landing.beforeYouStart.heading")
+    @p {
+        @messages("landing.byPost.para.1")
+        @link(href = "#", messageKey = "landing.byPost.linkText").
+    }
+
+    @p {
+        @messages("landing.welsh.para.1")
+        @link(href = "#", messageKey = "landing.welsh.linkText").
+    }
+
+}

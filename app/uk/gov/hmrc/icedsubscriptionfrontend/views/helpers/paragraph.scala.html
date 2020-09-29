@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.icedsubscriptionfrontend.config
+@import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+@this(p: helpers.p)
 
-trait AppConfig {
-  def footerLinkItems: Seq[String]
-  def loginUrl: String
-}
+@(messageKey: String)(implicit messages: Messages)
 
-@Singleton
-class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesConfig) extends AppConfig {
-  val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
+@p{@messages(messageKey)}
 
-  val loginUrl: String = config.get[String]("login.url")
+@{
+    //$COVERAGE-OFF$
 }
