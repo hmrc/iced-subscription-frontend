@@ -16,63 +16,72 @@
 
 @import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 @import uk.gov.hmrc.icedsubscriptionfrontend.controllers
+@import uk.gov.hmrc.hmrcfrontend.views.html.components._
+@import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers
 
-@this(layout: Layout)
+@this(layout: Layout,
+        hmrcPageHeading: HmrcPageHeading,
+        p: helpers.p,
+        paragraph: helpers.paragraph,
+        heading1: helpers.heading1,
+        bulletList: helpers.bulletList,
+        link: helpers.link,
+        govukButton: GovukButton)
 
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@layout(pageTitle = Some("#FIX THIS PAGE TITLE#")) {
+@layout(pageTitle = Some(messages("landing.title"))) {
 
-    <h1 class="govuk-heading-xl" xmlns="http://www.w3.org/1999/html">Access</h1>
-    <h1 class="govuk-heading-xl">Advanced Tariff Rulings (ATaR)</h1>
+    @hmrcPageHeading(PageHeading(text = messages("landing.heading")))
 
-    <p class="govuk-body">From this page you can enrol to the Advanced Tariff Rulings (ATaR) service</p>
+    @paragraph("landing.para.1")
+    @paragraph("landing.para.2")
+    @paragraph("landing.para.3")
 
-    <p class="govuk-body">
-        You can use this service to obtain a written tariff classification of your goods. It's not a legal requirement, but provides assurance that your goods have the correct commodity code.</p>
-    <p class="govuk-body">
-        Before you move goods in or out of the UK, or carry out other customs activities, you may need a GB Economic Operator and Registration Identification (EORI) number. HMRC use this to identify you and collect duty on your goods.</p>
+    @p {
+        @messages("landing.dontHaveEori") <a href="#" class="govuk-link">@messages("landing.registerEori")</a>
+    }
 
-    <p class="govuk-body">Don't have a GB EORI yet?
-        <a href="#" class="govuk-link">Register for an EORI</a>
-    </p>
+    @paragraph("landing.neededCredentials.intro")
+    @bulletList(Seq(
+        "landing.neededCredentials.1",
+        "landing.neededCredentials.2"))
 
-    <p class="govuk-body">You will also need the Government Gateway user ID and password that you use:</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>for your business or organisation</li>
-        <li>for yourself, if you are applying as an individual</li>
-    </ul>
-    <h1 class="govuk-heading-l">You might need to tell us</h1>
+    @heading1("landing.tellUs.heading")
 
-    <p class="govuk-body">If you haven't registered for a customs service before you may need:</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>A GB EORI number</li>
-        <li>National Insurance number (if you are an individual or sole trader)</li>
-        <li>your Unique Taxpayer Reference (UTR)</li>
-    </ul>
+    @paragraph("landing.tellUs.para.1")
+    @bulletList(Seq(
+        "landing.tellUs.1",
+        "landing.tellUs.2",
+        "landing.tellUs.3"
+    ))
 
-    <p class="govuk-body">You can find the following information on the
-        <a href="https://www.gov.uk/get-information-about-a-company?_ga=2.26343229.109169500.1597498674-807405893.1594043735" class="govuk-link">
-            Companies House register</a></p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>the date you started your business</li>
-    </ul>
+    @p {
+        @messages("landing.companiesHouseInfo.para.1")
+        @link(href = "https://www.gov.uk/get-information-about-a-company?_ga=2.26343229.109169500.1597498674-807405893.1594043735",
+            messageKey = "landing.companiesHouseInfo.linkText")
+    }
+    @bulletList(Seq(
+        "landing.companiesHouseInfo.1"
+    ))
 
-    <p class="govuk-body">
-        It takes around 5 to 10 minutes to apply to access the service. You should get it immediately</p>
+    @paragraph("landing.start.para.1")
 
-    <a href="@controllers.routes.SubscriptionController.start" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-        @{messages("landing.start")}
-        <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
-            <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
-        </svg>
-    </a>
+    @govukButton(Button(
+        isStartButton = true,
+        href = Some(controllers.routes.SubscriptionController.start.url),
+        content = Text(messages("landing.start"))
+    ))
 
-    <h1 class="govuk-heading-l">Before you start</h1>
-    <p class="govuk-body">You can also <a href="#">
-        register by post</a>.</p>
-    <p class="govuk-body">
-        The online service is also available in <a href="#" class="govuk-link">
-        Welsh (Cymraeg)</a>.</p>
+    @heading1("landing.beforeYouStart.heading")
+    @p {
+        @messages("landing.byPost.para.1")
+        @link(href = "#", messageKey = "landing.byPost.linkText").
+    }
+
+    @p {
+        @messages("landing.welsh.para.1")
+        @link(href = "#", messageKey = "landing.welsh.linkText").
+    }
 
 }
