@@ -18,6 +18,7 @@ object AppDependencies {
     "org.scalamock"          %% "scalamock-scalatest-support" % "3.6.0",
     "org.jsoup"              % "jsoup"                        % "1.10.2",
     "com.typesafe.play"      %% "play-test"                   % current,
-    "org.scalatestplus.play" %% "scalatestplus-play"          % "4.0.3"
+    "org.scalatestplus.play" %% "scalatestplus-play"          % "4.0.3",
+    "com.vladsch.flexmark"   % "flexmark-all"                 % "0.35.10"
   ).map(_ % "test, it")
 }
