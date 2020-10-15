@@ -23,6 +23,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 trait AppConfig {
   def footerLinkItems: Seq[String]
   def loginUrl: String
+  def eoriCommonComponentStartUrl: String
 }
 
 @Singleton
@@ -30,4 +31,9 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
   val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
 
   val loginUrl: String = config.get[String]("login.url")
+
+  private val eoriCommonComponentBaseUri = config.get[String]("eori-ommon-component-froontend.base")
+  private val eoriCommonComponentStartUri = config.get[String]("eori-ommon-component-froontend.start")
+  val eoriCommonComponentStartUrl = s"$eoriCommonComponentBaseUri$eoriCommonComponentStartUri"
+
 }

@@ -20,16 +20,19 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
+import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, AuthService}
+import uk.gov.hmrc.icedsubscriptionfrontend.services.AuthResult.{NotEnrolled, NotLoggedIn}
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.LandingPage
 
 import scala.concurrent.Future
 
 @Singleton
 class SubscriptionController @Inject()(
-                                      appConfig: AppConfig,
-                                      mcc: MessagesControllerComponents,
-                                      landingPage: LandingPage)
-  extends FrontendController(mcc) {
+  appConfig: AppConfig,
+  authAction: AuthAction,
+  mcc: MessagesControllerComponents,
+  landingPage: LandingPage)
+    extends FrontendController(mcc) {
 
   implicit val config: AppConfig = appConfig
 
@@ -37,7 +40,12 @@ class SubscriptionController @Inject()(
     Future.successful(Ok(landingPage()))
   }
 
-  def start : Action[AnyContent] = Action.async{
-    Future.successful(Redirect(appConfig.loginUrl))
+  def start: Action[AnyContent] = authAction.async { implicit request =>
+    request.enrolled match {
+      case true =>
+        Future.successful(
+          Redirect(uk.gov.hmrc.icedsubscriptionfrontend.controllers.routes.SubscriptionController.index()))
+      case false => Future.successful(Redirect(appConfig.eoriCommonComponentStartUrl))
+    }
   }
 }
