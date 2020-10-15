@@ -29,15 +29,18 @@ import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 import scala.concurrent.Future
 
 class SubscriptionControllerSpec extends SpecBase with MockAuthService with MockAppConfig {
+  val appNme    = "iced-subscription-frontend"
+  val returnUrl = ""
 
   val landingPage: LandingPage = app.injector.instanceOf[LandingPage]
 
   val authAction = new AuthAction(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
-  private val controller = new SubscriptionController(mockAppConfig, authAction, stubMessagesControllerComponents(), landingPage)
+  private val controller =
+    new SubscriptionController(mockAppConfig, authAction, stubMessagesControllerComponents(), landingPage)
 
   class Test {
-    MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes()
+    MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes ()
   }
 
   "GET /" should {
@@ -56,12 +59,16 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
   "GET /start" when {
     "not authenticated" should {
       "redirect to a login page" in new Test {
-        val loginUrl = "http://loginHost:1234/sign-in"
+        val loginUrl    = "http://loginHost:1234/sign-in"
+        val continueUrl = s"$loginUrl?continue=somePath&origin=$appNme"
+
         MockAppConfig.loginUrl returns loginUrl
+        MockAppConfig.loginReturnBase returns returnUrl
+        MockAppConfig.appName returns "iced-subscription-frontend"
         MockAuthService.authenticate returns Future.successful(AuthResult.NotLoggedIn)
 
         val result: Future[Result] = controller.start(fakeRequest)
-        redirectLocation(result) shouldBe Some(loginUrl)
+        redirectLocation(result) shouldBe Some(continueUrl)
       }
     }
 

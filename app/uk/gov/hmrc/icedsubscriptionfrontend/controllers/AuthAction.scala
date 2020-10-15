@@ -41,7 +41,7 @@ class AuthAction @Inject()(defaultParser: PlayBodyParsers,
     authService.authenticate().flatMap {
       case AuthResult.Enrolled => block(AuthenticatedRequest(request, enrolled = true))
       case AuthResult.NotEnrolled => block(AuthenticatedRequest(request, enrolled = false))
-      case AuthResult.NotLoggedIn => Future.successful(Redirect(appConfig.loginUrl))
+      case AuthResult.NotLoggedIn => Future.successful(Redirect(appConfig.loginUrl, Map("continue" -> Seq(s"${appConfig.loginReturnBase}${request.uri}"), "origin" -> Seq(appConfig.appName))))
     }
   }
 

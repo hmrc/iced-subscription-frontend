@@ -21,19 +21,24 @@ import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
+  def appName: String
   def footerLinkItems: Seq[String]
   def loginUrl: String
+  def loginReturnBase: String
   def eoriCommonComponentStartUrl: String
 }
 
 @Singleton
 class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesConfig) extends AppConfig {
+  lazy val appName: String = config.getOptional[String]("appName").getOrElse("APP NAME NOT SET")
+
   val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
 
   val loginUrl: String = config.get[String]("login.url")
+  val loginReturnBase: String = config.get[String]("login.return-base")
 
-  private val eoriCommonComponentBaseUri = config.get[String]("eori-ommon-component-froontend.base")
-  private val eoriCommonComponentStartUri = config.get[String]("eori-ommon-component-froontend.start")
+  private val eoriCommonComponentBaseUri = config.get[String]("eori-common-component-froontend.base")
+  private val eoriCommonComponentStartUri = config.get[String]("eori-common-component-froontend.start")
   val eoriCommonComponentStartUrl = s"$eoriCommonComponentBaseUri$eoriCommonComponentStartUri"
 
 }
