@@ -19,7 +19,6 @@ package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import base.SpecBase
 import play.api.http.Status
 import play.api.mvc.Result
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
