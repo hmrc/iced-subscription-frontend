@@ -26,5 +26,7 @@ trait MockAppConfig extends MockFactory {
     def footerLinkItems: CallHandler[Seq[String]] = (mockAppConfig.footerLinkItems _).expects()
 
     def loginUrl: CallHandler[String] = (mockAppConfig.loginUrl _).expects()
+
+    def eoriCommonComponentStartUrl: CallHandler[String] = (mockAppConfig.eoriCommonComponentStartUrl _).expects()
   }
 }

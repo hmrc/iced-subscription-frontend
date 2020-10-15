@@ -20,23 +20,21 @@ import base.SpecBase
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import play.api.{Configuration, Environment}
+import play.api.Environment
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
+import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.LandingPage
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
 import scala.concurrent.Future
 
-class SubscriptionControllerSpec extends SpecBase with MockAppConfig {
-  private val env           = Environment.simple()
-  private val configuration = Configuration.load(env)
-
-  private val serviceConfig = new ServicesConfig(configuration)
+class SubscriptionControllerSpec extends SpecBase with MockAuthService with MockAppConfig {
 
   val landingPage: LandingPage = app.injector.instanceOf[LandingPage]
 
-  private val controller = new SubscriptionController(mockAppConfig, stubMessagesControllerComponents(), landingPage)
+  val authAction = new AuthAction(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
+
+  private val controller = new SubscriptionController(mockAppConfig, authAction, stubMessagesControllerComponents(), landingPage)
 
   class Test {
     MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes()
@@ -60,9 +58,31 @@ class SubscriptionControllerSpec extends SpecBase with MockAppConfig {
       "redirect to a login page" in new Test {
         val loginUrl = "http://loginHost:1234/sign-in"
         MockAppConfig.loginUrl returns loginUrl
+        MockAuthService.authenticate returns Future.successful(AuthResult.NotLoggedIn)
 
         val result: Future[Result] = controller.start(fakeRequest)
         redirectLocation(result) shouldBe Some(loginUrl)
+      }
+    }
+
+    "authenticated without a HMRC-SS-ORG" should {
+      "redirect to the eori common component frontend" in new Test {
+        val eoriCommonComponentStartUrl: String = "http://localhost:1234/customs-enrolment-services/gbss/subscribe"
+        MockAppConfig.eoriCommonComponentStartUrl returns eoriCommonComponentStartUrl
+        MockAuthService.authenticate returns Future.successful(AuthResult.NotEnrolled)
+
+        val result: Future[Result] = controller.start(fakeRequest)
+        redirectLocation(result) shouldBe Some(eoriCommonComponentStartUrl)
+      }
+    }
+
+    "authenticated with a HMRC-SS-ORG" should {
+      "redirect to success page" in new Test {
+        val successUrl = "/safety-and-security-subscription" //TODO to be updated once journey has been agreed
+        MockAuthService.authenticate returns Future.successful(AuthResult.Enrolled)
+
+        val result: Future[Result] = controller.start(fakeRequest)
+        redirectLocation(result) shouldBe Some(successUrl)
       }
     }
   }

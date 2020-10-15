@@ -17,9 +17,12 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.config
 
 import com.google.inject.AbstractModule
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 
  class DIModule extends AbstractModule {
  override def configure(): Unit = {
    bind(classOf[AppConfig]).to(classOf[AppConfigImpl])
+   bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
  }
 }
