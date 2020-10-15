@@ -23,9 +23,13 @@ trait MockAppConfig extends MockFactory {
   val mockAppConfig: AppConfig = mock[AppConfig]
 
   object MockAppConfig {
+    def appName: CallHandler[String] = (mockAppConfig.appName _).expects()
+
     def footerLinkItems: CallHandler[Seq[String]] = (mockAppConfig.footerLinkItems _).expects()
 
     def loginUrl: CallHandler[String] = (mockAppConfig.loginUrl _).expects()
+
+    def loginReturnBase: CallHandler[String] = (mockAppConfig.loginReturnBase _).expects()
 
     def eoriCommonComponentStartUrl: CallHandler[String] = (mockAppConfig.eoriCommonComponentStartUrl _).expects()
   }

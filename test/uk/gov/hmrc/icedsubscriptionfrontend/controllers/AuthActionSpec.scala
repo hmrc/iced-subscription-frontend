@@ -33,7 +33,9 @@ import scala.concurrent.Future
 
 class AuthActionSpec extends SpecBase with MockAuthService with MockAppConfig {
 
-  val loginUrl = "someLoginUrl"
+  val loginUrl  = "someLoginUrl"
+  val appNme    = "iced-subscription-frontend"
+  val returnUrl = ""
 
   val authAction = new AuthAction(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
@@ -48,13 +50,17 @@ class AuthActionSpec extends SpecBase with MockAuthService with MockAppConfig {
   "AuthAction" when {
     "no active session" must {
       "redirect to login" in {
+        val continueUrl = s"$loginUrl?continue=%2F&origin=$appNme"
         MockAppConfig.loginUrl returns loginUrl
+        MockAppConfig.appName returns appNme
+        MockAppConfig.loginReturnBase returns returnUrl
+
         MockAuthService.authenticate returns Future.successful(AuthResult.NotLoggedIn)
 
         val result = controller.handleRequest()(FakeRequest())
 
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe loginUrl
+        status(result)               shouldBe SEE_OTHER
+        redirectLocation(result).get shouldBe continueUrl
       }
     }
 
@@ -64,7 +70,7 @@ class AuthActionSpec extends SpecBase with MockAuthService with MockAppConfig {
 
         val result = controller.handleRequest()(FakeRequest())
 
-        status(result) shouldBe OK
+        status(result)          shouldBe OK
         contentAsString(result) shouldBe "not enrolled"
       }
     }
@@ -75,7 +81,7 @@ class AuthActionSpec extends SpecBase with MockAuthService with MockAppConfig {
 
         val result = controller.handleRequest()(FakeRequest())
 
-        status(result) shouldBe OK
+        status(result)          shouldBe OK
         contentAsString(result) shouldBe "enrolled"
       }
     }
