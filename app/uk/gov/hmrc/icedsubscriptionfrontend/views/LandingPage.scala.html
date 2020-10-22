@@ -23,49 +23,41 @@
         hmrcPageHeading: HmrcPageHeading,
         p: helpers.p,
         paragraph: helpers.paragraph,
-        heading1: helpers.heading1,
+        heading2: helpers.heading2,
+        warningText: helpers.warningText,
         bulletList: helpers.bulletList,
         link: helpers.link,
         govukButton: GovukButton)
 
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@layout(pageTitle = Some(messages("landing.title"))) {
+@ggwLink = {
+@messages("landing.youNeed.1.1")@link(appConfig.loginUrl, "landing.youNeed.1.2")@messages("landing.youNeed.1.3")
+}
+
+@getEoriLink = {
+@messages("landing.youNeed.2.1")@link("https://www.gov.uk/eori?step-by-step-nav=8a543f4b-afb7-4591-bbfc-2eec52ab96c2", "landing.youNeed.2.2")@messages("landing.youNeed.2.3")
+}
+
+@layout(pageTitle = Some(messages("landing.heading"))) {
 
     @hmrcPageHeading(PageHeading(text = messages("landing.heading")))
 
-    @paragraph("landing.para.1")
-    @paragraph("landing.para.2")
-    @paragraph("landing.para.3")
+    @warningText("landing.fromJanuary", Some("landing.tradersWhoSubmit"))
 
-    @p {
-        @messages("landing.dontHaveEori") <a href="#" class="govuk-link">@messages("landing.registerEori")</a>
-    }
+    @paragraph("landing.coms")
 
-    @paragraph("landing.neededCredentials.intro")
-    @bulletList(Seq(
-        "landing.neededCredentials.1",
-        "landing.neededCredentials.2"))
+    @paragraph("landing.incorporates")
+    @bulletList(Seq(Html(messages("landing.incorporates.1")), Html(messages("landing.incorporates.2"))))
 
-    @heading1("landing.tellUs.heading")
+    @warningText("landing.csp", Some("landing.ifYouAreACsp"))
 
-    @paragraph("landing.tellUs.para.1")
-    @bulletList(Seq(
-        "landing.tellUs.1",
-        "landing.tellUs.2",
-        "landing.tellUs.3"
-    ))
+    @heading2("landing.beforeYouStart.heading")
 
-    @p {
-        @messages("landing.companiesHouseInfo.para.1")
-        @link(href = "https://www.gov.uk/get-information-about-a-company?_ga=2.26343229.109169500.1597498674-807405893.1594043735",
-            messageKey = "landing.companiesHouseInfo.linkText")
-    }
-    @bulletList(Seq(
-        "landing.companiesHouseInfo.1"
-    ))
+    @paragraph("landing.youNeed")
+    @bulletList(Seq(ggwLink, getEoriLink))
 
-    @paragraph("landing.start.para.1")
+    @paragraph("landing.takesMinutes")
 
     @govukButton(Button(
         isStartButton = true,
@@ -73,15 +65,9 @@
         content = Text(messages("landing.start"))
     ))
 
-    @heading1("landing.beforeYouStart.heading")
     @p {
-        @messages("landing.byPost.para.1")
-        @link(href = "#", messageKey = "landing.byPost.linkText").
-    }
-
-    @p {
-        @messages("landing.welsh.para.1")
-        @link(href = "#", messageKey = "landing.welsh.linkText").
+        @link(href = "#", messageKey = "landing.dontNeedToEnrol").
     }
 
 }
+
