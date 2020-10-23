@@ -107,7 +107,7 @@ class LandingPageSpec extends SpecBase {
       document
         .select(Selectors.link)
         .first
-        .attr("href") shouldBe "https://www.access.service.gov.uk/registration/email"
+        .attr("href") shouldBe "https://www.gov.uk/log-in-register-hmrc-online-services"
     }
 
     "have a link to get an EORI" in {
