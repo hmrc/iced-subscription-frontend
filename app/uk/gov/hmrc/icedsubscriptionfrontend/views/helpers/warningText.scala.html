@@ -16,13 +16,20 @@
 
 @this()
 
-@(listItems: Seq[Html])(implicit messages: Messages)
+@(strongMessageKey: String, paragraphKey: Option[String] = None)(implicit messages: Messages)
 
-<ul class="govuk-list govuk-list--bullet">
-    @for(listItem <- listItems) {
-        <li>@listItem</li>
-    }
-</ul>
+<div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <span class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        <strong>
+            @messages(strongMessageKey)
+        </strong>
+        @if(paragraphKey.isDefined) {
+            <p class="govuk-body govuk-!-margin-bottom-0">@messages(paragraphKey.get)</p>
+        }
+    </span>
+</div>
 
 @{
     //$COVERAGE-OFF$

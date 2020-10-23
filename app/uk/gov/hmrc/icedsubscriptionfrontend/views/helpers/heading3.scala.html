@@ -16,14 +16,10 @@
 
 @this()
 
-@(listItems: Seq[Html])(implicit messages: Messages)
+@(messageKey: String)(implicit messages: Messages)
 
-<ul class="govuk-list govuk-list--bullet">
-    @for(listItem <- listItems) {
-        <li>@listItem</li>
-    }
-</ul>
+<h2 class="govuk-heading-m">@messages(messageKey)</h2>
 
 @{
-    //$COVERAGE-OFF$
+//$COVERAGE-OFF$
 }
