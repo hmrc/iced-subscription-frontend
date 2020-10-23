@@ -69,7 +69,7 @@ class LandingPageSpec extends SpecBase {
       document
         .select(Selectors.listItem)
         .first
-        .text shouldBe "lodging, handling and processing of the ENS in advance of the arrival of goods"
+        .text shouldBe "lodging, handling and processing of an ENS in advance of the arrival of goods into the UK from outside the UK"
       document
         .select(Selectors.listItem)
         .get(1)
