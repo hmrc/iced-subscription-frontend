@@ -107,7 +107,7 @@ class LandingPageSpec extends SpecBase {
       document
         .select(Selectors.link)
         .first
-        .attr("href") shouldBe "http://localhost:9949/auth-login-stub/gg-sign-in"
+        .attr("href") shouldBe "https://www.access.service.gov.uk/registration/email"
     }
 
     "have a link to get an EORI" in {

@@ -45,17 +45,11 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
 
   "GET /" should {
     "return 200" in new Test {
-      val loginUrl    = "http://loginHost:1234/sign-in"
-      MockAppConfig.loginUrl returns loginUrl
-
       val result: Future[Result] = controller.index(fakeRequest)
       status(result) shouldBe Status.OK
     }
 
     "return HTML" in new Test {
-      val loginUrl    = "http://loginHost:1234/sign-in"
-      MockAppConfig.loginUrl returns loginUrl
-
       val result: Future[Result] = controller.index(fakeRequest)
       contentType(result) shouldBe Some("text/html")
       charset(result)     shouldBe Some("utf-8")
