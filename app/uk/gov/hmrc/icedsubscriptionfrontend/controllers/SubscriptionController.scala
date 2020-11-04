@@ -17,12 +17,11 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
-import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, AuthService}
-import uk.gov.hmrc.icedsubscriptionfrontend.services.AuthResult.{NotEnrolled, NotLoggedIn}
-import uk.gov.hmrc.icedsubscriptionfrontend.views.html.LandingPage
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, LandingPage}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.Future
 
@@ -31,8 +30,10 @@ class SubscriptionController @Inject()(
   appConfig: AppConfig,
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
-  landingPage: LandingPage)
-    extends FrontendController(mcc) {
+  landingPage: LandingPage,
+  alreadyEnrolledPage: AlreadyEnrolledPage)
+    extends FrontendController(mcc)
+    with I18nSupport {
 
   implicit val config: AppConfig = appConfig
 
@@ -41,11 +42,10 @@ class SubscriptionController @Inject()(
   }
 
   def start: Action[AnyContent] = authAction.async { implicit request =>
-    request.enrolled match {
-      case true =>
-        Future.successful(
-          Redirect(uk.gov.hmrc.icedsubscriptionfrontend.controllers.routes.SubscriptionController.index()))
-      case false => Future.successful(Redirect(appConfig.eoriCommonComponentStartUrl))
+    if (request.enrolled) {
+      Future.successful(Ok(alreadyEnrolledPage()))
+    } else {
+      Future.successful(Redirect(appConfig.eoriCommonComponentStartUrl))
     }
   }
 }
