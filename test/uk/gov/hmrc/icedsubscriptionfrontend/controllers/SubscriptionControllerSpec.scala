@@ -20,7 +20,6 @@ import base.SpecBase
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import play.api.Environment
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
 import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, LandingPage}

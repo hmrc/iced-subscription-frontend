@@ -26,6 +26,17 @@ landing.dontNeedToEnrol=I don’t need to enrol with S&S
 landing.welsh.para.1=The online service is also available in
 landing.welsh.linkText=Welsh (Cymraeg)
 
+## Successfully enrolled page
+successfullyEnrolled.title=Enrol with the safety & security service
+successfullyEnrolled.heading=You have successfully enrolled with safety and security
+successfullyEnrolled.para.1=Your enrolment will be active in 2 hours.
+successfullyEnrolled.coms=Safety and security handles digital communications between customs administrators and carriers or their appointed representatives.
+successfullyEnrolled.incorporates=Safety and security incorporates the:
+successfullyEnrolled.incorporates.1=lodging, handling and processing of an entry summary declaration (ENS) in advance of the arrival of goods into the UK from outside the UK
+successfullyEnrolled.incorporates.2=issuing of a Movement Reference Number (MRN)
+successfullyEnrolled.makeADeclaration=Once your account is active, you can submit an
+successfullyEnrolled.makeADeclaration.linkText=Entry Summary Declaration (ENS)
+
 ## Already enrolled page
 alreadyEnrolled.heading=Enrol with the safety & security service
 alreadyEnrolled.notice=The GBEORI you supplied is already enrolled with the safety and security service.

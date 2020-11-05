@@ -16,34 +16,20 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
-import javax.inject.{Inject, Singleton}
-import play.api.i18n.I18nSupport
-import play.api.mvc._
+import javax.inject.Inject
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
-import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, LandingPage}
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html.SuccessfullyEnrolledPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-@Singleton
-class SubscriptionController @Inject()(
+class HandbackController @Inject()(
   appConfig: AppConfig,
-  authAction: AuthAction,
   mcc: MessagesControllerComponents,
-  landingPage: LandingPage,
-  alreadyEnrolledPage: AlreadyEnrolledPage)
-    extends FrontendController(mcc)
-    with I18nSupport {
-
+  successfullyEnrolledPage: SuccessfullyEnrolledPage)
+    extends FrontendController(mcc) {
   implicit val config: AppConfig = appConfig
 
-  val index: Action[AnyContent] = Action { implicit request =>
-    Ok(landingPage())
-  }
-
-  def start: Action[AnyContent] = authAction { implicit request =>
-    if (request.enrolled) {
-      Ok(alreadyEnrolledPage())
-    } else {
-      Redirect(appConfig.eoriCommonComponentStartUrl)
-    }
+  def successfullyEnrolled: Action[AnyContent] = Action { implicit request =>
+    Ok(successfullyEnrolledPage())
   }
 }

@@ -4,4 +4,5 @@
 ->         /hmrc-frontend           hmrcfrontend.Routes
 GET        /                        uk.gov.hmrc.icedsubscriptionfrontend.controllers.SubscriptionController.index
 GET        /start                   uk.gov.hmrc.icedsubscriptionfrontend.controllers.SubscriptionController.start
+GET        /successfully-enrolled   uk.gov.hmrc.icedsubscriptionfrontend.controllers.HandbackController.successfullyEnrolled
 GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)
