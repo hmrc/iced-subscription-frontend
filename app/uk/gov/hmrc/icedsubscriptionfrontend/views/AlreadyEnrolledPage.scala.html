@@ -24,7 +24,7 @@
         p: helpers.p,
         paragraph: helpers.paragraph,
         heading2: helpers.heading2,
-        warningText: helpers.warningText,
+        insetText: helpers.insetText,
         bulletList: helpers.bulletList,
         link: helpers.link,
         govukButton: GovukButton)
@@ -34,7 +34,10 @@
 
 @layout(pageTitle = Some(messages("alreadyEnrolled.heading"))) {
 
-    ALREADY ENROLLED CONTENT HERE TODO
+ @hmrcPageHeading(PageHeading(text = messages("alreadyEnrolled.heading")))
 
+ @insetText("alreadyEnrolled.notice")
+
+ @link(href = "https://www.gov.uk/guidance/making-an-entry-summary-declaration", messageKey = "alreadyEnrolled.makeADeclaration").
 }
 

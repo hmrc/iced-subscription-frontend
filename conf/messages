@@ -26,6 +26,11 @@ landing.dontNeedToEnrol=I don’t need to enrol with S&S
 landing.welsh.para.1=The online service is also available in
 landing.welsh.linkText=Welsh (Cymraeg)
 
+## Already enrolled page
+alreadyEnrolled.heading=Enrol with the safety & security service
+alreadyEnrolled.notice=The GBEORI you supplied is already enrolled with the safety and security service.
+alreadyEnrolled.makeADeclaration=Make an Entry Summary Declaration (ENS)
+
 ## Footer
 footer.cookies.text = Cookies
 footer.cookies.url = /help/cookies
