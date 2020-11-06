@@ -26,22 +26,24 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvi
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class AuthenticatedRequest[A](request: Request[A], enrolled: Boolean)
+case class AuthenticatedRequest[A](request: Request[A], enrolled: Boolean) extends WrappedRequest(request)
 
-class AuthAction @Inject()(defaultParser: PlayBodyParsers,
-                           authService: AuthService,
-                           appConfig: AppConfig)(
-                            override implicit val executionContext: ExecutionContext)
-  extends ActionBuilder[AuthenticatedRequest, AnyContent]
+class AuthAction @Inject()(defaultParser: PlayBodyParsers, authService: AuthService, appConfig: AppConfig)(
+  override implicit val executionContext: ExecutionContext)
+    extends ActionBuilder[AuthenticatedRequest, AnyContent]
     with FrontendHeaderCarrierProvider {
 
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val headerCarrier: HeaderCarrier = hc(request)
 
     authService.authenticate().flatMap {
-      case AuthResult.Enrolled => block(AuthenticatedRequest(request, enrolled = true))
+      case AuthResult.Enrolled    => block(AuthenticatedRequest(request, enrolled = true))
       case AuthResult.NotEnrolled => block(AuthenticatedRequest(request, enrolled = false))
-      case AuthResult.NotLoggedIn => Future.successful(Redirect(appConfig.loginUrl, Map("continue" -> Seq(s"${appConfig.loginReturnBase}${request.uri}"), "origin" -> Seq(appConfig.appName))))
+      case AuthResult.NotLoggedIn =>
+        Future.successful(
+          Redirect(
+            appConfig.loginUrl,
+            Map("continue" -> Seq(s"${appConfig.loginReturnBase}${request.uri}"), "origin" -> Seq(appConfig.appName))))
     }
   }
 
