@@ -17,9 +17,7 @@
 @this()
 
 @(href: String, messageKey: String)(implicit messages: Messages)
-
-<a href="@href" class="govuk-link">@messages(messageKey)</a>
-
-@{
-    //$COVERAGE-OFF$
+@* @formatter:off - otherwise get whitespace output in COVERAGE-OFF comment *@
+<a href="@href" class="govuk-link">@messages(messageKey)</a>@{
+    // $COVERAGE-OFF$
 }

@@ -74,16 +74,15 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
     }
 
     "have a link to make a declaration" in {
-      val para = document
+      document
         .select(Selectors.paragraph)
         .get(3)
         .text shouldBe "Once your account is active, you can submit an Entry Summary Declaration (ENS)."
 
-      val link = document
+      document
         .select(Selectors.link)
         .get(0)
-
-      link.attr("href") shouldBe "https://www.gov.uk/guidance/making-an-entry-summary-declaration"
+        .attr("href") shouldBe "https://www.gov.uk/guidance/making-an-entry-summary-declaration"
     }
   }
 }

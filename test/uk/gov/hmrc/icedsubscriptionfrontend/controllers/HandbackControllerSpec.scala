@@ -28,8 +28,6 @@ import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 import scala.concurrent.Future
 
 class HandbackControllerSpec extends SpecBase with MockAuthService with MockAppConfig {
-  val appNme    = "iced-subscription-frontend"
-  val returnUrl = ""
 
   val successfullyEnrolledPage: SuccessfullyEnrolledPage = app.injector.instanceOf[SuccessfullyEnrolledPage]
 
@@ -46,7 +44,7 @@ class HandbackControllerSpec extends SpecBase with MockAuthService with MockAppC
       status(result) shouldBe Status.OK
     }
 
-    "return HTML for the 'Landing' page" in new Test {
+    "return HTML for the 'Successfully enrolled' page" in new Test {
       val result: Future[Result] = controller.successfullyEnrolled(fakeRequest)
       contentType(result)     shouldBe Some("text/html")
       charset(result)         shouldBe Some("utf-8")

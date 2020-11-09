@@ -32,11 +32,15 @@
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @ggwLink = {
-@messages("landing.youNeed.1.1")@link("https://www.gov.uk/log-in-register-hmrc-online-services", "landing.youNeed.1.2")@messages("landing.youNeed.1.3")
+@messages("landing.youNeed.1.1")
+@link("https://www.gov.uk/log-in-register-hmrc-online-services", "landing.youNeed.1.2")
+@messages("landing.youNeed.1.3")
 }
 
 @getEoriLink = {
-@messages("landing.youNeed.2.1")@link("https://www.gov.uk/eori?step-by-step-nav=8a543f4b-afb7-4591-bbfc-2eec52ab96c2", "landing.youNeed.2.2")@messages("landing.youNeed.2.3")
+@messages("landing.youNeed.2.1")
+@link("https://www.gov.uk/eori?step-by-step-nav=8a543f4b-afb7-4591-bbfc-2eec52ab96c2", "landing.youNeed.2.2")
+@messages("landing.youNeed.2.3")
 }
 
 @layout(pageTitle = Some(messages("landing.heading"))) {
