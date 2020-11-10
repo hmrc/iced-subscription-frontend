@@ -17,14 +17,10 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import base.SpecBase
-import org.scalamock.handlers.CallHandler
 import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.EmptyRetrieval
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
-import uk.gov.hmrc.icedsubscriptionfrontend.connectors.MockAuthConnector
 import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
@@ -41,7 +37,11 @@ class AuthActionSpec extends SpecBase with MockAuthService with MockAppConfig {
 
   class Controller extends FrontendController(stubMessagesControllerComponents()) {
     def handleRequest(): Action[AnyContent] = authAction { req =>
-      if (req.enrolled) Ok("enrolled") else Ok("not enrolled")
+      req.enrolment match {
+        case Enrolment.EnrolledAsOrganisation     => Ok("enrolled Organisation")
+        case Enrolment.NonOrganisationUser(group) => Ok(s"enrolled unsupported $group")
+        case Enrolment.NotEnrolled                => Ok("not enrolled")
+      }
     }
   }
 
@@ -75,14 +75,48 @@ class AuthActionSpec extends SpecBase with MockAuthService with MockAppConfig {
       }
     }
 
-    "active HMRC-SS-ORG enrolment found" must {
+    "active HMRC-SS-ORG enrolment found for an organisation" must {
       "call the block with an enrolled request" in {
         MockAuthService.authenticate returns Future.successful(AuthResult.Enrolled)
 
         val result = controller.handleRequest()(FakeRequest())
 
         status(result)          shouldBe OK
-        contentAsString(result) shouldBe "enrolled"
+        contentAsString(result) shouldBe "enrolled Organisation"
+      }
+    }
+
+    "user is an individual" must {
+      "call the block with an individual NonOrganisationUser" in {
+        MockAuthService.authenticate returns Future.successful(
+          AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Individual)))
+
+        val result = controller.handleRequest()(FakeRequest())
+
+        status(result)          shouldBe OK
+        contentAsString(result) shouldBe "enrolled unsupported Individual"
+      }
+    }
+
+    "user is an agent" must {
+      "call the block with an agent NonOrganisationUser" in {
+        MockAuthService.authenticate returns Future.successful(
+          AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Agent)))
+
+        val result = controller.handleRequest()(FakeRequest())
+
+        status(result)          shouldBe OK
+        contentAsString(result) shouldBe "enrolled unsupported Agent"
+      }
+    }
+
+    "user has no affinity group" must {
+      "respond with an INTERNAL_SERVER_ERROR" in {
+        MockAuthService.authenticate returns Future.successful(AuthResult.BadUserAffinity(None))
+
+        val result = controller.handleRequest()(FakeRequest())
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
       }
     }
   }

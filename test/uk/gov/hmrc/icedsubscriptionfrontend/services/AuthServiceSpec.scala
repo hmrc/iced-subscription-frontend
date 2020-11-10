@@ -19,8 +19,11 @@ package uk.gov.hmrc.icedsubscriptionfrontend.services
 import base.SpecBase
 import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.EmptyRetrieval
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.syntax.retrieved.authSyntaxForRetrieved
 import uk.gov.hmrc.icedsubscriptionfrontend.connectors.MockAuthConnector
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup
 
 import scala.concurrent.Future
 
@@ -28,12 +31,17 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
   val service = new AuthService(mockAuthConnector)
 
-  def stubAuth(): CallHandler[Future[Unit]] =
+  def stubAuth(): CallHandler[Future[Enrolments ~ Option[AffinityGroup]]] =
     MockAuthConnector
-      .authorise(Enrolment("HMRC-SS-ORG") and AuthProviders(AuthProvider.GovernmentGateway), EmptyRetrieval)
+      .authorise(AuthProviders(AuthProvider.GovernmentGateway), allEnrolments and affinityGroup)
+
+  def activeEnrolment(key: String): Enrolment = Enrolment(key = key)
+
+  private val ssEnrolment    = activeEnrolment("HMRC-SS-ORG")
+  private val otherEnrolment = activeEnrolment("OTHER")
 
   "AuthService.authenticate" when {
-    "no active session" must {
+    "there is no active session" must {
       "return NotLoggedIn" in {
         stubAuth() returns Future.failed(new NoActiveSession("") {})
 
@@ -41,17 +49,59 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
       }
     }
 
-    "no HMRC-SS-ORG enrolment" must {
+    "user is an individual" must {
+      "return BadUserAffinity" in {
+        stubAuth() returns Future.successful(Enrolments(Set(ssEnrolment)) and Some(AffinityGroup.Individual))
+
+        service.authenticate().futureValue shouldBe AuthResult.BadUserAffinity(
+          Some(UnsupportedAffinityGroup.Individual))
+      }
+    }
+
+    "user is an agent" must {
+      "return BadUserAffinity" in {
+        stubAuth() returns Future.successful(Enrolments(Set(ssEnrolment)) and Some(AffinityGroup.Agent))
+
+        service.authenticate().futureValue shouldBe AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Agent))
+      }
+    }
+
+    "user has no affinity group" must {
+      "return BadUserAffinity" in {
+        stubAuth() returns Future.successful(Enrolments(Set(ssEnrolment)) and None)
+
+        service.authenticate().futureValue shouldBe AuthResult.BadUserAffinity(None)
+      }
+    }
+
+    "user has no enrolment" must {
       "return NotEnrolled" in {
-        stubAuth() returns Future.failed(InsufficientEnrolments("HMRC-SS-ORG"))
+        stubAuth() returns Future.successful(Enrolments(Set.empty) and Some(AffinityGroup.Organisation))
 
         service.authenticate().futureValue shouldBe AuthResult.NotEnrolled
       }
     }
 
-    "active HMRC-SS-ORG enrolment found" must {
-      "return Enrolled" in {
-        stubAuth() returns Future.unit
+    "user has a different enrolment" must {
+      "return NotEnrolled" in {
+        stubAuth() returns Future.successful(Enrolments(Set(otherEnrolment)) and Some(AffinityGroup.Organisation))
+
+        service.authenticate().futureValue shouldBe AuthResult.NotEnrolled
+      }
+    }
+
+    "user HMRC-SS-ORG enrolment is not active" must {
+      "return NotEnrolled" in {
+        stubAuth() returns Future.successful(
+          Enrolments(Set(ssEnrolment.copy(state = "disabled"))) and Some(AffinityGroup.Organisation))
+
+        service.authenticate().futureValue shouldBe AuthResult.NotEnrolled
+      }
+    }
+
+    "user HMRC-SS-ORG enrolment is active" must {
+      "return NotEnrolled" in {
+        stubAuth() returns Future.successful(Enrolments(Set(ssEnrolment)) and Some(AffinityGroup.Organisation))
 
         service.authenticate().futureValue shouldBe AuthResult.Enrolled
       }

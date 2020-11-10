@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
+import controllers.Assets.{InternalServerError, Redirect}
 import javax.inject.Inject
-import play.api.mvc.Results._
+import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
@@ -26,24 +27,44 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvi
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class AuthenticatedRequest[A](request: Request[A], enrolled: Boolean) extends WrappedRequest(request)
+sealed trait Enrolment
+
+object Enrolment {
+  case object EnrolledAsOrganisation extends Enrolment
+  case class NonOrganisationUser(unsupportedAffinityGroup: UnsupportedAffinityGroup) extends Enrolment
+  case object NotEnrolled extends Enrolment
+}
+
+case class AuthenticatedRequest[A](request: Request[A], enrolment: Enrolment) extends WrappedRequest(request)
 
 class AuthAction @Inject()(defaultParser: PlayBodyParsers, authService: AuthService, appConfig: AppConfig)(
   override implicit val executionContext: ExecutionContext)
     extends ActionBuilder[AuthenticatedRequest, AnyContent]
     with FrontendHeaderCarrierProvider {
 
+  private val logger = Logger("application")
+
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val headerCarrier: HeaderCarrier = hc(request)
 
+    import AuthResult._
+
     authService.authenticate().flatMap {
-      case AuthResult.Enrolled    => block(AuthenticatedRequest(request, enrolled = true))
-      case AuthResult.NotEnrolled => block(AuthenticatedRequest(request, enrolled = false))
-      case AuthResult.NotLoggedIn =>
+      case Enrolled                     => block(AuthenticatedRequest(request, Enrolment.EnrolledAsOrganisation))
+      case BadUserAffinity(Some(group)) => block(AuthenticatedRequest(request, Enrolment.NonOrganisationUser(group)))
+      case Enrolled                     => block(AuthenticatedRequest(request, Enrolment.EnrolledAsOrganisation))
+      case AuthResult.NotEnrolled       => block(AuthenticatedRequest(request, Enrolment.NotEnrolled))
+
+      case NotLoggedIn =>
         Future.successful(
           Redirect(
             appConfig.loginUrl,
             Map("continue" -> Seq(s"${appConfig.loginReturnBase}${request.uri}"), "origin" -> Seq(appConfig.appName))))
+
+      case BadUserAffinity(None) =>
+        logger.warn("User with no affinity group")
+
+        Future.successful(InternalServerError)
     }
   }
 

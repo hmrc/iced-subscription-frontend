@@ -99,5 +99,31 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
         contentAsString(result) should include("alreadyEnrolled.heading")
       }
     }
+
+    "authenticated with but as an individual" should {
+      "return HTML for the 'nonOrganisationPage' page" in new Test {
+        MockAuthService.authenticate returns Future.successful(
+          AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Individual)))
+        val result: Future[Result] = controller.start(fakeRequest)
+
+        contentType(result)     shouldBe Some("text/html")
+        charset(result)         shouldBe Some("utf-8")
+        contentAsString(result) should include("nonOrganisation.heading")
+        contentAsString(result) should include("nonOrganisation.individual")
+      }
+    }
+
+    "authenticated with but as an agent" should {
+      "return HTML for the 'nonOrganisationPage' page" in new Test {
+        MockAuthService.authenticate returns Future.successful(
+          AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Agent)))
+        val result: Future[Result] = controller.start(fakeRequest)
+
+        contentType(result)     shouldBe Some("text/html")
+        charset(result)         shouldBe Some("utf-8")
+        contentAsString(result) should include("nonOrganisation.heading")
+        contentAsString(result) should include("nonOrganisation.agent")
+      }
+    }
   }
 }
