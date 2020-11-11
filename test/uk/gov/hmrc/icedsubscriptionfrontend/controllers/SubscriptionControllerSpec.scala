@@ -101,7 +101,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
     }
 
     "authenticated with but as an individual" should {
-      "return HTML for the 'nonOrganisationPage' page" in new Test {
+      "return HTML for the 'nonOrganisationPage' page" ignore new Test {
         MockAuthService.authenticate returns Future.successful(
           AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Individual)))
         val result: Future[Result] = controller.start(fakeRequest)
@@ -114,7 +114,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
     }
 
     "authenticated with but as an agent" should {
-      "return HTML for the 'nonOrganisationPage' page" in new Test {
+      "return HTML for the 'nonOrganisationPage' page" ignore new Test {
         MockAuthService.authenticate returns Future.successful(
           AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Agent)))
         val result: Future[Result] = controller.start(fakeRequest)

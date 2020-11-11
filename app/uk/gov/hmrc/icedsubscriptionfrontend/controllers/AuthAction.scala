@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import controllers.Assets.{InternalServerError, Redirect}
 import javax.inject.Inject
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
@@ -40,9 +40,8 @@ case class AuthenticatedRequest[A](request: Request[A], enrolment: Enrolment) ex
 class AuthAction @Inject()(defaultParser: PlayBodyParsers, authService: AuthService, appConfig: AppConfig)(
   override implicit val executionContext: ExecutionContext)
     extends ActionBuilder[AuthenticatedRequest, AnyContent]
-    with FrontendHeaderCarrierProvider {
-
-  private val logger = Logger("application")
+    with FrontendHeaderCarrierProvider
+    with Logging {
 
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val headerCarrier: HeaderCarrier = hc(request)

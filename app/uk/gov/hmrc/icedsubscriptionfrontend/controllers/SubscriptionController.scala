@@ -42,8 +42,8 @@ class SubscriptionController @Inject()(
   def start: Action[AnyContent] = authAction { implicit request =>
     request.enrolment match {
       case Enrolment.EnrolledAsOrganisation                        => Ok(alreadyEnrolledPage())
-      case Enrolment.NonOrganisationUser(unsupportedAffinityGroup) => Ok // TODO nonOrganisationPage
       case Enrolment.NotEnrolled                                   => Redirect(appConfig.eoriCommonComponentStartUrl)
+      case Enrolment.NonOrganisationUser(unsupportedAffinityGroup) => Ok // TODO nonOrganisationPage
     }
   }
 }
