@@ -32,8 +32,11 @@ object AuthResult {
 
   case object NotEnrolled extends AuthResult
 
-  case object Enrolled extends AuthResult
+  case object EnrolledAsOrganisation extends AuthResult
 
+  case object NonOrganisationUser extends AuthResult
+
+  @Deprecated
   case class BadUserAffinity(unsupportedAffinityGroup: Option[UnsupportedAffinityGroup]) extends AuthResult
 }
 
@@ -44,11 +47,14 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
     authorised(AuthProviders(AuthProvider.GovernmentGateway))
       .retrieve(allEnrolments and affinityGroup) {
         case enrolments ~ optAffinityGroup =>
-          val result = getBadUserAffinity(optAffinityGroup) match {
-            case Some(badUserAffinity)                 => badUserAffinity
-            case None if containsEnrolment(enrolments) => AuthResult.Enrolled
-            case _                                     => AuthResult.NotEnrolled
-          }
+          val result =
+            if (!hasOrganisationAffinity(optAffinityGroup)) {
+              AuthResult.NonOrganisationUser
+            } else if (hasActiveEnrolment(enrolments)) {
+              AuthResult.EnrolledAsOrganisation
+            } else {
+              AuthResult.NotEnrolled
+            }
 
           Future.successful(result)
       }
@@ -57,14 +63,9 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
         case _: NoActiveSession        => AuthResult.NotLoggedIn
       }
 
-  private def getBadUserAffinity(optAffinityGroup: Option[AffinityGroup]): Option[AuthResult.BadUserAffinity] =
-    optAffinityGroup match {
-      case Some(AffinityGroup.Individual) => Some(AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Individual)))
-      case Some(AffinityGroup.Agent)      => Some(AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Agent)))
-      case None                           => Some(AuthResult.BadUserAffinity(None))
-      case _                              => None
-    }
+  private def hasOrganisationAffinity(optAffinityGroup: Option[AffinityGroup]) =
+    optAffinityGroup.contains(AffinityGroup.Organisation)
 
-  private def containsEnrolment(enrolments: Enrolments): Boolean =
+  private def hasActiveEnrolment(enrolments: Enrolments) =
     enrolments.getEnrolment("HMRC-SS-ORG").exists(_.isActivated)
 }

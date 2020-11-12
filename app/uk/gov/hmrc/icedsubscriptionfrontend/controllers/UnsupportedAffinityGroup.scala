@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
+@Deprecated
 sealed trait UnsupportedAffinityGroup
 
 object UnsupportedAffinityGroup {
