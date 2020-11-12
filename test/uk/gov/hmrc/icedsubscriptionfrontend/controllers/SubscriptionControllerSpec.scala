@@ -22,7 +22,7 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
 import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
-import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, LandingPage}
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, LandingPage, WrongAffinityPage}
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
 import scala.concurrent.Future
@@ -33,6 +33,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
 
   val landingPage: LandingPage                 = app.injector.instanceOf[LandingPage]
   val alreadyEnrolledPage: AlreadyEnrolledPage = app.injector.instanceOf[AlreadyEnrolledPage]
+  val wrongAffinityPage: WrongAffinityPage     = app.injector.instanceOf[WrongAffinityPage]
 
   val authAction = new AuthAction(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
@@ -42,7 +43,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       authAction,
       stubMessagesControllerComponents(),
       landingPage,
-      alreadyEnrolledPage)
+      alreadyEnrolledPage,
+      wrongAffinityPage)
 
   class Test {
     MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes ()
@@ -101,7 +103,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
     }
 
     "authenticated with but as an individual" should {
-      "return HTML for the 'nonOrganisationPage' page" ignore new Test {
+      "return HTML for the 'nonOrganisationPage' page" in new Test {
         MockAuthService.authenticate returns Future.successful(
           AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Individual)))
         val result: Future[Result] = controller.start(fakeRequest)
@@ -114,7 +116,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
     }
 
     "authenticated with but as an agent" should {
-      "return HTML for the 'nonOrganisationPage' page" ignore new Test {
+      "return HTML for the 'nonOrganisationPage' page" in new Test {
         MockAuthService.authenticate returns Future.successful(
           AuthResult.BadUserAffinity(Some(UnsupportedAffinityGroup.Agent)))
         val result: Future[Result] = controller.start(fakeRequest)

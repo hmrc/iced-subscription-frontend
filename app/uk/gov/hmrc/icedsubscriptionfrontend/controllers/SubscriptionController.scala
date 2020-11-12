@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
-import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, LandingPage}
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, LandingPage, WrongAffinityPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 @Singleton
@@ -29,7 +29,8 @@ class SubscriptionController @Inject()(
   authAction: AuthAction,
   mcc: MessagesControllerComponents,
   landingPage: LandingPage,
-  alreadyEnrolledPage: AlreadyEnrolledPage)
+  alreadyEnrolledPage: AlreadyEnrolledPage,
+  wrongAffinityPage: WrongAffinityPage)
     extends FrontendController(mcc)
     with I18nSupport {
 
@@ -43,7 +44,7 @@ class SubscriptionController @Inject()(
     request.enrolment match {
       case Enrolment.EnrolledAsOrganisation                        => Ok(alreadyEnrolledPage())
       case Enrolment.NotEnrolled                                   => Redirect(appConfig.eoriCommonComponentStartUrl)
-      case Enrolment.NonOrganisationUser(unsupportedAffinityGroup) => Ok // TODO nonOrganisationPage
+      case Enrolment.NonOrganisationUser(unsupportedAffinityGroup) => Ok(wrongAffinityPage(unsupportedAffinityGroup))
     }
   }
 }

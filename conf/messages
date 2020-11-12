@@ -1,6 +1,7 @@
 service.name = Enrol with the safety & security service
 service.homePageUrl = /safety-and-security-subscription
 service.text = This is your new service
+service.sign-out = Sign out
 
 ## Landing page
 landing.heading=Enrol with the safety & security service
@@ -41,6 +42,17 @@ successfullyEnrolled.makeADeclaration.linkText=Entry Summary Declaration (ENS)
 alreadyEnrolled.heading=Enrol with the safety & security service
 alreadyEnrolled.notice=The GBEORI you supplied is already enrolled with the safety and security service.
 alreadyEnrolled.makeADeclaration=Make an Entry Summary Declaration (ENS)
+
+## Wrong affinity Page
+wrongAffinity.title=Enrol with the safety & security service
+wrongAffinity.heading=Set up a new account
+wrongAffinity.paragraph.asIndividual=You have signed in with a individual account. To enrol with safety and security you need an Organisation account.
+wrongAffinity.paragraph.asOrganisation=You have signed in with a agent account. To enrol with safety and security you need an Organisation account.
+wrongAffinity.instructionsToProceed=You need to:
+wrongAffinity.instructionsToProceed.1=Create an Organisation account on the Government Gateway website
+wrongAffinity.instructionsToProceed.2=Sign in to HMRC with the new sign in details
+wrongAffinity.instructionsToProceed.3=Enrol with safety and security using the new account
+wrongAffinity.signOutToGGW=Sign out and create ''Organisation'' account
 
 ## Footer
 footer.cookies.text = Cookies

@@ -16,9 +16,13 @@
 
 @this()
 
-@(html: Html)
+@(html: Html, id:Option[String] = None)
 
-<p class="govuk-body">@html</p>
+@if(id.isDefined){
+ <p id="@id.getOrElse("")" class="govuk-body">@html</p>
+}else {
+ <p class="govuk-body">@html</p>
+}
 
 @{
     //$COVERAGE-OFF$
