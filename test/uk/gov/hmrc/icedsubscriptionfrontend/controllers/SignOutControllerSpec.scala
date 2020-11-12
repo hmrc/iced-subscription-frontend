@@ -21,6 +21,8 @@ import play.api.mvc.Session
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
+import scala.concurrent.Await
+
 class SignOutControllerSpec extends SpecBase {
 
   private val controller = new SignOutController(stubMessagesControllerComponents())
@@ -44,7 +46,7 @@ class SignOutControllerSpec extends SpecBase {
       "start a new session" in {
         val result = controller.signOut(continueUrl)(fakeRequest.withSession(("test", "test")))
 
-        session(result) shouldBe Session(Map.empty)
+        Await.result(result, defaultAwaitTimeout.duration).newSession shouldBe Some(Session())
       }
     }
   }
