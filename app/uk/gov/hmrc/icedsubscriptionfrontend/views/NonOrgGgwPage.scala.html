@@ -31,7 +31,7 @@
         govukButton: GovukButton)
 
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-@layout(pageTitle = Some(messages("nonOrgGgwPage.title"))) {
+@layout(pageTitle = Some(messages("nonOrgGgwPage.title")), showSignOutLink = true) {
 
     @hmrcPageHeading(PageHeading(text = messages("nonOrgGgwPage.heading")))
 
@@ -48,6 +48,6 @@
 
     @govukButton(Button(
         isStartButton = true,
-        href = Some(controllers.routes.SignOutController.signOut(controllers.routes.SubscriptionController.start.url).url),
+        href = Some(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url),
         content = Text(messages("nonOrgGgwPage.signOutToGGW"))))
 }

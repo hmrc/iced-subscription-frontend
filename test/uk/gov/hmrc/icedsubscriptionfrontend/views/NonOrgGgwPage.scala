@@ -27,7 +27,7 @@ class NonOrgGgwPageSpec extends SpecBase {
 
   lazy val view: NonOrgGgwPage = inject[NonOrgGgwPage]
   lazy val signOutAndContinueUrl: String =
-    controllers.routes.SignOutController.signOut(controllers.routes.SubscriptionController.start.url).url
+    controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url
 
   object Selectors {
     val h1          = "h1"
@@ -42,8 +42,16 @@ class NonOrgGgwPageSpec extends SpecBase {
   lazy val html: Html         = view()(fakeRequest, messages, appConfig)
   lazy val document: Document = Jsoup.parse(html.toString)
 
-
   "NonOrgGgwPage" must {
+    "have a sign out link" in {
+      val link = document
+        .select(Selectors.link)
+        .first()
+
+      link.text         shouldBe "Sign out"
+      link.attr("href") shouldBe "/safety-and-security-subscription/sign-out"
+    }
+
     "have a only one page heading" in {
       document.select(Selectors.h1).text shouldBe "Use a Government Gateway Organisation account"
       document.select(Selectors.h1).size shouldBe 1

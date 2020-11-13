@@ -41,6 +41,15 @@ class AlreadyEnrolledPageSpec extends SpecBase {
 
   "AlreadyEnrolledPage" must {
 
+    "have a sign out link" in {
+      val link = document
+        .select(Selectors.link)
+        .first()
+
+      link.text         shouldBe "Sign out"
+      link.attr("href") shouldBe "/safety-and-security-subscription/sign-out"
+    }
+
     "have a only one page heading" in {
       document.select(Selectors.h1).text shouldBe "Enrol with the safety & security service"
       document.select(Selectors.h1).size shouldBe 1
@@ -56,7 +65,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     "have a link to make a declaration" in {
       val link = document
         .select(Selectors.link)
-        .get(0)
+        .get(1)
 
       link.text         shouldBe "Make an Entry Summary Declaration (ENS)"
       link.attr("href") shouldBe "https://www.gov.uk/guidance/making-an-entry-summary-declaration"

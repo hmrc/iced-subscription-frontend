@@ -29,7 +29,7 @@ class SignOutControllerSpec extends SpecBase {
 
   "GET /sign-out" when {
     "given a continue URL" should {
-      val continueUrl = "/continue"
+      val continueUrl = Some("/continue")
 
       "return 303" in {
         val result = controller.signOut(continueUrl)(fakeRequest)
@@ -40,11 +40,31 @@ class SignOutControllerSpec extends SpecBase {
       "redirect to given URL" in {
         val result = controller.signOut(continueUrl)(fakeRequest)
 
-        redirectLocation(result) shouldBe Some(continueUrl)
+        redirectLocation(result) shouldBe continueUrl
       }
 
       "start a new session" in {
         val result = controller.signOut(continueUrl)(fakeRequest.withSession(("test", "test")))
+
+        Await.result(result, defaultAwaitTimeout.duration).newSession shouldBe Some(Session())
+      }
+    }
+
+    "not given a continue URL" should {
+      "return 303" in {
+        val result = controller.signOut(None)(fakeRequest)
+
+        status(result) shouldBe 303
+      }
+
+      "redirect to the signed page" ignore {
+        val result = controller.signOut(None)(fakeRequest)
+
+        redirectLocation(result) shouldBe Some("")
+      }
+
+      "start a new session" in {
+        val result = controller.signOut(None)(fakeRequest.withSession(("test", "test")))
 
         Await.result(result, defaultAwaitTimeout.duration).newSession shouldBe Some(Session())
       }
