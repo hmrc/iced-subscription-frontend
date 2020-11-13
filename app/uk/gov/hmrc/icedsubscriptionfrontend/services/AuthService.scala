@@ -34,14 +34,15 @@ object AuthResult {
   case object EnrolledAsOrganisation extends AuthResult
 
   case object NonOrganisationUser extends AuthResult
-
-  @Deprecated
-  case class BadUserAffinity(unsupportedAffinityGroup: Option[UnsupportedAffinityGroup]) extends AuthResult
 }
 
 class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: ExecutionContext)
     extends AuthorisedFunctions {
 
+  // Note: the logic is primarily implemented using retrievals rather than lists of
+  // predicates so that we can closely control the order of checks rather than
+  // relying on any correspondence between predicate order and
+  // the exception that is thrown in a particular scenario...
   def authenticate()(implicit hc: HeaderCarrier): Future[AuthResult] =
     authorised(AuthProviders(AuthProvider.GovernmentGateway))
       .retrieve(allEnrolments and affinityGroup) {
@@ -58,8 +59,8 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
           Future.successful(result)
       }
       .recover {
-        case _: InsufficientEnrolments => AuthResult.NotEnrolled
-        case _: NoActiveSession        => AuthResult.NotLoggedIn
+        case _: NoActiveSession         => AuthResult.NotLoggedIn
+        case _: UnsupportedAuthProvider => AuthResult.NonOrganisationUser
       }
 
   private def hasOrganisationAffinity(optAffinityGroup: Option[AffinityGroup]) =

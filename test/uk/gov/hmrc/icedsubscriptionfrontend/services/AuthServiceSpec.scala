@@ -74,6 +74,14 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
       }
     }
 
+    "user is not a GGW user" must {
+      "return NonOrganisationUser" in {
+        stubAuth() returns Future.failed(UnsupportedAuthProvider())
+
+        service.authenticate().futureValue shouldBe AuthResult.NonOrganisationUser
+      }
+    }
+
     "user has no enrolment" must {
       "return NotEnrolled" in {
         stubAuth() returns Future.successful(Enrolments(Set.empty) and Some(AffinityGroup.Organisation))
