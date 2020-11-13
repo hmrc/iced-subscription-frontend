@@ -26,7 +26,7 @@ import ExecutionContext.Implicits.global
 @Singleton
 class SignOutController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc) with I18nSupport {
 
-  def signOut(continueURL: Option[String]): Action[AnyContent] = Action.async { implicit request =>
+  def signOut(continueURL: Option[String]): Action[AnyContent] = Action.async {
     Future.successful(
       Redirect(
         continueURL.getOrElse("") //TODO Redirect to signed out page when no continue URL given

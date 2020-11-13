@@ -17,20 +17,20 @@
 @import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 @import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 @import uk.gov.hmrc.hmrcfrontend.views.html.components._
-@import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers
+@import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
 
 
 @this(layout: Layout,
         hmrcPageHeading: HmrcPageHeading,
-        p: helpers.p,
-        paragraph: helpers.paragraph,
-        heading2: helpers.heading2,
-        insetText: helpers.insetText,
-        bulletList: helpers.bulletList,
-        link: helpers.link,
+        p: p,
+        paragraph: paragraph,
+        heading2: heading2,
+        insetText: insetText,
+        bulletList: bulletList,
+        link: link,
         govukButton: GovukButton)
 
-@()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@()(implicit messages: Messages, appConfig: AppConfig)
 @layout(pageTitle = Some(messages("nonOrgGgwPage.title")), showSignOutLink = true) {
 
     @hmrcPageHeading(PageHeading(text = messages("nonOrgGgwPage.heading")))

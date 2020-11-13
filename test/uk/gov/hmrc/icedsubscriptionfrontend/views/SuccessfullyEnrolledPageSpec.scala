@@ -34,7 +34,7 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
     val link      = ".govuk-link"
   }
 
-  lazy val html: Html         = view()(fakeRequest, messages, appConfig)
+  lazy val html: Html         = view()(messages, appConfig)
   lazy val document: Document = Jsoup.parse(html.toString)
 
   "SuccessfullyEnrolledPage" must {

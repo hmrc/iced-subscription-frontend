@@ -17,19 +17,19 @@
 @import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 @import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 @import uk.gov.hmrc.hmrcfrontend.views.html.components._
-@import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers
+@import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
 
 @this(layout: Layout,
         hmrcPageHeading: HmrcPageHeading,
-        p: helpers.p,
-        paragraph: helpers.paragraph,
-        heading2: helpers.heading2,
-        warningText: helpers.warningText,
-        bulletList: helpers.bulletList,
-        link: helpers.link,
+        p: p,
+        paragraph: paragraph,
+        heading2: heading2,
+        warningText: warningText,
+        bulletList: bulletList,
+        link: link,
         govukButton: GovukButton)
 
-@()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@()(implicit messages: Messages, appConfig: AppConfig)
 
 @ggwLink = {
 @messages("landing.youNeed.1.1")
