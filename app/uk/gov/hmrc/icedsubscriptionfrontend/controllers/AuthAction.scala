@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
+import controllers.Assets.Redirect
 import javax.inject.Inject
-import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
@@ -26,7 +26,15 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvi
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class AuthenticatedRequest[A](request: Request[A], enrolled: Boolean) extends WrappedRequest(request)
+sealed trait Enrolment
+
+object Enrolment {
+  case object EnrolledAsOrganisation extends Enrolment
+  case object NotEnrolled extends Enrolment
+  case object NonOrganisationUser extends Enrolment
+}
+
+case class AuthenticatedRequest[A](request: Request[A], enrolment: Enrolment) extends WrappedRequest(request)
 
 class AuthAction @Inject()(defaultParser: PlayBodyParsers, authService: AuthService, appConfig: AppConfig)(
   override implicit val executionContext: ExecutionContext)
@@ -36,10 +44,14 @@ class AuthAction @Inject()(defaultParser: PlayBodyParsers, authService: AuthServ
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val headerCarrier: HeaderCarrier = hc(request)
 
+    import AuthResult._
+
     authService.authenticate().flatMap {
-      case AuthResult.Enrolled    => block(AuthenticatedRequest(request, enrolled = true))
-      case AuthResult.NotEnrolled => block(AuthenticatedRequest(request, enrolled = false))
-      case AuthResult.NotLoggedIn =>
+      case EnrolledAsOrganisation => block(AuthenticatedRequest(request, Enrolment.EnrolledAsOrganisation))
+      case NotEnrolled            => block(AuthenticatedRequest(request, Enrolment.NotEnrolled))
+      case NonOrganisationUser    => block(AuthenticatedRequest(request, Enrolment.NonOrganisationUser))
+
+      case NotLoggedIn =>
         Future.successful(
           Redirect(
             appConfig.loginUrl,

@@ -18,6 +18,8 @@ package uk.gov.hmrc.icedsubscriptionfrontend.services
 
 import javax.inject.Inject
 import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -25,25 +27,45 @@ import scala.concurrent.{ExecutionContext, Future}
 sealed trait AuthResult
 
 object AuthResult {
-
   case object NotLoggedIn extends AuthResult
 
   case object NotEnrolled extends AuthResult
 
-  case object Enrolled extends AuthResult
+  case object EnrolledAsOrganisation extends AuthResult
 
+  case object NonOrganisationUser extends AuthResult
 }
 
-class AuthService @Inject()(
-                             val authConnector: AuthConnector
-                           )(implicit ec: ExecutionContext) extends AuthorisedFunctions {
+class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: ExecutionContext)
+    extends AuthorisedFunctions {
 
-  def authenticate()(implicit hc: HeaderCarrier): Future[AuthResult] = {
-    authorised(Enrolment("HMRC-SS-ORG") and AuthProviders(AuthProvider.GovernmentGateway)) {
-      Future.successful(AuthResult.Enrolled)
-    }.recover {
-      case _: InsufficientEnrolments => AuthResult.NotEnrolled
-      case _: NoActiveSession => AuthResult.NotLoggedIn
-    }
-  }
+  // Note: the logic is primarily implemented using retrievals rather than lists of
+  // predicates so that we can closely control the order of checks rather than
+  // relying on any correspondence between predicate order and
+  // the exception that is thrown in a particular scenario...
+  def authenticate()(implicit hc: HeaderCarrier): Future[AuthResult] =
+    authorised(AuthProviders(AuthProvider.GovernmentGateway))
+      .retrieve(allEnrolments and affinityGroup) {
+        case enrolments ~ optAffinityGroup =>
+          val result =
+            if (!hasOrganisationAffinity(optAffinityGroup)) {
+              AuthResult.NonOrganisationUser
+            } else if (hasActiveEnrolment(enrolments)) {
+              AuthResult.EnrolledAsOrganisation
+            } else {
+              AuthResult.NotEnrolled
+            }
+
+          Future.successful(result)
+      }
+      .recover {
+        case _: NoActiveSession         => AuthResult.NotLoggedIn
+        case _: UnsupportedAuthProvider => AuthResult.NonOrganisationUser
+      }
+
+  private def hasOrganisationAffinity(optAffinityGroup: Option[AffinityGroup]) =
+    optAffinityGroup.contains(AffinityGroup.Organisation)
+
+  private def hasActiveEnrolment(enrolments: Enrolments) =
+    enrolments.getEnrolment("HMRC-SS-ORG").exists(_.isActivated)
 }

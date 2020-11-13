@@ -14,16 +14,14 @@
  * limitations under the License.
  *@
 
-@this()
+@import uk.gov.hmrc.icedsubscriptionfrontend.controllers
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.header.Header
 
-@(listItems: Seq[Html])
+@this(hmrcHeader: HmrcHeader)
 
-<ul class="govuk-list govuk-list--bullet">
-    @for(listItem <- listItems) {
-        <li>@listItem</li>
-    }
-</ul>
+@(showSignOut: Boolean = true)(implicit messages: Messages)
 
-@{
-    //$COVERAGE-OFF$
-}
+@hmrcHeader(Header(
+    serviceName = Some(messages("service.name")),
+    signOutHref = if (showSignOut) Some(controllers.routes.SignOutController.signOut(None).url) else None
+))

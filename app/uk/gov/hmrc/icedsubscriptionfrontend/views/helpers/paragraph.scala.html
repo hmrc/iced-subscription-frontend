@@ -18,11 +18,9 @@
 
 @this(p: helpers.p)
 
-@(messageKey: String)(implicit messages: Messages)
+@(messageKey: String, id: Option[String] = None)(implicit messages: Messages)
 
-@p {
-    @messages(messageKey)
-}
+@p(Html(messages(messageKey)), id)
 
 @{
     //$COVERAGE-OFF$

@@ -1,6 +1,7 @@
 service.name = Enrol with the safety & security service
 service.homePageUrl = /safety-and-security-subscription
 service.text = This is your new service
+service.sign-out = Sign out
 
 ## Landing page
 landing.heading=Enrol with the safety & security service
@@ -41,6 +42,19 @@ successfullyEnrolled.makeADeclaration.linkText=Entry Summary Declaration (ENS)
 alreadyEnrolled.heading=Enrol with the safety & security service
 alreadyEnrolled.notice=The GBEORI you supplied is already enrolled with the safety and security service.
 alreadyEnrolled.makeADeclaration=Make an Entry Summary Declaration (ENS)
+
+## Non Organisation GGW Page
+nonOrgGgwPage.title=Enrol with the safety & security service
+nonOrgGgwPage.heading=Use a Government Gateway Organisation account
+nonOrgGgwPage.wrongTypeOfAccount=You have signed in with the wrong type of account. To enrol with safety and security you need a Government Gateway organisation account.
+nonOrgGgwPage.ifYouDontHaveOrgAccount=If you don''t have an organisation account, you need to:
+nonOrgGgwPage.ifYouDontHaveOrgAccount.1=Create an organisation account on the Government Gateway website
+nonOrgGgwPage.ifYouDontHaveOrgAccount.2=Sign in to HMRC with the new sign in details
+nonOrgGgwPage.ifYouDontHaveOrgAccount.3=Enrol with safety and security using the new account
+nonOrgGgwPage.ifYouHaveOrgAccount=If you have an organisation account, you need to:
+nonOrgGgwPage.ifYouHaveOrgAccount.1=Sign in to HMRC with the organisation''s details
+nonOrgGgwPage.ifYouHaveOrgAccount.2=Enrol with safety and security using that account
+nonOrgGgwPage.signOutToGGW=Sign out and go to Government Gateway
 
 ## Footer
 footer.cookies.text = Cookies
