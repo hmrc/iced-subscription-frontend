@@ -26,6 +26,8 @@ trait AppConfig {
   def loginUrl: String
   def loginReturnBase: String
   def eoriCommonComponentStartUrl: String
+  def sessionTimeoutSeconds: Int
+  def sessionCountdownSeconds: Int
 }
 
 @Singleton
@@ -34,11 +36,13 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
 
   val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
 
-  val loginUrl: String = config.get[String]("login.url")
+  val loginUrl: String        = config.get[String]("login.url")
   val loginReturnBase: String = config.get[String]("login.return-base")
 
-  private val eoriCommonComponentBaseUri = config.get[String]("eori-common-component-froontend.base")
+  private val eoriCommonComponentBaseUri  = config.get[String]("eori-common-component-froontend.base")
   private val eoriCommonComponentStartUri = config.get[String]("eori-common-component-froontend.start")
-  val eoriCommonComponentStartUrl = s"$eoriCommonComponentBaseUri$eoriCommonComponentStartUri"
+  val eoriCommonComponentStartUrl         = s"$eoriCommonComponentBaseUri$eoriCommonComponentStartUri"
 
+  lazy val sessionTimeoutSeconds: Int   = config.get[Int]("session.timeoutSeconds")
+  lazy val sessionCountdownSeconds: Int = config.get[Int]("session.countdownSeconds")
 }
