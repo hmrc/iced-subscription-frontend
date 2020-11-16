@@ -19,18 +19,27 @@ package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import scala.concurrent.{ExecutionContext, Future}
-import ExecutionContext.Implicits.global
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html.SignedOutPage
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers
+
+import scala.concurrent.Future
 
 @Singleton
-class SignOutController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc) with I18nSupport {
+class SignOutController @Inject()(signedOutPage:SignedOutPage,
+                                   mcc: MessagesControllerComponents,
+                                  implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   def signOut(continueURL: Option[String]): Action[AnyContent] = Action.async {
     Future.successful(
       Redirect(
-        continueURL.getOrElse("") //TODO Redirect to signed out page when no continue URL given
+        continueURL.getOrElse(controllers.routes.SignOutController.signedOut.url)
       ).withNewSession
     )
+  }
+
+  def signedOut():Action[AnyContent] = Action { implicit request =>
+    Ok(signedOutPage())
   }
 }
