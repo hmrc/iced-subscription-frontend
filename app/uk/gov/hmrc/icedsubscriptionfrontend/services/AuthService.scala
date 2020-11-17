@@ -18,8 +18,9 @@ package uk.gov.hmrc.icedsubscriptionfrontend.services
 
 import javax.inject.Inject
 import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
-import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -68,4 +69,12 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
 
   private def hasActiveEnrolment(enrolments: Enrolments) =
     enrolments.getEnrolment("HMRC-SS-ORG").exists(_.isActivated)
+
+  def authenticateNoProfile()(implicit hc: HeaderCarrier): Future[Boolean] =
+    authConnector
+      .authorise(EmptyPredicate, EmptyRetrieval)
+      .map(_ => true)
+      .recover {
+        case _: NoActiveSession => false
+      }
 }

@@ -27,13 +27,13 @@ import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
 import scala.concurrent.Future
 
-class AuthActionSpec extends SpecBase with MockAuthService with MockAppConfig {
+class AuthActionWithProfileSpec extends SpecBase with MockAuthService with MockAppConfig {
 
   val loginUrl  = "someLoginUrl"
   val appNme    = "iced-subscription-frontend"
   val returnUrl = ""
 
-  val authAction = new AuthAction(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
+  val authAction = new AuthActionWithProfile(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
   class Controller extends FrontendController(stubMessagesControllerComponents()) {
     def handleRequest(): Action[AnyContent] = authAction { req =>

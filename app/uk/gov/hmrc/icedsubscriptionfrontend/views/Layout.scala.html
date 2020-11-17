@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 @import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.FooterLinks
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers.SiteHeader
@@ -36,15 +37,15 @@
 
 @timeoutScriptBlock = {
 @timeoutDialog(TimeoutDialog(
-    countdown = Some(appConfig.sessionCountdownSeconds),
     title = None,
-    keepAliveUrl = Some("/safety-and-security-subscription/keep-alive"),
+    countdown = Some(appConfig.sessionCountdownSeconds),
     timeout = Some(appConfig.sessionTimeoutSeconds),
-    signOutUrl = Some("/safety-and-security-subscription/sign-out")
+    keepAliveUrl = Some(controllers.routes.KeepAliveController.keepAlive.url),
+    signOutUrl = Some(controllers.routes.SignOutController.signOut(None).url)
 ))
 
-    <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
-    <script src='@controllers.routes.Assets.versioned("lib/hmrc-frontend/hmrc/all.js")'></script>
+    <script src='@routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script src='@routes.Assets.versioned("lib/hmrc-frontend/hmrc/all.js")'></script>
 
     <script>
             window.GOVUKFrontend.initAll();

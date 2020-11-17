@@ -19,8 +19,9 @@ package uk.gov.hmrc.icedsubscriptionfrontend.services
 import base.SpecBase
 import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
-import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, ~}
 import uk.gov.hmrc.auth.core.syntax.retrieved.authSyntaxForRetrieved
 import uk.gov.hmrc.icedsubscriptionfrontend.connectors.MockAuthConnector
 
@@ -30,18 +31,18 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
   val service = new AuthService(mockAuthConnector)
 
-  def stubAuth(): CallHandler[Future[Enrolments ~ Option[AffinityGroup]]] =
-    MockAuthConnector
-      .authorise(AuthProviders(AuthProvider.GovernmentGateway), allEnrolments and affinityGroup)
-
-  def activeEnrolment(key: String): Enrolment = Enrolment(key = key)
-
-  private val ssEnrolment = activeEnrolment("HMRC-SS-ORG")
-
-  private val activeSsEnrolments = Enrolments(Set(ssEnrolment))
-  private val otherEnrolments    = Enrolments(Set(activeEnrolment("OTHER")))
-
   "AuthService.authenticate" when {
+    def stubAuth(): CallHandler[Future[Enrolments ~ Option[AffinityGroup]]] =
+      MockAuthConnector
+        .authorise(AuthProviders(AuthProvider.GovernmentGateway), allEnrolments and affinityGroup)
+
+    def activeEnrolment(key: String): Enrolment = Enrolment(key = key)
+
+    val ssEnrolment = activeEnrolment("HMRC-SS-ORG")
+
+    val activeSsEnrolments = Enrolments(Set(ssEnrolment))
+    val otherEnrolments    = Enrolments(Set(activeEnrolment("OTHER")))
+
     "there is no active session" must {
       "return NotLoggedIn" in {
         stubAuth() returns Future.failed(new NoActiveSession("") {})
@@ -112,6 +113,27 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
         stubAuth() returns Future.successful(activeSsEnrolments and Some(AffinityGroup.Organisation))
 
         service.authenticate().futureValue shouldBe AuthResult.EnrolledAsOrganisation
+      }
+    }
+  }
+
+  "AuthService.authenticateNoProfile" when {
+    def stubAuth(): CallHandler[Future[Unit]] =
+      MockAuthConnector.authorise(EmptyPredicate, EmptyRetrieval)
+
+    "logged in" must {
+      "return true" in {
+        stubAuth() returns Future.unit
+
+        service.authenticateNoProfile().futureValue shouldBe true
+      }
+    }
+
+    "not logged in" must {
+      "return true" in {
+        stubAuth() returns Future.failed(new NoActiveSession("") {})
+
+        service.authenticateNoProfile().futureValue shouldBe false
       }
     }
   }

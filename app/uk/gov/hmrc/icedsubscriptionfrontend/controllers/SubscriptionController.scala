@@ -26,7 +26,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 @Singleton
 class SubscriptionController @Inject()(
   appConfig: AppConfig,
-  authAction: AuthAction,
+  authAction: AuthActionWithProfile,
   mcc: MessagesControllerComponents,
   landingPage: LandingPage,
   alreadyEnrolledPage: AlreadyEnrolledPage,

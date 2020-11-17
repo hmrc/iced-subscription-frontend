@@ -1,10 +1,11 @@
 # microservice specific routes
 
-->         /govuk-frontend          govuk.Routes
-->         /hmrc-frontend           hmrcfrontend.Routes
-GET        /                        uk.gov.hmrc.icedsubscriptionfrontend.controllers.SubscriptionController.index
-GET        /start                   uk.gov.hmrc.icedsubscriptionfrontend.controllers.SubscriptionController.start
-GET        /sign-out                uk.gov.hmrc.icedsubscriptionfrontend.controllers.SignOutController.signOut(continueURL:Option[String])
-GET        /signed-out              uk.gov.hmrc.icedsubscriptionfrontend.controllers.SignOutController.signedOut
-GET        /successfully-enrolled   uk.gov.hmrc.icedsubscriptionfrontend.controllers.HandbackController.successfullyEnrolled
-GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)
+->         /govuk-frontend               govuk.Routes
+->         /hmrc-frontend                hmrcfrontend.Routes
+GET        /                             uk.gov.hmrc.icedsubscriptionfrontend.controllers.SubscriptionController.index
+GET        /start                        uk.gov.hmrc.icedsubscriptionfrontend.controllers.SubscriptionController.start
+GET        /sign-out                     uk.gov.hmrc.icedsubscriptionfrontend.controllers.SignOutController.signOut(continueURL:Option[String])
+GET        /signed-out                   uk.gov.hmrc.icedsubscriptionfrontend.controllers.SignOutController.signedOut
+GET        /keep-alive                   uk.gov.hmrc.icedsubscriptionfrontend.controllers.KeepAliveController.keepAlive
+GET        /successfully-enrolled        uk.gov.hmrc.icedsubscriptionfrontend.controllers.HandbackController.successfullyEnrolled
+GET        /assets/*file                 controllers.Assets.versioned(path = "/public", file: Asset)

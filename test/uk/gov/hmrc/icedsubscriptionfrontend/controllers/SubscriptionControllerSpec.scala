@@ -33,9 +33,9 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
 
   val landingPage: LandingPage                 = app.injector.instanceOf[LandingPage]
   val alreadyEnrolledPage: AlreadyEnrolledPage = app.injector.instanceOf[AlreadyEnrolledPage]
-  val nonOrgGgwPage: NonOrgGgwPage            = app.injector.instanceOf[NonOrgGgwPage]
+  val nonOrgGgwPage: NonOrgGgwPage             = app.injector.instanceOf[NonOrgGgwPage]
 
-  val authAction = new AuthAction(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
+  val authAction = new AuthActionWithProfile(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
   private val controller =
     new SubscriptionController(
@@ -48,6 +48,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
 
   class Test {
     MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes ()
+    MockAppConfig.sessionCountdownSeconds returns 1 anyNumberOfTimes ()
+    MockAppConfig.sessionTimeoutSeconds returns 1 anyNumberOfTimes ()
   }
 
   "GET /" should {
@@ -68,7 +70,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
     "not authenticated" should {
       "redirect to a login page" in new Test {
         val loginUrl    = "http://loginHost:1234/sign-in"
-        val continueUrl = s"$loginUrl?continue=somePath&origin=$appNme"
+        val continueUrl = s"$loginUrl?continue=$requestPath&origin=$appNme"
 
         MockAppConfig.loginUrl returns loginUrl
         MockAppConfig.loginReturnBase returns returnUrl
