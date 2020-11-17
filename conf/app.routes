@@ -5,5 +5,6 @@
 GET        /                        uk.gov.hmrc.icedsubscriptionfrontend.controllers.SubscriptionController.index
 GET        /start                   uk.gov.hmrc.icedsubscriptionfrontend.controllers.SubscriptionController.start
 GET        /sign-out                uk.gov.hmrc.icedsubscriptionfrontend.controllers.SignOutController.signOut(continueURL:Option[String])
+GET        /signed-out              uk.gov.hmrc.icedsubscriptionfrontend.controllers.SignOutController.signedOut
 GET        /successfully-enrolled   uk.gov.hmrc.icedsubscriptionfrontend.controllers.HandbackController.successfullyEnrolled
 GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)

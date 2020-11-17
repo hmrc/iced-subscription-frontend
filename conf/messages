@@ -3,6 +3,11 @@ service.homePageUrl = /safety-and-security-subscription
 service.text = This is your new service
 service.sign-out = Sign out
 
+## Signed Out page
+signedOut.title=Enrol with the safety & security service
+signedOut.heading=For your security, we signed you out
+signedOut.signInButton=Sign in
+
 ## Landing page
 landing.heading=Enrol with the safety & security service
 landing.fromJanuary=From 1 January 2021

@@ -17,15 +17,24 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import base.SpecBase
-import play.api.mvc.Session
+import play.api.http.Status
+import play.api.mvc.{Result, Session}
 import play.api.test.Helpers._
+import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html.SignedOutPage
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
-import scala.concurrent.Await
+import scala.concurrent.{Await, Future}
 
-class SignOutControllerSpec extends SpecBase {
+class SignOutControllerSpec extends SpecBase with MockAppConfig {
 
-  private val controller = new SignOutController(stubMessagesControllerComponents())
+  val signedOutPage: SignedOutPage = app.injector.instanceOf[SignedOutPage]
+
+  private val controller = new SignOutController(signedOutPage, stubMessagesControllerComponents(), mockAppConfig)
+
+  class Test {
+    MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes ()
+  }
 
   "GET /sign-out" when {
     "given a continue URL" should {
@@ -57,10 +66,10 @@ class SignOutControllerSpec extends SpecBase {
         status(result) shouldBe 303
       }
 
-      "redirect to the signed page" ignore {
+      "redirect to the signed page" in {
         val result = controller.signOut(None)(fakeRequest)
 
-        redirectLocation(result) shouldBe Some("")
+        redirectLocation(result) shouldBe Some("/safety-and-security-subscription/signed-out")
       }
 
       "start a new session" in {
@@ -68,6 +77,20 @@ class SignOutControllerSpec extends SpecBase {
 
         Await.result(result, defaultAwaitTimeout.duration).newSession shouldBe Some(Session())
       }
+    }
+  }
+
+  "GET /" should {
+    "return 200" in new Test {
+      val result: Future[Result] = controller.signedOut()(fakeRequest)
+      status(result) shouldBe Status.OK
+    }
+
+    "return HTML for the 'Landing' page" in new Test {
+      val result: Future[Result] = controller.signedOut()(fakeRequest)
+      contentType(result)     shouldBe Some("text/html")
+      charset(result)         shouldBe Some("utf-8")
+      contentAsString(result) should include("signedOut.heading")
     }
   }
 }
