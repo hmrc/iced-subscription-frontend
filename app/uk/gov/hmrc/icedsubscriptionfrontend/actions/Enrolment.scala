@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.icedsubscriptionfrontend.controllers
+package uk.gov.hmrc.icedsubscriptionfrontend.actions
 
-import javax.inject.Inject
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionNoProfile
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+sealed trait Enrolment
 
-class KeepAliveController @Inject()(authActionNoProfile: AuthActionNoProfile, mcc: MessagesControllerComponents)
-    extends FrontendController(mcc) {
+object Enrolment {
 
-  def keepAlive: Action[AnyContent] = authActionNoProfile {
-    Ok
-  }
+  case object EnrolledAsOrganisation extends Enrolment
+
+  case object NotEnrolled extends Enrolment
+
+  case object NonOrganisationUser extends Enrolment
+
 }

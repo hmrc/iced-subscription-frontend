@@ -19,6 +19,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import base.SpecBase
 import play.api.mvc.Result
 import play.api.test.Helpers._
+import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionNoProfile
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
 import uk.gov.hmrc.icedsubscriptionfrontend.services.MockAuthService
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents

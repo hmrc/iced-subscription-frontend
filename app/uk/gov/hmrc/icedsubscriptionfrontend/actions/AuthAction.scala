@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.icedsubscriptionfrontend.controllers
+package uk.gov.hmrc.icedsubscriptionfrontend.actions
 
 import controllers.Assets.Redirect
 import javax.inject.Inject
@@ -37,16 +37,6 @@ abstract class AuthAction[P[_]](defaultParser: PlayBodyParsers, appConfig: AppCo
 
   override def parser: BodyParser[AnyContent] = defaultParser.defaultBodyParser
 }
-
-sealed trait Enrolment
-
-object Enrolment {
-  case object EnrolledAsOrganisation extends Enrolment
-  case object NotEnrolled extends Enrolment
-  case object NonOrganisationUser extends Enrolment
-}
-
-case class AuthenticatedRequest[A](request: Request[A], enrolment: Enrolment) extends WrappedRequest(request)
 
 class AuthActionWithProfile @Inject()(defaultParser: PlayBodyParsers, authService: AuthService, appConfig: AppConfig)(
   override implicit val executionContext: ExecutionContext)

@@ -14,37 +14,40 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.icedsubscriptionfrontend.controllers
+package uk.gov.hmrc.icedsubscriptionfrontend.actions
 
 import base.SpecBase
 import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
-import uk.gov.hmrc.icedsubscriptionfrontend.services.MockAuthService
+import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
 import scala.concurrent.Future
 
-class AuthActionNoProfileSpec extends SpecBase with MockAuthService with MockAppConfig {
+class AuthActionWithProfileSpec extends SpecBase with MockAuthService with MockAppConfig {
 
   val loginUrl  = "someLoginUrl"
   val appNme    = "iced-subscription-frontend"
   val returnUrl = ""
 
-  val authAction =
-    new AuthActionNoProfile(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
+  val authAction = new AuthActionWithProfile(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
   class Controller extends FrontendController(stubMessagesControllerComponents()) {
     def handleRequest(): Action[AnyContent] = authAction { req =>
-      Ok("logged in")
+      req.enrolment match {
+        case Enrolment.EnrolledAsOrganisation => Ok("enrolled Organisation")
+        case Enrolment.NonOrganisationUser    => Ok("non organisation user")
+        case Enrolment.NotEnrolled            => Ok("not enrolled")
+      }
     }
   }
 
   val controller = new Controller
 
-  "AuthActionNoProfile" when {
+  "AuthAction" when {
     "no active session" must {
       "redirect to login" in {
         val continueUrl = s"$loginUrl?continue=%2F&origin=$appNme"
@@ -52,7 +55,7 @@ class AuthActionNoProfileSpec extends SpecBase with MockAuthService with MockApp
         MockAppConfig.appName returns appNme
         MockAppConfig.loginReturnBase returns returnUrl
 
-        MockAuthService.authenticateNoProfile returns Future.successful(false)
+        MockAuthService.authenticate returns Future.successful(AuthResult.NotLoggedIn)
 
         val result = controller.handleRequest()(FakeRequest())
 
@@ -61,14 +64,36 @@ class AuthActionNoProfileSpec extends SpecBase with MockAuthService with MockApp
       }
     }
 
-    "logged in" must {
-      "call the block" in {
-        MockAuthService.authenticateNoProfile returns Future.successful(true)
+    "no HMRC-SS-ORG enrolment" must {
+      "call the block with an un-enrolled request" in {
+        MockAuthService.authenticate returns Future.successful(AuthResult.NotEnrolled)
 
         val result = controller.handleRequest()(FakeRequest())
 
         status(result)          shouldBe OK
-        contentAsString(result) shouldBe "logged in"
+        contentAsString(result) shouldBe "not enrolled"
+      }
+    }
+
+    "active HMRC-SS-ORG enrolment found for an organisation" must {
+      "call the block with an enrolled request" in {
+        MockAuthService.authenticate returns Future.successful(AuthResult.EnrolledAsOrganisation)
+
+        val result = controller.handleRequest()(FakeRequest())
+
+        status(result)          shouldBe OK
+        contentAsString(result) shouldBe "enrolled Organisation"
+      }
+    }
+
+    "user is unsupported" must {
+      "call the block with UnsupportedUser" in {
+        MockAuthService.authenticate returns Future.successful(AuthResult.NonOrganisationUser)
+
+        val result = controller.handleRequest()(FakeRequest())
+
+        status(result)          shouldBe OK
+        contentAsString(result) shouldBe "non organisation user"
       }
     }
   }
