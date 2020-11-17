@@ -32,5 +32,8 @@ trait MockAppConfig extends MockFactory {
     def loginReturnBase: CallHandler[String] = (mockAppConfig.loginReturnBase _).expects()
 
     def eoriCommonComponentStartUrl: CallHandler[String] = (mockAppConfig.eoriCommonComponentStartUrl _).expects()
+
+    def sessionTimeoutSeconds: CallHandler[Int]   = (mockAppConfig.sessionTimeoutSeconds _).expects()
+    def sessionCountdownSeconds: CallHandler[Int] = (mockAppConfig.sessionCountdownSeconds _).expects()
   }
 }

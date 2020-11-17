@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.icedsubscriptionfrontend.services
+package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
+import javax.inject.Inject
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionNoProfile
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import scala.concurrent.Future
+class KeepAliveController @Inject()(authActionNoProfile: AuthActionNoProfile, mcc: MessagesControllerComponents)
+    extends FrontendController(mcc) {
 
-trait MockAuthService extends MockFactory {
-  val mockAuthService: AuthService = mock[AuthService]
-
-  object MockAuthService {
-    def authenticate: CallHandler[Future[AuthResult]] = (mockAuthService.authenticate()(_: HeaderCarrier)).expects(*)
-
-    def authenticateNoProfile: CallHandler[Future[Boolean]] =
-      (mockAuthService.authenticateNoProfile()(_: HeaderCarrier)).expects(*)
+  def keepAlive: Action[AnyContent] = authActionNoProfile {
+    Ok
   }
-
 }

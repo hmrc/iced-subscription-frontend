@@ -19,6 +19,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
+import uk.gov.hmrc.icedsubscriptionfrontend.actions.{AuthActionWithProfile, Enrolment}
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, LandingPage, NonOrgGgwPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -26,7 +27,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 @Singleton
 class SubscriptionController @Inject()(
   appConfig: AppConfig,
-  authAction: AuthAction,
+  authAction: AuthActionWithProfile,
   mcc: MessagesControllerComponents,
   landingPage: LandingPage,
   alreadyEnrolledPage: AlreadyEnrolledPage,

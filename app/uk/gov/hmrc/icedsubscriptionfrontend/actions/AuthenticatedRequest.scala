@@ -14,22 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.icedsubscriptionfrontend.services
+package uk.gov.hmrc.icedsubscriptionfrontend.actions
 
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.mvc.{Request, WrappedRequest}
 
-import scala.concurrent.Future
-
-trait MockAuthService extends MockFactory {
-  val mockAuthService: AuthService = mock[AuthService]
-
-  object MockAuthService {
-    def authenticate: CallHandler[Future[AuthResult]] = (mockAuthService.authenticate()(_: HeaderCarrier)).expects(*)
-
-    def authenticateNoProfile: CallHandler[Future[Boolean]] =
-      (mockAuthService.authenticateNoProfile()(_: HeaderCarrier)).expects(*)
-  }
-
-}
+case class AuthenticatedRequest[A](request: Request[A], enrolment: Enrolment) extends WrappedRequest(request)

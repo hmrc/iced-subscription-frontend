@@ -31,7 +31,7 @@
 @()(implicit messages: Messages, appConfig: AppConfig)
 
 
-@layout(pageTitle = Some(messages("alreadyEnrolled.heading")), showSignOutLink = true) {
+@layout(pageTitle = Some(messages("alreadyEnrolled.heading")), showSignOutLink = true, showTimeoutDialog = true) {
 
  @hmrcPageHeading(PageHeading(text = messages("alreadyEnrolled.heading")))
 

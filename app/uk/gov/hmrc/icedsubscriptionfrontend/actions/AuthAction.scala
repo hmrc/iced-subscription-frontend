@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.icedsubscriptionfrontend.controllers
+package uk.gov.hmrc.icedsubscriptionfrontend.actions
 
 import controllers.Assets.Redirect
 import javax.inject.Inject
@@ -25,21 +25,22 @@ import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, AuthService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.language.higherKinds
 
-sealed trait Enrolment
+abstract class AuthAction[P[_]](defaultParser: PlayBodyParsers, appConfig: AppConfig)
+    extends ActionBuilder[P, AnyContent]
+    with FrontendHeaderCarrierProvider {
+  protected def redirectToLogin[A](request: Request[A]): Result =
+    Redirect(
+      appConfig.loginUrl,
+      Map("continue" -> Seq(s"${appConfig.loginReturnBase}${request.uri}"), "origin" -> Seq(appConfig.appName)))
 
-object Enrolment {
-  case object EnrolledAsOrganisation extends Enrolment
-  case object NotEnrolled extends Enrolment
-  case object NonOrganisationUser extends Enrolment
+  override def parser: BodyParser[AnyContent] = defaultParser.defaultBodyParser
 }
 
-case class AuthenticatedRequest[A](request: Request[A], enrolment: Enrolment) extends WrappedRequest(request)
-
-class AuthAction @Inject()(defaultParser: PlayBodyParsers, authService: AuthService, appConfig: AppConfig)(
+class AuthActionWithProfile @Inject()(defaultParser: PlayBodyParsers, authService: AuthService, appConfig: AppConfig)(
   override implicit val executionContext: ExecutionContext)
-    extends ActionBuilder[AuthenticatedRequest, AnyContent]
-    with FrontendHeaderCarrierProvider {
+    extends AuthAction[AuthenticatedRequest](defaultParser, appConfig) {
 
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val headerCarrier: HeaderCarrier = hc(request)
@@ -50,14 +51,20 @@ class AuthAction @Inject()(defaultParser: PlayBodyParsers, authService: AuthServ
       case EnrolledAsOrganisation => block(AuthenticatedRequest(request, Enrolment.EnrolledAsOrganisation))
       case NotEnrolled            => block(AuthenticatedRequest(request, Enrolment.NotEnrolled))
       case NonOrganisationUser    => block(AuthenticatedRequest(request, Enrolment.NonOrganisationUser))
-
-      case NotLoggedIn =>
-        Future.successful(
-          Redirect(
-            appConfig.loginUrl,
-            Map("continue" -> Seq(s"${appConfig.loginReturnBase}${request.uri}"), "origin" -> Seq(appConfig.appName))))
+      case NotLoggedIn            => Future.successful(redirectToLogin(request))
     }
   }
+}
 
-  override def parser: BodyParser[AnyContent] = defaultParser.defaultBodyParser
+class AuthActionNoProfile @Inject()(defaultParser: PlayBodyParsers, authService: AuthService, appConfig: AppConfig)(
+  override implicit val executionContext: ExecutionContext)
+    extends AuthAction[Request](defaultParser, appConfig) {
+
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
+    implicit val headerCarrier: HeaderCarrier = hc(request)
+
+    authService.authenticateNoProfile().flatMap { loggedIn =>
+      if (loggedIn) block(request) else Future.successful(redirectToLogin(request))
+    }
+  }
 }
