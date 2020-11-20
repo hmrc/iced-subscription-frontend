@@ -28,13 +28,16 @@ class LandingPageSpec extends SpecBase {
   lazy val view: LandingPage = inject[LandingPage]
 
   object Selectors {
-    val h1          = "h1"
-    val h2          = "h2"
-    val warningText = ".govuk-warning-text__text"
-    val paragraph   = "p"
-    val listItem    = "li"
-    val startButton = ".govuk-button--start"
-    val link        = ".govuk-link"
+    val h1                  = "h1"
+    val h2                  = "h2"
+    val warningText         = ".govuk-warning-text__text"
+    val paragraph           = "p"
+    val listItem            = "li"
+    val startButton         = ".govuk-button--start"
+    val link                = ".govuk-link"
+    val cspsSection         = "#csps"
+    val requirementsSection = "#requirements"
+    val waitSection         = "#wait"
   }
 
   lazy val html: Html         = view()(messages, appConfig)
@@ -43,7 +46,7 @@ class LandingPageSpec extends SpecBase {
   "LandingPage" must {
 
     "have a only one page heading" in {
-      document.select(Selectors.h1).text shouldBe "Enrol with the safety & security service"
+      document.select(Selectors.h1).text shouldBe "Enrol with the Safety and Security service"
       document.select(Selectors.h1).size shouldBe 1
     }
 
@@ -51,25 +54,28 @@ class LandingPageSpec extends SpecBase {
       document
         .select(Selectors.warningText)
         .first
-        .text shouldBe "Warning From 1 January 2021 Traders who submit Entry Summary Declarations (ENS) using third party software will need to enrol with the Safety & Security (S&S) service."
+        .text shouldBe "Warning From 1 January 2021 traders who submit Entry Summary declarations (sometimes called an ENS) " +
+        "using third party software will need to enrol with the Safety and Security (S&S GB) service."
     }
 
     "have a paragraph explaining S&S" in {
       document
         .select(Selectors.paragraph)
-        .get(1)
-        .text shouldBe "S&S handles digital communications between customs administrators and carriers or their appointed representatives."
+        .get(0)
+        .text shouldBe "S&S GB handles digital communications between customs administrators and carriers " +
+        "or their appointed representatives."
     }
 
     "have a list of what S&S incorporates" in {
       document
         .select(Selectors.paragraph)
-        .get(2)
-        .text shouldBe "S&S incorporates the:"
+        .get(1)
+        .text shouldBe "S&S GB incorporates the:"
       document
         .select(Selectors.listItem)
         .first
-        .text shouldBe "lodging, handling and processing of an ENS in advance of the arrival of goods into the UK from outside the UK"
+        .text shouldBe "lodging, handling and processing of an Entry Summary declaration in advance of the " +
+        "arrival of goods into the UK from outside the UK"
       document
         .select(Selectors.listItem)
         .get(1)
@@ -77,62 +83,100 @@ class LandingPageSpec extends SpecBase {
     }
 
     "have warning text for CSPs" in {
-      document
-        .select(Selectors.warningText)
-        .get(1)
-        .text shouldBe "Warning Community System Providers If you are a Community System Provider you don’t need to enrol with S&S to submit an ENS."
+      val section = document.select(Selectors.cspsSection)
+
+      section.select(Selectors.h2).text shouldBe "Community System Providers"
+
+      section
+        .select(Selectors.paragraph)
+        .get(0)
+        .text shouldBe "If you are a Community System Provider you don’t need to enrol with S&S GB to submit an ENS."
     }
 
     "a heading about before you enrol" in {
-      document.select(Selectors.h2).first.text shouldBe "Before you enrol"
+      val section = document.select(Selectors.requirementsSection)
+      section
+        .select(Selectors.h2)
+        .get(0)
+        .text shouldBe "Before you enrol"
     }
 
     "have a list of what you need to enrol" in {
-      document
+      val section = document.select(Selectors.requirementsSection)
+
+      section
         .select(Selectors.paragraph)
-        .get(4)
+        .get(0)
         .text shouldBe "You’ll need:"
-      document
+
+      val bullets = section
         .select(Selectors.listItem)
+
+      bullets.size shouldBe 6
+
+      bullets
+        .get(0)
+        .text shouldBe "a user ID and password for a Government Gateway Organisation account " +
+        "(opens in a new window or tab) - if you do not have a user ID, you can create one when you apply"
+
+      bullets
+        .get(1)
+        .text shouldBe "an EORI number that starts with GB - apply for a new one (opens in a new window or tab) " +
+        "if yours does not start with GB"
+
+      bullets
         .get(2)
-        .text shouldBe "a Government Gateway user ID and password - if you do not have a user ID, you can create one when you apply"
-      document
-        .select(Selectors.listItem)
+        .text shouldBe "trader name"
+
+      bullets
         .get(3)
-        .text shouldBe "an EORI number that starts with GB - apply for a new one if yours does not start with GB"
+        .text shouldBe "business UTR"
+
+      bullets
+        .get(4)
+        .text shouldBe "business date of establishment"
+
+      bullets
+        .get(5)
+        .text shouldBe "business address"
     }
 
     "have a link to GGW" in {
-      document.select(Selectors.link).first.text shouldBe "Government Gateway user ID and password"
-      document
-        .select(Selectors.link)
-        .first
-        .attr("href") shouldBe "https://www.gov.uk/log-in-register-hmrc-online-services"
+      val section = document.select(Selectors.requirementsSection)
+      val link    = section.select(Selectors.link).first
+
+      link.text shouldBe
+        "user ID and password for a Government Gateway Organisation account (opens in a new window or tab)"
+
+      link.attr("href") shouldBe
+        "https://www.gov.uk/log-in-register-hmrc-online-services/register"
     }
 
     "have a link to get an EORI" in {
-      document.select(Selectors.link).get(1).text shouldBe "apply for a new one"
-      document
-        .select(Selectors.link)
-        .get(1)
-        .attr("href") shouldBe "https://www.gov.uk/eori?step-by-step-nav=8a543f4b-afb7-4591-bbfc-2eec52ab96c2"
+      val section = document.select(Selectors.requirementsSection)
+      val link    = section.select(Selectors.link).get(1)
+
+      link.text shouldBe
+        "apply for a new one (opens in a new window or tab)"
+
+      link
+        .attr("href") shouldBe
+        "https://www.gov.uk/eori?step-by-step-nav=8a543f4b-afb7-4591-bbfc-2eec52ab96c2"
     }
 
     "have a paragraph showing how long it takes to enrol" in {
-      document
+      val section = document.select(Selectors.waitSection)
+
+      section
         .select(Selectors.paragraph)
-        .get(5)
-        .text shouldBe "It takes around n minutes to apply to enrol with S&S. You should get a decision immediately."
+        .get(0)
+        .text shouldBe "It takes around 5-10 minutes to apply to enrol with S&S GB. It may take 2 hours to get a decision."
     }
 
     "have a start button" in {
-      document.select(Selectors.startButton).text         shouldBe "Start now"
-      document.select(Selectors.startButton).attr("href") shouldBe controllers.routes.SubscriptionController.start.url
-    }
-
-    "have a link to not enroll" in {
-      document.select(Selectors.link).get(2).text         shouldBe "I don’t need to enrol with S&S"
-      document.select(Selectors.link).get(2).attr("href") shouldBe "#"
+      document.select(Selectors.startButton).text shouldBe "Start now"
+      document.select(Selectors.startButton).attr("href") shouldBe
+        controllers.routes.SubscriptionController.start().url
     }
   }
 }
