@@ -32,7 +32,7 @@
 
 @ggwLink = {
 @messages("landing.youNeed.1.1")
-@link("https://www.gov.uk/log-in-register-hmrc-online-services", "landing.youNeed.1.2")
+@link("https://www.gov.uk/log-in-register-hmrc-online-services/register", "landing.youNeed.1.2")
 @messages("landing.youNeed.1.3")
 }
 
@@ -46,31 +46,43 @@
 
     @hmrcPageHeading(PageHeading(text = messages("landing.heading")))
 
-    @warningText("landing.fromJanuary", Some("landing.tradersWhoSubmit"))
+    @warningText("landing.fromJanuaryWarning")
 
     @paragraph("landing.coms")
 
     @paragraph("landing.incorporates")
-    @bulletList(Seq(Html(messages("landing.incorporates.1")), Html(messages("landing.incorporates.2"))))
+    @bulletList(Seq(
+        Html(messages("landing.incorporates.1")),
+        Html(messages("landing.incorporates.2"))
+    ))
 
-    @warningText("landing.csp", Some("landing.ifYouAreACsp"))
+    <div id="csps">
+        @heading2("landing.csp.heading")
+        @paragraph("landing.ifYouAreACsp")
+    </div>
 
-    @heading2("landing.beforeYouStart.heading")
+    <div id="requirements">
+        @heading2("landing.beforeYouStart.heading")
 
-    @paragraph("landing.youNeed")
-    @bulletList(Seq(ggwLink, getEoriLink))
+        @paragraph("landing.youNeed")
+        @bulletList(Seq(
+            ggwLink,
+            getEoriLink,
+            Html(messages("landing.youNeed.3")),
+            Html(messages("landing.youNeed.4")),
+            Html(messages("landing.youNeed.5")),
+            Html(messages("landing.youNeed.6"))
+        ))
+    </div>
 
-    @paragraph("landing.takesMinutes")
+    <div id="wait">
+    @paragraph("landing.expectedWait")
+    </div>
 
     @govukButton(Button(
         isStartButton = true,
         href = Some(controllers.routes.SubscriptionController.start.url),
         content = Text(messages("landing.start"))
     ))
-
-    @p {
-        @link(href = "#", messageKey = "landing.dontNeedToEnrol").
-    }
-
 }
 
