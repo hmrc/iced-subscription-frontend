@@ -40,7 +40,7 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
   "SuccessfullyEnrolledPage" must {
 
     "have a only one page heading" in {
-      document.select(Selectors.h1).text shouldBe "You have successfully enrolled with safety and security"
+      document.select(Selectors.h1).text shouldBe "You have successfully enrolled with S&S GB"
       document.select(Selectors.h1).size shouldBe 1
     }
 
@@ -55,18 +55,18 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
       document
         .select(Selectors.paragraph)
         .get(1)
-        .text shouldBe "Safety and security handles digital communications between customs administrators and carriers or their appointed representatives."
+        .text shouldBe "S&S GB handles digital communications between customs administrators and carriers or their appointed representatives."
     }
 
     "have a list of what S&S incorporates" in {
       document
         .select(Selectors.paragraph)
         .get(2)
-        .text shouldBe "Safety and security incorporates the:"
+        .text shouldBe "S&S GB incorporates the:"
       document
         .select(Selectors.listItem)
         .first
-        .text shouldBe "lodging, handling and processing of an entry summary declaration (ENS) in advance of the arrival of goods into the UK from outside the UK"
+        .text shouldBe "lodging, handling and processing of an Entry Summary declaration (sometimes called an ENS) in advance of the arrival of goods into the UK from outside the UK"
       document
         .select(Selectors.listItem)
         .get(1)
@@ -77,7 +77,7 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
       document
         .select(Selectors.paragraph)
         .get(3)
-        .text shouldBe "Once your account is active, you can submit an Entry Summary Declaration (ENS)."
+        .text shouldBe "Once your account is active, you can submit an Entry Summary Declaration."
 
       document
         .select(Selectors.link)

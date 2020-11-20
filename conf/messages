@@ -1,4 +1,5 @@
 service.name = Enrol with the Safety and Security service
+service.pageTitle.format={0} - Enrol with the Safety and Security service - GOV.UK
 service.homePageUrl = /safety-and-security-subscription
 service.text = This is your new service
 service.sign-out = Sign out
@@ -33,15 +34,14 @@ landing.expectedWait=It takes around 5-10 minutes to apply to enrol with S&S GB.
 landing.start=Start now
 
 ## Successfully enrolled page
-successfullyEnrolled.title=Enrol with the safety & security service
-successfullyEnrolled.heading=You have successfully enrolled with safety and security
+successfullyEnrolled.heading=You have successfully enrolled with S&S GB
 successfullyEnrolled.para.1=Your enrolment will be active in 2 hours.
-successfullyEnrolled.coms=Safety and security handles digital communications between customs administrators and carriers or their appointed representatives.
-successfullyEnrolled.incorporates=Safety and security incorporates the:
-successfullyEnrolled.incorporates.1=lodging, handling and processing of an entry summary declaration (ENS) in advance of the arrival of goods into the UK from outside the UK
+successfullyEnrolled.coms=S&S GB handles digital communications between customs administrators and carriers or their appointed representatives.
+successfullyEnrolled.incorporates=S&S GB incorporates the:
+successfullyEnrolled.incorporates.1=lodging, handling and processing of an Entry Summary declaration (sometimes called an ENS) in advance of the arrival of goods into the UK from outside the UK
 successfullyEnrolled.incorporates.2=issuing of a Movement Reference Number (MRN)
 successfullyEnrolled.makeADeclaration=Once your account is active, you can submit an
-successfullyEnrolled.makeADeclaration.linkText=Entry Summary Declaration (ENS)
+successfullyEnrolled.makeADeclaration.linkText=Entry Summary Declaration
 
 ## Already enrolled page
 alreadyEnrolled.heading=Enrol with the safety & security service
@@ -49,7 +49,6 @@ alreadyEnrolled.notice=The GBEORI you supplied is already enrolled with the safe
 alreadyEnrolled.makeADeclaration=Make an Entry Summary Declaration (ENS)
 
 ## Non Organisation GGW Page
-nonOrgGgwPage.title=Enrol with the safety & security service
 nonOrgGgwPage.heading=Use a Government Gateway Organisation account
 nonOrgGgwPage.wrongTypeOfAccount=You have signed in with the wrong type of account. To enrol with safety and security you need a Government Gateway organisation account.
 nonOrgGgwPage.ifYouDontHaveOrgAccount=If you don''t have an organisation account, you need to:
