@@ -49,16 +49,12 @@ alreadyEnrolled.notice=The GBEORI you supplied is already enrolled with the Safe
 alreadyEnrolled.makeADeclaration=Make an Entry Summary declaration
 
 ## Non Organisation GGW Page
-nonOrgGgwPage.heading=Use a Government Gateway Organisation account
-nonOrgGgwPage.wrongTypeOfAccount=You have signed in with the wrong type of account. To enrol with safety and security you need a Government Gateway organisation account.
-nonOrgGgwPage.ifYouDontHaveOrgAccount=If you don''t have an organisation account, you need to:
-nonOrgGgwPage.ifYouDontHaveOrgAccount.1=Create an organisation account on the Government Gateway website
-nonOrgGgwPage.ifYouDontHaveOrgAccount.2=Sign in to HMRC with the new sign in details
-nonOrgGgwPage.ifYouDontHaveOrgAccount.3=Enrol with safety and security using the new account
-nonOrgGgwPage.ifYouHaveOrgAccount=If you have an organisation account, you need to:
-nonOrgGgwPage.ifYouHaveOrgAccount.1=Sign in to HMRC with the organisation''s details
-nonOrgGgwPage.ifYouHaveOrgAccount.2=Enrol with safety and security using that account
-nonOrgGgwPage.signOutToGGW=Sign out and go to Government Gateway
+nonOrgGgwPage.heading=You need to access this service through Government Gateway
+nonOrgGgwPage.wrongTypeOfAccount=This is because you have signed in with the wrong account.
+nonOrgGgwPage.ifYouDontHaveOrgAccount=To enrol with this service you need a Government Gateway account for your organisation.
+nonOrgGgwPage.ifYouHaveOrgAccount.1=If you have another Government Gateway user ID,
+nonOrgGgwPage.ifYouHaveOrgAccount.2=return to the sign in page
+nonOrgGgwPage.ifYouHaveOrgAccount.3=and enter the Government Gateway ID for your organisation.
 
 ## Footer
 footer.cookies.text = Cookies

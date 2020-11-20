@@ -38,16 +38,11 @@
     @paragraph("nonOrgGgwPage.wrongTypeOfAccount", Some("you-have-signed-in"))
 
     @paragraph("nonOrgGgwPage.ifYouDontHaveOrgAccount")
-    @bulletList(Seq(Html(messages("nonOrgGgwPage.ifYouDontHaveOrgAccount.1")),
-        Html(messages("nonOrgGgwPage.ifYouDontHaveOrgAccount.2")),
-        Html(messages("nonOrgGgwPage.ifYouDontHaveOrgAccount.3"))))
 
-    @paragraph("nonOrgGgwPage.ifYouHaveOrgAccount")
-    @bulletList(Seq(Html(messages("nonOrgGgwPage.ifYouHaveOrgAccount.1")),
-        Html(messages("nonOrgGgwPage.ifYouHaveOrgAccount.2"))))
-
-    @govukButton(Button(
-        isStartButton = true,
-        href = Some(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url),
-        content = Text(messages("nonOrgGgwPage.signOutToGGW"))))
+    @p {
+        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.1")
+        @link(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url,
+            "nonOrgGgwPage.ifYouHaveOrgAccount.2")
+        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.3")
+    }
 }

@@ -27,7 +27,7 @@ class NonOrgGgwPageSpec extends SpecBase {
 
   lazy val view: NonOrgGgwPage = inject[NonOrgGgwPage]
   lazy val signOutAndContinueUrl: String =
-    controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url
+    controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start().url)).url
 
   object Selectors {
     val h1          = "h1"
@@ -53,7 +53,7 @@ class NonOrgGgwPageSpec extends SpecBase {
     }
 
     "have a only one page heading" in {
-      document.select(Selectors.h1).text shouldBe "Use a Government Gateway Organisation account"
+      document.select(Selectors.h1).text shouldBe "You need to access this service through Government Gateway"
       document.select(Selectors.h1).size shouldBe 1
     }
 
@@ -61,48 +61,28 @@ class NonOrgGgwPageSpec extends SpecBase {
       document
         .select(Selectors.paragraph)
         .first()
-        .text shouldBe "You have signed in with the wrong type of account. To enrol with safety and security you need a Government Gateway organisation account."
+        .text shouldBe "This is because you have signed in with the wrong account."
     }
 
-    "have a list explaining what to do next" when {
-      "the user does not an organisation GGW account" in {
-        document
-          .select(Selectors.paragraph)
-          .get(1)
-          .text shouldBe "If you don't have an organisation account, you need to:"
-        document
-          .select(Selectors.listItem)
-          .first
-          .text shouldBe "Create an organisation account on the Government Gateway website"
-        document
-          .select(Selectors.listItem)
-          .get(1)
-          .text shouldBe "Sign in to HMRC with the new sign in details"
-        document
-          .select(Selectors.listItem)
-          .get(2)
-          .text shouldBe "Enrol with safety and security using the new account"
-      }
-
-      "user has an organisation GGW account" in {
-        document
-          .select(Selectors.paragraph)
-          .get(2)
-          .text shouldBe "If you have an organisation account, you need to:"
-        document
-          .select(Selectors.listItem)
-          .get(3)
-          .text shouldBe "Sign in to HMRC with the organisation's details"
-        document
-          .select(Selectors.listItem)
-          .get(4)
-          .text shouldBe "Enrol with safety and security using that account"
-      }
+    "have a paragraph explaining what need" in {
+      document
+        .select(Selectors.paragraph)
+        .get(1)
+        .text shouldBe "To enrol with this service you need a Government Gateway account for your organisation."
     }
 
-    "have a sign out button with the correct continue URL" in {
-      document.select(Selectors.startButton).text         shouldBe "Sign out and go to Government Gateway"
-      document.select(Selectors.startButton).attr("href") shouldBe signOutAndContinueUrl
+    "have a paragraph with a link explaining what to do if have another organisation account" in {
+      val para = document
+        .select(Selectors.paragraph)
+        .get(2)
+
+      para.text shouldBe "If you have another Government Gateway user ID, return to the sign in page and enter the " +
+        "Government Gateway ID for your organisation."
+
+      val link = para.select(Selectors.link).get(0)
+
+      link.text         shouldBe "return to the sign in page"
+      link.attr("href") shouldBe signOutAndContinueUrl
     }
   }
 }
