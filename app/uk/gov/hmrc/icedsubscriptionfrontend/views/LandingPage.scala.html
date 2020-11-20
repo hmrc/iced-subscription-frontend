@@ -24,7 +24,7 @@
         p: p,
         paragraph: paragraph,
         heading2: heading2,
-        warningText: warningText,
+        govukWarningText: GovukWarningText,
         bulletList: bulletList,
         link: link,
         govukButton: GovukButton)
@@ -32,13 +32,13 @@
 
 @ggwLink = {
 @messages("landing.youNeed.1.1")
-@link("https://www.gov.uk/log-in-register-hmrc-online-services/register", "landing.youNeed.1.2")
+@link("https://www.gov.uk/log-in-register-hmrc-online-services/register", "landing.youNeed.1.2", openNewTab = true)
 @messages("landing.youNeed.1.3")
 }
 
 @getEoriLink = {
 @messages("landing.youNeed.2.1")
-@link("https://www.gov.uk/eori?step-by-step-nav=8a543f4b-afb7-4591-bbfc-2eec52ab96c2", "landing.youNeed.2.2")
+@link("https://www.gov.uk/eori?step-by-step-nav=8a543f4b-afb7-4591-bbfc-2eec52ab96c2", "landing.youNeed.2.2", openNewTab = true)
 @messages("landing.youNeed.2.3")
 }
 
@@ -46,7 +46,10 @@
 
     @hmrcPageHeading(PageHeading(text = messages("landing.heading")))
 
-    @warningText("landing.fromJanuaryWarning")
+    @govukWarningText(WarningText(
+        iconFallbackText = "Warning",
+        content = Text(messages("landing.fromJanuaryWarning"))
+    ))
 
     @paragraph("landing.coms")
 
