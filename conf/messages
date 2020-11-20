@@ -44,9 +44,9 @@ successfullyEnrolled.makeADeclaration=Once your account is active, you can submi
 successfullyEnrolled.makeADeclaration.linkText=Entry Summary Declaration
 
 ## Already enrolled page
-alreadyEnrolled.heading=Enrol with the safety & security service
-alreadyEnrolled.notice=The GBEORI you supplied is already enrolled with the safety and security service.
-alreadyEnrolled.makeADeclaration=Make an Entry Summary Declaration (ENS)
+alreadyEnrolled.heading=Enrol with the Safety and Security service
+alreadyEnrolled.notice=The GBEORI you supplied is already enrolled with the Safety and Security service.
+alreadyEnrolled.makeADeclaration=Make an Entry Summary declaration
 
 ## Non Organisation GGW Page
 nonOrgGgwPage.heading=Use a Government Gateway Organisation account
