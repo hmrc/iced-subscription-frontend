@@ -79,7 +79,7 @@ class NonOrgGgwPageSpec extends SpecBase {
       para.text shouldBe "If you have another Government Gateway user ID, return to the sign in page and enter the " +
         "Government Gateway ID for your organisation."
 
-      val link = para.select(Selectors.link).get(0)
+      val link = para.select("#sign-in").get(0)
 
       link.text         shouldBe "return to the sign in page"
       link.attr("href") shouldBe signOutAndContinueUrl

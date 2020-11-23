@@ -42,7 +42,7 @@
     @p {
         @messages("nonOrgGgwPage.ifYouHaveOrgAccount.1")
         @link(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url,
-            "nonOrgGgwPage.ifYouHaveOrgAccount.2")
+            "nonOrgGgwPage.ifYouHaveOrgAccount.2", id = Some("sign-in"))
         @messages("nonOrgGgwPage.ifYouHaveOrgAccount.3")
     }
 }
