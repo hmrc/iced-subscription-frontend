@@ -9,3 +9,5 @@ GET        /signed-out                   uk.gov.hmrc.icedsubscriptionfrontend.co
 GET        /keep-alive                   uk.gov.hmrc.icedsubscriptionfrontend.controllers.KeepAliveController.keepAlive
 GET        /successfully-enrolled        uk.gov.hmrc.icedsubscriptionfrontend.controllers.HandbackController.successfullyEnrolled
 GET        /assets/*file                 controllers.Assets.versioned(path = "/public", file: Asset)
+
+GET        /language/:lang               uk.gov.hmrc.icedsubscriptionfrontend.controllers.LanguageSwitchController.switchToLanguage(lang: String)

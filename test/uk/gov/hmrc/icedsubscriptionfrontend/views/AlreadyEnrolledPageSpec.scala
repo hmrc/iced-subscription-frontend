@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.views
 
 import base.SpecBase
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.{Document, Element}
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.AlreadyEnrolledPage
 
@@ -38,6 +38,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
 
   lazy val html: Html         = view()(messages, appConfig)
   lazy val document: Document = Jsoup.parse(html.toString)
+  lazy val content: Element   = document.select("#content").first
 
   "AlreadyEnrolledPage" must {
 
@@ -56,16 +57,16 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     }
 
     "have inset text for with notice" in {
-      document
+      content
         .select(Selectors.paragraph)
         .first
         .text shouldBe "The GBEORI you supplied is already enrolled with the Safety and Security service."
     }
 
     "have a link to make a declaration" in {
-      val link = document
+      val link = content
         .select(Selectors.link)
-        .get(1)
+        .first
 
       link.text         shouldBe "Make an Entry Summary declaration"
       link.attr("href") shouldBe "https://www.gov.uk/guidance/making-an-entry-summary-declaration"
