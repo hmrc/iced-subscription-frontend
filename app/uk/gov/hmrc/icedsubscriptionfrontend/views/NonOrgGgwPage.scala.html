@@ -31,23 +31,18 @@
         govukButton: GovukButton)
 
 @()(implicit messages: Messages, appConfig: AppConfig)
-@layout(pageTitle = Some(messages("nonOrgGgwPage.title")), showSignOutLink = true, showTimeoutDialog = true) {
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("nonOrgGgwPage.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
 
     @hmrcPageHeading(PageHeading(text = messages("nonOrgGgwPage.heading")))
 
     @paragraph("nonOrgGgwPage.wrongTypeOfAccount", Some("you-have-signed-in"))
 
     @paragraph("nonOrgGgwPage.ifYouDontHaveOrgAccount")
-    @bulletList(Seq(Html(messages("nonOrgGgwPage.ifYouDontHaveOrgAccount.1")),
-        Html(messages("nonOrgGgwPage.ifYouDontHaveOrgAccount.2")),
-        Html(messages("nonOrgGgwPage.ifYouDontHaveOrgAccount.3"))))
 
-    @paragraph("nonOrgGgwPage.ifYouHaveOrgAccount")
-    @bulletList(Seq(Html(messages("nonOrgGgwPage.ifYouHaveOrgAccount.1")),
-        Html(messages("nonOrgGgwPage.ifYouHaveOrgAccount.2"))))
-
-    @govukButton(Button(
-        isStartButton = true,
-        href = Some(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url),
-        content = Text(messages("nonOrgGgwPage.signOutToGGW"))))
+    @p {
+        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.1")
+        @link(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url,
+            "nonOrgGgwPage.ifYouHaveOrgAccount.2", id = Some("sign-in"))
+        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.3")
+    }
 }

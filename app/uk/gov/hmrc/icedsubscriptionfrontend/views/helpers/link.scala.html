@@ -16,12 +16,20 @@
 
 @this()
 
-@(href: String, messageKey: String, openNewTab: Boolean = false)(implicit messages: Messages)
+@(href: String, messageKey: String, openNewTab: Boolean = false, id: Option[String] = None)(implicit messages: Messages)
 @* @formatter:off - otherwise get whitespace output in COVERAGE-OFF comment *@
-@if(!openNewTab) {
-    <a href="@href" class="govuk-link">@messages(messageKey)</a>@{
-        // $COVERAGE-OFF$
-    }} else  {
-    <a href="@href" rel="noreferrer noopener" target="_blank" class="govuk-link">@messages(messageKey)</a>@{
-        // $COVERAGE-OFF$
-    }}
+@if(id.isDefined){
+    @if(!openNewTab) {
+        <a id="@id.getOrElse("")" href="@href" class="govuk-link">@messages(messageKey)</a>@{
+            // $COVERAGE-OFF$
+        }} else  {
+        <a id="@id.getOrElse("")" href="@href" rel="noreferrer noopener" target="_blank" class="govuk-link">@messages(messageKey)</a>@{
+            // $COVERAGE-OFF$
+        }}} else {
+    @if(!openNewTab) {
+        <a href="@href" class="govuk-link">@messages(messageKey)</a>@{
+            // $COVERAGE-OFF$
+        }} else  {
+        <a href="@href" rel="noreferrer noopener" target="_blank" class="govuk-link">@messages(messageKey)</a>@{
+            // $COVERAGE-OFF$
+        }}}

@@ -29,7 +29,7 @@
 @()(implicit messages: Messages, appConfig: AppConfig)
 
 
-@layout(pageTitle = Some(messages("successfullyEnrolled.title"))) {
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("successfullyEnrolled.heading")))) {
 
     @hmrcPageHeading(PageHeading(text = messages("successfullyEnrolled.heading")))
 

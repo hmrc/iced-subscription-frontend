@@ -51,15 +51,15 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     }
 
     "have a only one page heading" in {
-      document.select(Selectors.h1).text shouldBe "Enrol with the safety & security service"
+      document.select(Selectors.h1).text shouldBe "Enrol with the Safety and Security service"
       document.select(Selectors.h1).size shouldBe 1
     }
 
     "have inset text for with notice" in {
       document
-        .select(Selectors.insetText)
+        .select(Selectors.paragraph)
         .first
-        .text shouldBe "The GBEORI you supplied is already enrolled with the safety and security service."
+        .text shouldBe "The GBEORI you supplied is already enrolled with the Safety and Security service."
     }
 
     "have a link to make a declaration" in {
@@ -67,7 +67,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
         .select(Selectors.link)
         .get(1)
 
-      link.text         shouldBe "Make an Entry Summary Declaration (ENS)"
+      link.text         shouldBe "Make an Entry Summary declaration"
       link.attr("href") shouldBe "https://www.gov.uk/guidance/making-an-entry-summary-declaration"
     }
   }
