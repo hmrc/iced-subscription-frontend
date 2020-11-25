@@ -67,19 +67,21 @@
     }
 }
 
+@languageSelectBlock = @{
+    hmrcLanguageSelect(LanguageSelect(
+        if(messages.lang.code == "cy") Cy else En,
+        (En, controllers.routes.LanguageSwitchController.switchToLanguage("en").url),
+        (Cy, controllers.routes.LanguageSwitchController.switchToLanguage("cy").url)
+    ))
+}
+
 @govukLayout(
     pageTitle = pageTitle,
     headBlock = Some(head(headBlock)),
     scriptsBlock = Some(Html(scriptBlocks)),
     headerBlock = Some(siteHeader(showSignOutLink)),
-    beforeContentBlock = None,
+    beforeContentBlock = Some(languageSelectBlock),
     footerItems = FooterLinks()
 ) {
-    @hmrcLanguageSelect(LanguageSelect(
-        if(messages.lang.code == "cy") Cy else En,
-        (En, controllers.routes.LanguageSwitchController.switchToLanguage("en").url),
-        (Cy, controllers.routes.LanguageSwitchController.switchToLanguage("cy").url)
-    ))
-
     <div id="content">@contentBlock</div>
 }
