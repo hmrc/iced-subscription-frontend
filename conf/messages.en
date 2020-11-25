@@ -41,7 +41,7 @@ successfullyEnrolled.incorporates=S&S GB incorporates the:
 successfullyEnrolled.incorporates.1=lodging, handling and processing of an Entry Summary declaration (sometimes called an ENS) in advance of the arrival of goods into the UK from outside the UK
 successfullyEnrolled.incorporates.2=issuing of a Movement Reference Number (MRN)
 successfullyEnrolled.makeADeclaration=Once your account is active, you can submit an
-successfullyEnrolled.makeADeclaration.linkText=Entry Summary Declaration
+successfullyEnrolled.makeADeclaration.linkText=Entry Summary declaration
 
 ## Already enrolled page
 alreadyEnrolled.heading=Enrol with the Safety and Security service
