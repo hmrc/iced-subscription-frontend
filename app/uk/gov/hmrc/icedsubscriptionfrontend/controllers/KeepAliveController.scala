@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionNoProfile
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+@Singleton
 class KeepAliveController @Inject()(authActionNoProfile: AuthActionNoProfile, mcc: MessagesControllerComponents)
     extends FrontendController(mcc) {
 
