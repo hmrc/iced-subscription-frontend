@@ -24,7 +24,7 @@
         govukButton: GovukButton)
 
 @()(implicit messages: Messages, appConfig: AppConfig)
-@layout(pageTitle = Some(messages("signedOut.title"))) {
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("signedOut.heading")))) {
 
  @hmrcPageHeading(PageHeading(text = messages("signedOut.heading")))
 

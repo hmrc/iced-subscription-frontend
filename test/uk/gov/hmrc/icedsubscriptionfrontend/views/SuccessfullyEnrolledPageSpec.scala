@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.views
 
 import base.SpecBase
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.{Document, Element}
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.SuccessfullyEnrolledPage
@@ -36,6 +36,7 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
 
   lazy val html: Html         = view()(messages, appConfig)
   lazy val document: Document = Jsoup.parse(html.toString)
+  lazy val content: Element   = document.select("#content").first
 
   "SuccessfullyEnrolledPage" must {
 
@@ -45,41 +46,42 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
     }
 
     "have indication of when active" in {
-      document
+      content
         .select(Selectors.paragraph)
         .first
         .text shouldBe "Your enrolment will be active in 2 hours."
     }
 
     "have a paragraph explaining S&S" in {
-      document
+      content
         .select(Selectors.paragraph)
         .get(1)
         .text shouldBe "S&S GB handles digital communications between customs administrators and carriers or their appointed representatives."
     }
 
     "have a list of what S&S incorporates" in {
-      document
+      content
         .select(Selectors.paragraph)
         .get(2)
         .text shouldBe "S&S GB incorporates the:"
-      document
+      content
         .select(Selectors.listItem)
         .first
-        .text shouldBe "lodging, handling and processing of an Entry Summary declaration (sometimes called an ENS) in advance of the arrival of goods into the UK from outside the UK"
-      document
+        .text shouldBe "lodging, handling and processing of an Entry Summary declaration (sometimes called an ENS) " +
+        "in advance of the arrival of goods into the UK from outside the UK"
+      content
         .select(Selectors.listItem)
         .get(1)
         .text shouldBe "issuing of a Movement Reference Number (MRN)"
     }
 
     "have a link to make a declaration" in {
-      document
+      content
         .select(Selectors.paragraph)
         .get(3)
         .text shouldBe "Once your account is active, you can submit an Entry Summary Declaration."
 
-      document
+      content
         .select(Selectors.link)
         .get(0)
         .attr("href") shouldBe "https://www.gov.uk/guidance/making-an-entry-summary-declaration"

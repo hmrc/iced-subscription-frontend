@@ -19,12 +19,14 @@
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.FooterLinks
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers.SiteHeader
 
+@import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 @this(
         govukLayout: GovukLayout,
         head: Head,
         siteHeader: SiteHeader,
         appConfig: AppConfig,
-        timeoutDialog: HmrcTimeoutDialog
+        timeoutDialog: HmrcTimeoutDialog,
+        hmrcLanguageSelect: HmrcLanguageSelect
 )
 
 
@@ -65,11 +67,21 @@
     }
 }
 
+@languageSelectBlock = @{
+    hmrcLanguageSelect(LanguageSelect(
+        if(messages.lang.code == "cy") Cy else En,
+        (En, controllers.routes.LanguageSwitchController.switchToLanguage("en").url),
+        (Cy, controllers.routes.LanguageSwitchController.switchToLanguage("cy").url)
+    ))
+}
+
 @govukLayout(
     pageTitle = pageTitle,
     headBlock = Some(head(headBlock)),
     scriptsBlock = Some(Html(scriptBlocks)),
     headerBlock = Some(siteHeader(showSignOutLink)),
-    beforeContentBlock = None,
+    beforeContentBlock = Some(languageSelectBlock),
     footerItems = FooterLinks()
-)(contentBlock)
+) {
+    <div id="content">@contentBlock</div>
+}

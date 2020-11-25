@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.views
 
 import base.SpecBase
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.{Document, Element}
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.SignedOutPage
@@ -30,8 +30,10 @@ class SignedOutPageSpec extends SpecBase {
     val h1     = "h1"
     val button = ".govuk-button"
   }
+
   lazy val html: Html         = view()(messages, appConfig)
   lazy val document: Document = Jsoup.parse(html.toString)
+  lazy val content: Element   = document.select("#content").first
 
   "have a only one page heading" in {
     document.select(Selectors.h1).text shouldBe "For your security, we signed you out"
@@ -39,7 +41,7 @@ class SignedOutPageSpec extends SpecBase {
   }
 
   "have a sign in button with the correct URL" in {
-    document.select(Selectors.button).text         shouldBe "Sign in"
-    document.select(Selectors.button).attr("href") shouldBe controllers.routes.SubscriptionController.start.url
+    content.select(Selectors.button).text         shouldBe "Sign in"
+    content.select(Selectors.button).attr("href") shouldBe controllers.routes.SubscriptionController.start.url
   }
 }

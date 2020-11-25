@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.services
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
@@ -37,6 +37,7 @@ object AuthResult {
   case object NonOrganisationUser extends AuthResult
 }
 
+@Singleton
 class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: ExecutionContext)
     extends AuthorisedFunctions {
 

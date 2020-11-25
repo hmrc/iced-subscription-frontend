@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.views
 
 import base.SpecBase
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.{Document, Element}
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.NonOrgGgwPage
@@ -41,6 +41,7 @@ class NonOrgGgwPageSpec extends SpecBase {
 
   lazy val html: Html         = view()(messages, appConfig)
   lazy val document: Document = Jsoup.parse(html.toString)
+  lazy val content: Element   = document.select("#content").first
 
   "NonOrgGgwPage" must {
     "have a sign out link" in {
@@ -58,21 +59,21 @@ class NonOrgGgwPageSpec extends SpecBase {
     }
 
     "have a paragraph explaining the user is logged in to an invalid account" in {
-      document
+      content
         .select(Selectors.paragraph)
         .first()
         .text shouldBe "This is because you have signed in with the wrong account."
     }
 
     "have a paragraph explaining what need" in {
-      document
+      content
         .select(Selectors.paragraph)
         .get(1)
         .text shouldBe "To enrol with this service you need a Government Gateway account for your organisation."
     }
 
     "have a paragraph with a link explaining what to do if have another organisation account" in {
-      val para = document
+      val para = content
         .select(Selectors.paragraph)
         .get(2)
 

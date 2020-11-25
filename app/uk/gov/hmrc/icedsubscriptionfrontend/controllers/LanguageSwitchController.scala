@@ -17,15 +17,20 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionNoProfile
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import play.api.Configuration
+import play.api.i18n.Lang
+import play.api.mvc._
+import uk.gov.hmrc.play.language.{LanguageController, LanguageUtils}
 
 @Singleton
-class KeepAliveController @Inject()(authActionNoProfile: AuthActionNoProfile, mcc: MessagesControllerComponents)
-    extends FrontendController(mcc) {
+class LanguageSwitchController @Inject()(
+  configuration: Configuration,
+  languageUtils: LanguageUtils,
+  cc: ControllerComponents)
+    extends LanguageController(configuration, languageUtils, cc) {
 
-  def keepAlive: Action[AnyContent] = authActionNoProfile {
-    Ok
-  }
+  protected lazy val fallbackURL: String = routes.SubscriptionController.index().url
+
+  protected lazy val languageMap: Map[String, Lang] =
+    Map("en" -> Lang("en"), "cy" -> Lang("cy"))
 }

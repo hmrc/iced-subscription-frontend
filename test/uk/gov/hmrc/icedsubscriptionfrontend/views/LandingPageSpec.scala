@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.views
 
 import base.SpecBase
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.{Document, Element}
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.LandingPage
@@ -42,6 +42,7 @@ class LandingPageSpec extends SpecBase {
 
   lazy val html: Html         = view()(messages, appConfig)
   lazy val document: Document = Jsoup.parse(html.toString)
+  lazy val content: Element   = document.select("#content").first
 
   "LandingPage" must {
 
@@ -51,7 +52,7 @@ class LandingPageSpec extends SpecBase {
     }
 
     "have warning text for Traders" in {
-      document
+      content
         .select(Selectors.warningText)
         .first
         .text shouldBe "Warning From 1 January 2021 traders who submit Entry Summary declarations (sometimes called an ENS) " +
@@ -59,7 +60,7 @@ class LandingPageSpec extends SpecBase {
     }
 
     "have a paragraph explaining S&S" in {
-      document
+      content
         .select(Selectors.paragraph)
         .get(0)
         .text shouldBe "S&S GB handles digital communications between customs administrators and carriers " +
@@ -67,23 +68,23 @@ class LandingPageSpec extends SpecBase {
     }
 
     "have a list of what S&S incorporates" in {
-      document
+      content
         .select(Selectors.paragraph)
         .get(1)
         .text shouldBe "S&S GB incorporates the:"
-      document
+      content
         .select(Selectors.listItem)
         .first
         .text shouldBe "lodging, handling and processing of an Entry Summary declaration in advance of the " +
         "arrival of goods into the UK from outside the UK"
-      document
+      content
         .select(Selectors.listItem)
         .get(1)
         .text shouldBe "issuing of a Movement Reference Number (MRN)"
     }
 
     "have warning text for CSPs" in {
-      val section = document.select(Selectors.cspsSection)
+      val section = content.select(Selectors.cspsSection)
 
       section.select(Selectors.h2).text shouldBe "Community System Providers"
 
@@ -94,7 +95,7 @@ class LandingPageSpec extends SpecBase {
     }
 
     "a heading about before you enrol" in {
-      val section = document.select(Selectors.requirementsSection)
+      val section = content.select(Selectors.requirementsSection)
       section
         .select(Selectors.h2)
         .get(0)
@@ -102,7 +103,7 @@ class LandingPageSpec extends SpecBase {
     }
 
     "have a list of what you need to enrol" in {
-      val section = document.select(Selectors.requirementsSection)
+      val section = content.select(Selectors.requirementsSection)
 
       section
         .select(Selectors.paragraph)
@@ -142,7 +143,7 @@ class LandingPageSpec extends SpecBase {
     }
 
     "have a link to GGW" in {
-      val section = document.select(Selectors.requirementsSection)
+      val section = content.select(Selectors.requirementsSection)
       val link    = section.select(Selectors.link).first
 
       link.text shouldBe
@@ -153,7 +154,7 @@ class LandingPageSpec extends SpecBase {
     }
 
     "have a link to get an EORI" in {
-      val section = document.select(Selectors.requirementsSection)
+      val section = content.select(Selectors.requirementsSection)
       val link    = section.select(Selectors.link).get(1)
 
       link.text shouldBe
@@ -165,7 +166,7 @@ class LandingPageSpec extends SpecBase {
     }
 
     "have a paragraph showing how long it takes to enrol" in {
-      val section = document.select(Selectors.waitSection)
+      val section = content.select(Selectors.waitSection)
 
       section
         .select(Selectors.paragraph)
@@ -174,8 +175,8 @@ class LandingPageSpec extends SpecBase {
     }
 
     "have a start button" in {
-      document.select(Selectors.startButton).text shouldBe "Start now"
-      document.select(Selectors.startButton).attr("href") shouldBe
+      content.select(Selectors.startButton).text shouldBe "Start now"
+      content.select(Selectors.startButton).attr("href") shouldBe
         controllers.routes.SubscriptionController.start().url
     }
   }
