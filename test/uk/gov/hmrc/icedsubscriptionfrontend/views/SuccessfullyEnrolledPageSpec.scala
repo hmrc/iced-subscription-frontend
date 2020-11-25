@@ -79,7 +79,7 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
       content
         .select(Selectors.paragraph)
         .get(3)
-        .text shouldBe "Once your account is active, you can submit an Entry Summary Declaration."
+        .text shouldBe "Once your account is active, you can submit an Entry Summary declaration."
 
       content
         .select(Selectors.link)
