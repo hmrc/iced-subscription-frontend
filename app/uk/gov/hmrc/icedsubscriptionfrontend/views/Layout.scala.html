@@ -19,13 +19,10 @@
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.FooterLinks
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers.SiteHeader
 
-@import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 @this(
         govukLayout: GovukLayout,
         head: Head,
         siteHeader: SiteHeader,
-        appConfig: AppConfig,
-        timeoutDialog: HmrcTimeoutDialog,
         hmrcLanguageSelect: HmrcLanguageSelect
 )
 
@@ -37,36 +34,6 @@
         showTimeoutDialog: Boolean = false
 )(contentBlock: Html)(implicit messages: Messages, appConfig: AppConfig)
 
-@timeoutScriptBlock = {
-@timeoutDialog(TimeoutDialog(
-    title = None,
-    countdown = Some(appConfig.sessionCountdownSeconds),
-    timeout = Some(appConfig.sessionTimeoutSeconds),
-    keepAliveUrl = Some(controllers.routes.KeepAliveController.keepAlive.url),
-    signOutUrl = Some(controllers.routes.SignOutController.signOut(None).url)
-))
-
-    <script src='@routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
-    <script src='@routes.Assets.versioned("lib/hmrc-frontend/hmrc/all.js")'></script>
-
-    <script>
-            window.GOVUKFrontend.initAll();
-            const timeoutDialog = document.getElementsByName("hmrc-timeout-dialog").item(0);
-            if (timeoutDialog && window.HMRCFrontend.TimeoutDialog) {
-                new window.HMRCFrontend.TimeoutDialog(timeoutDialog).init();
-            }
-    </script>
-}
-
-@scriptBlocks = @{
-    (scriptsBlock, showTimeoutDialog) match {
-        case (Some(block), true) => block.body + "\n" + timeoutScriptBlock.body
-        case (None, true) => timeoutScriptBlock.body
-        case (Some(block), false) => block.body
-        case (None, false) => ""
-    }
-}
-
 @languageSelectBlock = @{
     hmrcLanguageSelect(LanguageSelect(
         if(messages.lang.code == "cy") Cy else En,
@@ -77,8 +44,8 @@
 
 @govukLayout(
     pageTitle = pageTitle,
-    headBlock = Some(head(headBlock)),
-    scriptsBlock = Some(Html(scriptBlocks)),
+    headBlock = Some(head(headBlock, showTimeoutDialog)),
+    scriptsBlock = scriptsBlock,
     headerBlock = Some(siteHeader(showSignOutLink)),
     beforeContentBlock = Some(languageSelectBlock),
     footerItems = FooterLinks()
