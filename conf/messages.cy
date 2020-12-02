@@ -65,3 +65,5 @@ footer.termsConditions.text = Terms and conditions
 footer.termsConditions.url = /help/terms-and-conditions
 footer.govukHelp.text = Help using GOV.UK
 footer.govukHelp.url = https://www.gov.uk/help
+footer.accessibilityStatement.text=Accessibility statement
+footer.accessibilityStatement.url=/accessibility-statement/safety-and-security-subscription
