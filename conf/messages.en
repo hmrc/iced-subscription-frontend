@@ -1,11 +1,11 @@
 service.name = Enrol with the Safety and Security service
 service.pageTitle.format={0} - Enrol with the Safety and Security service - GOV.UK
+service.pageTitle.basic.format=Enrol with the Safety and Security service - GOV.UK
 service.homePageUrl = /safety-and-security-subscription
 service.text = This is your new service
 service.sign-out = Sign out
 
 ## Signed Out page
-signedOut.title=Enrol with the safety & security service
 signedOut.heading=For your security, we signed you out
 signedOut.signInButton=Sign in
 

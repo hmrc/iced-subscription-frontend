@@ -35,6 +35,10 @@ class SignedOutPageSpec extends SpecBase {
   lazy val document: Document = Jsoup.parse(html.toString)
   lazy val content: Element   = document.select("#content").first
 
+  "have the correct title" in {
+    document.title shouldBe "For your security, we signed you out - Enrol with the Safety and Security service - GOV.UK"
+  }
+
   "have a only one page heading" in {
     document.select(Selectors.h1).text shouldBe "For your security, we signed you out"
     document.select(Selectors.h1).size shouldBe 1
