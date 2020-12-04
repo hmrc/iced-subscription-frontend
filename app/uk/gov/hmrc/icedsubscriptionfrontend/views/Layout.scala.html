@@ -48,7 +48,21 @@
     scriptsBlock = scriptsBlock,
     headerBlock = Some(siteHeader(showSignOutLink)),
     beforeContentBlock = Some(languageSelectBlock),
-    footerItems = FooterLinks()
-) {
+    footerItems = FooterLinks()) {
     <div id="content">@contentBlock</div>
+
+    <script src='@routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script src='@routes.Assets.versioned("lib/hmrc-frontend/hmrc/all.js")'></script>
+    <script>
+            window.GOVUKFrontend.initAll();
+    </script>
+
+    @if(showTimeoutDialog) {
+        <script>
+                const timeoutDialog = document.getElementsByName("hmrc-timeout-dialog").item(0);
+                if (timeoutDialog && window.HMRCFrontend.TimeoutDialog) {
+                    new window.HMRCFrontend.TimeoutDialog(timeoutDialog).init();
+                }
+        </script>
+    }
 }
