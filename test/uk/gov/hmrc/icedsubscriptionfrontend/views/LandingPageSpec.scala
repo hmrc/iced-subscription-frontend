@@ -122,11 +122,11 @@ class LandingPageSpec extends SpecBase {
       bullets
         .get(0)
         .text shouldBe "a user ID and password for a Government Gateway Organisation account " +
-        "(opens in a new window or tab) - if you do not have a user ID, you can create one when you apply"
+        "(opens in new tab) - if you do not have a user ID, you can create one when you apply"
 
       bullets
         .get(1)
-        .text shouldBe "an EORI number that starts with GB - apply for a new one (opens in a new window or tab) " +
+        .text shouldBe "an EORI number that starts with GB - apply for a new one (opens in new tab) " +
         "if yours does not start with GB"
 
       bullets
@@ -151,7 +151,7 @@ class LandingPageSpec extends SpecBase {
       val link    = section.select(Selectors.link).first
 
       link.text shouldBe
-        "user ID and password for a Government Gateway Organisation account (opens in a new window or tab)"
+        "user ID and password for a Government Gateway Organisation account (opens in new tab)"
 
       link.attr("href") shouldBe
         "https://www.gov.uk/log-in-register-hmrc-online-services/register"
@@ -162,7 +162,7 @@ class LandingPageSpec extends SpecBase {
       val link    = section.select(Selectors.link).get(1)
 
       link.text shouldBe
-        "apply for a new one (opens in a new window or tab)"
+        "apply for a new one (opens in new tab)"
 
       link
         .attr("href") shouldBe
