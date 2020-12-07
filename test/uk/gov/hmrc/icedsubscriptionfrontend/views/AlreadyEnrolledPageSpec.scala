@@ -64,7 +64,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
       content
         .select(Selectors.paragraph)
         .first
-        .text shouldBe "The GBEORI you supplied is already enrolled with the Safety and Security service."
+        .text shouldBe "The GB EORI you supplied is already enrolled with the Safety and Security service."
     }
 
     "have a link to make a declaration" in {
