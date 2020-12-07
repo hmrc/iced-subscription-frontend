@@ -42,6 +42,10 @@ class AlreadyEnrolledPageSpec extends SpecBase {
 
   "AlreadyEnrolledPage" must {
 
+    "have the correct title" in {
+      document.title shouldBe "Enrol with the Safety and Security service - GOV.UK"
+    }
+
     "have a sign out link" in {
       val link = document
         .select(Selectors.link)

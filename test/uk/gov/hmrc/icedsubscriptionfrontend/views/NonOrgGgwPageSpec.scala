@@ -44,6 +44,11 @@ class NonOrgGgwPageSpec extends SpecBase {
   lazy val content: Element   = document.select("#content").first
 
   "NonOrgGgwPage" must {
+
+    "have the correct title" in {
+      document.title shouldBe "You need to access this service through Government Gateway - Enrol with the Safety and Security service - GOV.UK"
+    }
+
     "have a sign out link" in {
       val link = document
         .select(Selectors.link)

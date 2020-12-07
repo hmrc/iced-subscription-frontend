@@ -46,6 +46,10 @@ class LandingPageSpec extends SpecBase {
 
   "LandingPage" must {
 
+    "have the correct title" in {
+      document.title shouldBe "Enrol with the Safety and Security service - GOV.UK"
+    }
+
     "have a only one page heading" in {
       document.select(Selectors.h1).text shouldBe "Enrol with the Safety and Security service"
       document.select(Selectors.h1).size shouldBe 1

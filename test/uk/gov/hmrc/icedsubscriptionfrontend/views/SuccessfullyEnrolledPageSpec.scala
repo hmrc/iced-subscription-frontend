@@ -40,6 +40,10 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
 
   "SuccessfullyEnrolledPage" must {
 
+    "have the correct title" in {
+      document.title shouldBe "You have successfully enrolled with S&S GB - Enrol with the Safety and Security service - GOV.UK"
+    }
+
     "have a only one page heading" in {
       document.select(Selectors.h1).text shouldBe "You have successfully enrolled with S&S GB"
       document.select(Selectors.h1).size shouldBe 1
