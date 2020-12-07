@@ -45,7 +45,7 @@ successfullyEnrolled.makeADeclaration.linkText=Entry Summary declaration
 
 ## Already enrolled page
 alreadyEnrolled.heading=Enrol with the Safety and Security service
-alreadyEnrolled.notice=The GBEORI you supplied is already enrolled with the Safety and Security service.
+alreadyEnrolled.notice=The GB EORI you supplied is already enrolled with the Safety and Security service.
 alreadyEnrolled.makeADeclaration=Make an Entry Summary declaration
 
 ## Non Organisation GGW Page
