@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.html.components._
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
 
@@ -28,7 +27,7 @@
         link: link,
         govukButton: GovukButton)
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@()(implicit messages: Messages, requestHeader: RequestHeader)
 
 
 @layout(pageTitle = Some(messages("service.pageTitle.basic.format")), showSignOutLink = true, showTimeoutDialog = true) {

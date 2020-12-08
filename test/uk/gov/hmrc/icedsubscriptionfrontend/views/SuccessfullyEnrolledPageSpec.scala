@@ -19,8 +19,8 @@ package uk.gov.hmrc.icedsubscriptionfrontend.views
 import base.SpecBase
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
+import play.api.test.FakeRequest
 import play.twirl.api.Html
-import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.SuccessfullyEnrolledPage
 
 class SuccessfullyEnrolledPageSpec extends SpecBase {
@@ -34,7 +34,7 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
     val link      = ".govuk-link"
   }
 
-  lazy val html: Html         = view()(messages, appConfig)
+  lazy val html: Html         = view()(messages, FakeRequest())
   lazy val document: Document = Jsoup.parse(html.toString)
   lazy val content: Element   = document.select("#content").first
 
