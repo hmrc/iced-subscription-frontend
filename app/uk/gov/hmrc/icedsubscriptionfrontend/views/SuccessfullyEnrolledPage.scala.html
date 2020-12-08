@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.html.components._
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
 
@@ -26,7 +25,7 @@
         bulletList: bulletList,
         link: link)
 
-@()(implicit messages: Messages, appConfig: AppConfig, requestHeader: RequestHeader)
+@()(implicit messages: Messages, requestHeader: RequestHeader)
 
 
 @layout(pageTitle = Some(messages("service.pageTitle.format", messages("successfullyEnrolled.heading")))) {

@@ -24,14 +24,14 @@
         head: Head,
         siteHeader: SiteHeader,
         hmrcLanguageSelect: HmrcLanguageSelect
-)
+)(implicit appConfig: AppConfig)
 
 @(pageTitle: Option[String] = None,
         headBlock: Option[Html] = None,
         scriptsBlock: Option[Html] = None,
         showSignOutLink: Boolean = false,
         showTimeoutDialog: Boolean = false
-)(contentBlock: Html)(implicit messages: Messages, appConfig: AppConfig, requestHeader: RequestHeader)
+)(contentBlock: Html)(implicit messages: Messages, requestHeader: RequestHeader)
 
 @languageSelectBlock = @{
     hmrcLanguageSelect(LanguageSelect(
