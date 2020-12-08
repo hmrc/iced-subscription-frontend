@@ -34,14 +34,14 @@ trait AppConfig {
 class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesConfig) extends AppConfig {
   lazy val appName: String = config.getOptional[String]("appName").getOrElse("APP NAME NOT SET")
 
-  val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
+  lazy val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
 
-  val loginUrl: String        = config.get[String]("login.url")
-  val loginReturnBase: String = config.get[String]("login.return-base")
+  lazy val loginUrl: String        = config.get[String]("login.url")
+  lazy val loginReturnBase: String = config.get[String]("login.return-base")
 
   private val eoriCommonComponentBaseUri  = config.get[String]("eori-common-component-froontend.base")
   private val eoriCommonComponentStartUri = config.get[String]("eori-common-component-froontend.start")
-  val eoriCommonComponentStartUrl         = s"$eoriCommonComponentBaseUri$eoriCommonComponentStartUri"
+  lazy val eoriCommonComponentStartUrl         = s"$eoriCommonComponentBaseUri$eoriCommonComponentStartUri"
 
   lazy val sessionTimeoutSeconds: Int   = config.get[Int]("session.timeoutSeconds")
   lazy val sessionCountdownSeconds: Int = config.get[Int]("session.countdownSeconds")
