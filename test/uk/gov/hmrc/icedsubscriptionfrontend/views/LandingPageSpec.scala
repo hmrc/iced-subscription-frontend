@@ -19,6 +19,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.views
 import base.SpecBase
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
+import play.api.test.FakeRequest
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.LandingPage
@@ -40,7 +41,7 @@ class LandingPageSpec extends SpecBase {
     val waitSection         = "#wait"
   }
 
-  lazy val html: Html         = view()(messages, appConfig)
+  lazy val html: Html         = view()(messages, appConfig, FakeRequest())
   lazy val document: Document = Jsoup.parse(html.toString)
   lazy val content: Element   = document.select("#content").first
 

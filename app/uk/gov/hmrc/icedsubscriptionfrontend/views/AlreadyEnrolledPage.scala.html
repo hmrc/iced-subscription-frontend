@@ -28,7 +28,7 @@
         link: link,
         govukButton: GovukButton)
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@()(implicit messages: Messages, appConfig: AppConfig, requestHeader: RequestHeader)
 
 
 @layout(pageTitle = Some(messages("service.pageTitle.basic.format")), showSignOutLink = true, showTimeoutDialog = true) {

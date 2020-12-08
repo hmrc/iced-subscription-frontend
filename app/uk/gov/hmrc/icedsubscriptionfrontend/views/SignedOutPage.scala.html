@@ -23,7 +23,7 @@
         hmrcPageHeading: HmrcPageHeading,
         govukButton: GovukButton)
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@()(implicit messages: Messages, appConfig: AppConfig, requestHeader: RequestHeader)
 @layout(pageTitle = Some(messages("service.pageTitle.format", messages("signedOut.heading")))) {
 
  @hmrcPageHeading(PageHeading(text = messages("signedOut.heading")))

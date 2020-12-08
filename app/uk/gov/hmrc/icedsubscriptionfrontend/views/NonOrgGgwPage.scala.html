@@ -30,7 +30,7 @@
         link: link,
         govukButton: GovukButton)
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@()(implicit messages: Messages, appConfig: AppConfig, requestHeader: RequestHeader)
 @layout(pageTitle = Some(messages("service.pageTitle.format", messages("nonOrgGgwPage.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
 
     @hmrcPageHeading(PageHeading(text = messages("nonOrgGgwPage.heading")))

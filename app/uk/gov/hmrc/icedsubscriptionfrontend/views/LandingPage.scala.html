@@ -28,7 +28,7 @@
         bulletList: bulletList,
         link: link,
         govukButton: GovukButton)
-@()(implicit messages: Messages, appConfig: AppConfig)
+@()(implicit messages: Messages, appConfig: AppConfig, requestHeader: RequestHeader)
 
 @ggwLink = {
 @messages("landing.youNeed.1.1")
