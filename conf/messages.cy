@@ -1,69 +1,69 @@
-service.name = TRANSLATE Enrol with the Safety and Security service
-service.pageTitle.format={0} - Enrol with the Safety and Security service - GOV.UK
-service.pageTitle.basic.format=Enrol with the Safety and Security service - GOV.UK
-service.homePageUrl = /safety-and-security-subscription
-service.text = This is your new service
-service.sign-out = Sign out
+service.name=Ymrestru ar gyfer y gwasanaeth Diogelwch
+service.pageTitle.format={0} - Ymrestru ar gyfer y gwasanaeth Diogelwch - GOV.UK
+service.pageTitle.basic.format=Ymrestru ar gyfer y gwasanaeth Diogelwch - GOV.UK
+service.homePageUrl=/safety-and-security-subscription
+service.text=Dyma'ch gwasanaeth newydd
+service.sign-out=Allgofnodi
 
 ## Signed Out page
-signedOut.heading=TRANSLATE For your security, we signed you out
-signedOut.signInButton=Sign in
+signedOut.heading=Er eich diogelwch, gwnaethom eich allgofnodi
+signedOut.signInButton=Mewngofnodi
 
 ## Landing page
-landing.heading=TRANSLATE Enrol with the Safety and Security service
-landing.fromJanuaryWarning=From 1 January 2021 traders who submit Entry Summary declarations (sometimes called an ENS) using third party software will need to enrol with the Safety and Security (S&S GB) service.
-landing.coms=S&S GB handles digital communications between customs administrators and carriers or their appointed representatives.
-landing.incorporates=S&S GB incorporates the:
-landing.incorporates.1=lodging, handling and processing of an Entry Summary declaration in advance of the arrival of goods into the UK from outside the UK
-landing.incorporates.2=issuing of a Movement Reference Number (MRN)
-landing.csp.heading=Community System Providers
-landing.ifYouAreACsp=If you are a Community System Provider you don’t need to enrol with S&S GB to submit an ENS.
-landing.beforeYouStart.heading=Before you enrol
-landing.youNeed=You’ll need:
-landing.youNeed.1.1=a
-landing.youNeed.1.2=user ID and password for a Government Gateway Organisation account (opens in new tab)
-landing.youNeed.1.3=- if you do not have a user ID, you can create one when you apply
-landing.youNeed.2.1=an EORI number that starts with GB -
-landing.youNeed.2.2=apply for a new one (opens in new tab)
-landing.youNeed.2.3=if yours does not start with GB
-landing.youNeed.3=trader name
-landing.youNeed.4=business UTR
-landing.youNeed.5=business date of establishment
-landing.youNeed.6=business address
-landing.expectedWait=It takes around 5-10 minutes to apply to enrol with S&S GB. It may take 2 hours to get a decision.
-landing.start=Start now
+landing.heading=Ymrestru ar gyfer y gwasanaeth Diogelwch
+landing.fromJanuaryWarning=O 1 Ionawr 2021 ymlaen bydd angen i fasnachwyr sy’n cyflwyno datganiadau Crynodeb Mynediad (a elwir weithiau’n ENS), gan ddefnyddio meddalwedd trydydd parti, ymrestru ar gyfer y gwasanaeth Diogelwch (S&S GB).
+landing.coms=Mae S&S GB yn delio â gohebiaeth ddigidol rhwng gweinyddwyr tollau a chludwyr neu eu cynrychiolwyr penodedig.
+landing.incorporates=Mae S&S GB yn ymgorffori'r canlynol:
+landing.incorporates.1=cyflwyno, trin a phrosesu datganiad Crynodeb Mynediad cyn i nwyddau gyrraedd y DU o’r tu allan i’r DU
+landing.incorporates.2=anfon Cyfeirnod Symud (MRN)
+landing.csp.heading=Darparwyr System Gymunedol
+landing.ifYouAreACsp=Os ydych yn Ddarparwr System Gymunedol, nid oes angen i chi ymrestru ar gyfer S&S GB er mwyn cyflwyno ENS.
+landing.beforeYouStart.heading=Cyn i chi ymrestru
+landing.youNeed=Bydd angen:
+landing.youNeed.1.1=Dynodydd
+landing.youNeed.1.2=Defnyddiwr a chyfrinair ar gyfer cyfrif Sefydliad Porth y Llywodraeth (yn agor tab newydd)
+landing.youNeed.1.3=os nad oes gennych Ddynodydd Defnyddiwr, gallwch greu un pan fyddwch yn gwneud cais
+landing.youNeed.2.1=rhif EORI sy’n dechrau gyda GB -
+landing.youNeed.2.2=gwnewch gais am un newydd (yn agor tab newydd)
+landing.youNeed.2.3=os nad yw’ch un chi yn dechrau gyda GB
+landing.youNeed.3=enw’r masnachwr
+landing.youNeed.4=Cyfeirnod Unigryw y Trethdalwr (UTR) y busnes
+landing.youNeed.5=dyddiad sefydlu’r busnes
+landing.youNeed.6=cyfeiriad y busnes
+landing.expectedWait=Mae’n cymryd tua 5-10 munud i wneud cais i ymrestru ar gyfer S&S GB. Efallai y bydd yn cymryd 2 awr i gael penderfyniad.
+landing.start=Dechrau arni nawr
 
 ## Successfully enrolled page
-successfullyEnrolled.heading=TRANSLATE You have successfully enrolled with S&S GB
-successfullyEnrolled.para.1=Your enrolment will be active in 2 hours.
-successfullyEnrolled.coms=S&S GB handles digital communications between customs administrators and carriers or their appointed representatives.
-successfullyEnrolled.incorporates=S&S GB incorporates the:
-successfullyEnrolled.incorporates.1=lodging, handling and processing of an Entry Summary declaration (sometimes called an ENS) in advance of the arrival of goods into the UK from outside the UK
-successfullyEnrolled.incorporates.2=issuing of a Movement Reference Number (MRN)
-successfullyEnrolled.makeADeclaration=Once your account is active, you can submit an
-successfullyEnrolled.makeADeclaration.linkText=Entry Summary declaration
+successfullyEnrolled.heading=Rydych wedi ymrestru’n llwyddiannus ar gyfer S&S GB
+successfullyEnrolled.para.1=Bydd eich ymrestriad yn dod i rym cyn pen 2 awr.
+successfullyEnrolled.coms=Mae S&S GB yn delio â gohebiaeth ddigidol rhwng gweinyddwyr tollau a chludwyr neu eu cynrychiolwyr penodedig.
+successfullyEnrolled.incorporates=Mae S&S GB yn ymgorffori’r canlynol:
+successfullyEnrolled.incorporates.1=cyflwyno, trin a phrosesu datganiad Crynodeb Mynediad (a elwir weithiau’n ENS) cyn i nwyddau gyrraedd y DU o’r tu allan i’r DU
+successfullyEnrolled.incorporates.2=anfon Cyfeirnod Symud (MRN)
+successfullyEnrolled.makeADeclaration=Unwaith y bydd eich cyfrif yn dod i rym, gallwch gyflwyno
+successfullyEnrolled.makeADeclaration.linkText=datganiad Crynodeb Mynediad
 
 ## Already enrolled page
-alreadyEnrolled.heading=TRANSLATE Enrol with the Safety and Security service
-alreadyEnrolled.notice=The GB EORI you supplied is already enrolled with the Safety and Security service.
-alreadyEnrolled.makeADeclaration=Make an Entry Summary declaration
+alreadyEnrolled.heading=Ymrestru ar gyfer y gwasanaeth Diogelwch
+alreadyEnrolled.notice=Mae’r rhif GB EORI a roddwyd gennych wedi’i ymrestru eisoes ar gyfer y gwasanaeth Diogelwch.
+alreadyEnrolled.makeADeclaration=Gwneud datganiad Crynodeb Mynediad
 
 ## Non Organisation GGW Page
-nonOrgGgwPage.heading=TRANSLATE You need to access this service through Government Gateway
-nonOrgGgwPage.wrongTypeOfAccount=This is because you have signed in with the wrong account.
-nonOrgGgwPage.ifYouDontHaveOrgAccount=To enrol with this service you need a Government Gateway account for your organisation.
-nonOrgGgwPage.ifYouHaveOrgAccount.1=If you have another Government Gateway user ID,
-nonOrgGgwPage.ifYouHaveOrgAccount.2=return to the sign in page
-nonOrgGgwPage.ifYouHaveOrgAccount.3=and enter the Government Gateway ID for your organisation.
+nonOrgGgwPage.heading=Mae angen i chi gael at y gwasanaeth hwn drwy Borth y Llywodraeth
+nonOrgGgwPage.wrongTypeOfAccount=Mae hyn oherwydd eich bod wedi mewngofnodi gyda’r cyfrif anghywir.
+nonOrgGgwPage.ifYouDontHaveOrgAccount=I ymrestru ar gyfer y gwasanaeth hwn, mae angen cyfrif Porth y Llywodraeth arnoch ar gyfer eich sefydliad.
+nonOrgGgwPage.ifYouHaveOrgAccount.1=Os oes gennych Ddynodydd Defnyddiwr arall ar gyfer Porth y Llywodraeth,
+nonOrgGgwPage.ifYouHaveOrgAccount.2=ewch yn ôl i’r dudalen fewngofnodi
+nonOrgGgwPage.ifYouHaveOrgAccount.3=a nodi Dynodydd Defnyddiwr Porth y Llywodraeth ar gyfer eich sefydliad.
 
 ## Footer
-footer.cookies.text = Cookies
-footer.cookies.url = /help/cookies
-footer.privacy.text = Privacy policy
-footer.privacy.url = /help/privacy
-footer.termsConditions.text = Terms and conditions
-footer.termsConditions.url = /help/terms-and-conditions
-footer.govukHelp.text = Help using GOV.UK
-footer.govukHelp.url = https://www.gov.uk/help
-footer.accessibilityStatement.text=Accessibility statement
+footer.cookies.text=Cwcis
+footer.cookies.url=/help/cookies
+footer.privacy.text=Polisi preifatrwydd
+footer.privacy.url=/help/privacy
+footer.termsConditions.text=Telerau ac amodau
+footer.termsConditions.url=/help/terms-and-conditions
+footer.govukHelp.text=Help wrth ddefnyddio GOV.UK
+footer.govukHelp.url=https://www.gov.uk/help
+footer.accessibilityStatement.text=Datganiad hygyrchedd
 footer.accessibilityStatement.url=/accessibility-statement/safety-and-security-subscription
