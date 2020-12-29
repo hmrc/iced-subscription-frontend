@@ -27,19 +27,19 @@ import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import scala.concurrent.Future
 
 @Singleton
-class SignOutController @Inject()(signedOutPage:SignedOutPage,
-                                   mcc: MessagesControllerComponents,
-                                  implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+class SignOutController @Inject()(
+  signedOutPage: SignedOutPage,
+  mcc: MessagesControllerComponents,
+  implicit val appConfig: AppConfig)
+    extends FrontendController(mcc)
+    with I18nSupport {
 
   def signOut(continueURL: Option[String]): Action[AnyContent] = Action.async {
     Future.successful(
-      Redirect(
-        continueURL.getOrElse(controllers.routes.SignOutController.signedOut.url)
-      ).withNewSession
-    )
+      Redirect(continueURL.getOrElse(controllers.routes.SignOutController.signedOut().url)).withNewSession)
   }
 
-  def signedOut():Action[AnyContent] = Action { implicit request =>
+  def signedOut(): Action[AnyContent] = Action { implicit request =>
     Ok(signedOutPage())
   }
 }

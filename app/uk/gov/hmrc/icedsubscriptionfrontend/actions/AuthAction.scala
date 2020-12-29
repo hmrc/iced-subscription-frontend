@@ -48,10 +48,8 @@ class AuthActionWithProfile @Inject()(defaultParser: PlayBodyParsers, authServic
     import AuthResult._
 
     authService.authenticate().flatMap {
-      case EnrolledAsOrganisation => block(AuthenticatedRequest(request, Enrolment.EnrolledAsOrganisation))
-      case NotEnrolled            => block(AuthenticatedRequest(request, Enrolment.NotEnrolled))
-      case NonOrganisationUser    => block(AuthenticatedRequest(request, Enrolment.NonOrganisationUser))
-      case NotLoggedIn            => Future.successful(redirectToLogin(request))
+      case NotLoggedIn => Future.successful(redirectToLogin(request))
+      case authResult  => block(AuthenticatedRequest(request, Enrolment.fromAuthResult(authResult)))
     }
   }
 }

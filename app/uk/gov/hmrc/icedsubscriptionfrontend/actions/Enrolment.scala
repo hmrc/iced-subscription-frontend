@@ -16,14 +16,25 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.actions
 
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup
+import uk.gov.hmrc.icedsubscriptionfrontend.services.AuthResult
+
 sealed trait Enrolment
 
 object Enrolment {
+
+  def fromAuthResult(authResult: AuthResult): Enrolment = authResult match {
+    case AuthResult.NotEnrolled            => Enrolment.NotEnrolled
+    case AuthResult.EnrolledAsOrganisation => Enrolment.EnrolledAsOrganisation
+    case AuthResult.BadUserAffinity(group) => Enrolment.BadUserAffinity(group)
+    case _                                 => Enrolment.NonGovernmentGatewayUser
+  }
 
   case object EnrolledAsOrganisation extends Enrolment
 
   case object NotEnrolled extends Enrolment
 
-  case object NonOrganisationUser extends Enrolment
+  case object NonGovernmentGatewayUser extends Enrolment
 
+  case class BadUserAffinity(unsupportedAffinityGroup: UnsupportedAffinityGroup) extends Enrolment
 }

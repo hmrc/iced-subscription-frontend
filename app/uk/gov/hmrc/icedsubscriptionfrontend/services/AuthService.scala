@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.services
 
-import javax.inject.{Inject, Singleton}
+import com.google.inject.{Inject, Singleton}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,7 +35,9 @@ object AuthResult {
 
   case object EnrolledAsOrganisation extends AuthResult
 
-  case object NonOrganisationUser extends AuthResult
+  case object NonGovernmentGatewayUser extends AuthResult
+
+  case class BadUserAffinity(unsupportedAffinityGroup: UnsupportedAffinityGroup) extends AuthResult
 }
 
 @Singleton
@@ -48,25 +51,21 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
   def authenticate()(implicit hc: HeaderCarrier): Future[AuthResult] =
     authorised(AuthProviders(AuthProvider.GovernmentGateway))
       .retrieve(allEnrolments and affinityGroup) {
-        case enrolments ~ optAffinityGroup =>
-          val result =
-            if (!hasOrganisationAffinity(optAffinityGroup)) {
-              AuthResult.NonOrganisationUser
-            } else if (hasActiveEnrolment(enrolments)) {
-              AuthResult.EnrolledAsOrganisation
-            } else {
-              AuthResult.NotEnrolled
-            }
-
-          Future.successful(result)
+        case enrolments ~ Some(AffinityGroup.Organisation) if hasActiveEnrolment(enrolments) =>
+          Future.successful(AuthResult.EnrolledAsOrganisation)
+        case _ ~ Some(AffinityGroup.Organisation) =>
+          Future.successful(AuthResult.NotEnrolled)
+        case _ ~ Some(AffinityGroup.Individual) =>
+          Future.successful(AuthResult.BadUserAffinity(UnsupportedAffinityGroup.Individual))
+        case _ ~ Some(AffinityGroup.Agent) =>
+          Future.successful(AuthResult.BadUserAffinity(UnsupportedAffinityGroup.Agent))
+        case _ =>
+          Future.successful(AuthResult.NonGovernmentGatewayUser)
       }
       .recover {
         case _: NoActiveSession         => AuthResult.NotLoggedIn
-        case _: UnsupportedAuthProvider => AuthResult.NonOrganisationUser
+        case _: UnsupportedAuthProvider => AuthResult.NonGovernmentGatewayUser
       }
-
-  private def hasOrganisationAffinity(optAffinityGroup: Option[AffinityGroup]) =
-    optAffinityGroup.contains(AffinityGroup.Organisation)
 
   private def hasActiveEnrolment(enrolments: Enrolments) =
     enrolments.getEnrolment("HMRC-SS-ORG").exists(_.isActivated)

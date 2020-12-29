@@ -107,7 +107,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
 
     "authenticated with but as an not as an organisation with GGW" should {
       "return HTML for the 'nonOrganisationPage' page" in new Test {
-        MockAuthService.authenticate returns Future.successful(AuthResult.NonOrganisationUser)
+        MockAuthService.authenticate returns Future.successful(AuthResult.NonGovernmentGatewayUser)
         val result: Future[Result] = controller.start(fakeRequest)
 
         contentType(result)     shouldBe Some("text/html")

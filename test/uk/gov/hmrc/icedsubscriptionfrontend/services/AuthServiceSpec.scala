@@ -24,6 +24,7 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, ~}
 import uk.gov.hmrc.auth.core.syntax.retrieved.authSyntaxForRetrieved
 import uk.gov.hmrc.icedsubscriptionfrontend.connectors.MockAuthConnector
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup
 
 import scala.concurrent.Future
 
@@ -33,8 +34,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
   "AuthService.authenticate" when {
     def stubAuth(): CallHandler[Future[Enrolments ~ Option[AffinityGroup]]] =
-      MockAuthConnector
-        .authorise(AuthProviders(AuthProvider.GovernmentGateway), allEnrolments and affinityGroup)
+      MockAuthConnector.authorise(AuthProviders(AuthProvider.GovernmentGateway), allEnrolments and affinityGroup)
 
     def activeEnrolment(key: String): Enrolment = Enrolment(key = key)
 
@@ -52,34 +52,34 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
     }
 
     "user is an individual (even with correct enrolment)" must {
-      "return NonOrganisationUser" in {
+      "return BadUserAffinity" in {
         stubAuth() returns Future.successful(activeSsEnrolments and Some(AffinityGroup.Individual))
 
-        service.authenticate().futureValue shouldBe AuthResult.NonOrganisationUser
+        service.authenticate().futureValue shouldBe AuthResult.BadUserAffinity(UnsupportedAffinityGroup.Individual)
       }
     }
 
     "user is an agent (even with correct enrolment)" must {
-      "return NonOrganisationUser" in {
+      "return BadUserAffinity" in {
         stubAuth() returns Future.successful(activeSsEnrolments and Some(AffinityGroup.Agent))
 
-        service.authenticate().futureValue shouldBe AuthResult.NonOrganisationUser
+        service.authenticate().futureValue shouldBe AuthResult.BadUserAffinity(UnsupportedAffinityGroup.Agent)
       }
     }
 
     "user has no affinity group (even with correct enrolment)" must {
-      "return NonOrganisationUser" in {
+      "return NonGovernmentGatewayUser" in {
         stubAuth() returns Future.successful(activeSsEnrolments and None)
 
-        service.authenticate().futureValue shouldBe AuthResult.NonOrganisationUser
+        service.authenticate().futureValue shouldBe AuthResult.NonGovernmentGatewayUser
       }
     }
 
     "user is not a GGW user" must {
-      "return NonOrganisationUser" in {
+      "return NonGovernmentGatewayUser" in {
         stubAuth() returns Future.failed(UnsupportedAuthProvider())
 
-        service.authenticate().futureValue shouldBe AuthResult.NonOrganisationUser
+        service.authenticate().futureValue shouldBe AuthResult.NonGovernmentGatewayUser
       }
     }
 
@@ -118,8 +118,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
   }
 
   "AuthService.authenticateNoProfile" when {
-    def stubAuth(): CallHandler[Future[Unit]] =
-      MockAuthConnector.authorise(EmptyPredicate, EmptyRetrieval)
+    def stubAuth(): CallHandler[Future[Unit]] = MockAuthConnector.authorise(EmptyPredicate, EmptyRetrieval)
 
     "logged in" must {
       "return true" in {

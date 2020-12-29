@@ -45,7 +45,7 @@ class SubscriptionController @Inject()(
     request.enrolment match {
       case Enrolment.EnrolledAsOrganisation => Ok(alreadyEnrolledPage())
       case Enrolment.NotEnrolled            => Redirect(appConfig.eoriCommonComponentStartUrl)
-      case Enrolment.NonOrganisationUser    => Ok(nonOrgGgwPage())
+      case _                                => Ok(nonOrgGgwPage())
     }
   }
 }

@@ -21,6 +21,7 @@ import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup
 import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
@@ -38,9 +39,10 @@ class AuthActionWithProfileSpec extends SpecBase with MockAuthService with MockA
   class Controller extends FrontendController(stubMessagesControllerComponents()) {
     def handleRequest(): Action[AnyContent] = authAction { req =>
       req.enrolment match {
-        case Enrolment.EnrolledAsOrganisation => Ok("enrolled Organisation")
-        case Enrolment.NonOrganisationUser    => Ok("non organisation user")
-        case Enrolment.NotEnrolled            => Ok("not enrolled")
+        case Enrolment.EnrolledAsOrganisation   => Ok("enrolled Organisation")
+        case Enrolment.NonGovernmentGatewayUser => Ok("non organisation user")
+        case Enrolment.NotEnrolled              => Ok("not enrolled")
+        case Enrolment.BadUserAffinity(group)   => Ok(s"bad user affinity $group")
       }
     }
   }
@@ -86,14 +88,38 @@ class AuthActionWithProfileSpec extends SpecBase with MockAuthService with MockA
       }
     }
 
-    "user is unsupported" must {
-      "call the block with UnsupportedUser" in {
-        MockAuthService.authenticate returns Future.successful(AuthResult.NonOrganisationUser)
+    "user is unsupported" when {
+      "Non-GG user" must {
+        "call the block with UnsupportedUser" in {
+          MockAuthService.authenticate returns Future.successful(AuthResult.NonGovernmentGatewayUser)
 
-        val result = controller.handleRequest()(FakeRequest())
+          val result = controller.handleRequest()(FakeRequest())
 
-        status(result)          shouldBe OK
-        contentAsString(result) shouldBe "non organisation user"
+          status(result) shouldBe OK
+          contentAsString(result) shouldBe "non organisation user"
+        }
+      }
+      "BadUserAffinity(Individual)" must {
+        "call the block with BadUserAffinity" in {
+          val group = UnsupportedAffinityGroup.Individual
+          MockAuthService.authenticate returns Future.successful(AuthResult.BadUserAffinity(group))
+
+          val result = controller.handleRequest()(FakeRequest())
+
+          status(result) shouldBe OK
+          contentAsString(result) shouldBe s"bad user affinity $group"
+        }
+      }
+      "BadUserAffinity(Agent)" must {
+        "call the block with BadUserAffinity" in {
+          val group = UnsupportedAffinityGroup.Agent
+          MockAuthService.authenticate returns Future.successful(AuthResult.BadUserAffinity(group))
+
+          val result = controller.handleRequest()(FakeRequest())
+
+          status(result) shouldBe OK
+          contentAsString(result) shouldBe s"bad user affinity $group"
+        }
       }
     }
   }
