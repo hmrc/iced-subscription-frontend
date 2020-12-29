@@ -38,11 +38,11 @@ class AuthActionWithProfileSpec extends SpecBase with MockAuthService with MockA
 
   class Controller extends FrontendController(stubMessagesControllerComponents()) {
     def handleRequest(): Action[AnyContent] = authAction { req =>
-      req.enrolment match {
-        case Enrolment.EnrolledAsOrganisation   => Ok("enrolled Organisation")
-        case Enrolment.NonGovernmentGatewayUser => Ok("non organisation user")
-        case Enrolment.NotEnrolled              => Ok("not enrolled")
-        case Enrolment.BadUserAffinity(group)   => Ok(s"bad user affinity $group")
+      req.authResult match {
+        case AuthResult.EnrolledAsOrganisation   => Ok("enrolled Organisation")
+        case AuthResult.NonGovernmentGatewayUser => Ok("non organisation user")
+        case AuthResult.NotEnrolled              => Ok("not enrolled")
+        case AuthResult.BadUserAffinity(group)   => Ok(s"bad user affinity $group")
       }
     }
   }

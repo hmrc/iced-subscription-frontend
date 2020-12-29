@@ -49,7 +49,7 @@ class AuthActionWithProfile @Inject()(defaultParser: PlayBodyParsers, authServic
 
     authService.authenticate().flatMap {
       case NotLoggedIn => Future.successful(redirectToLogin(request))
-      case authResult  => block(AuthenticatedRequest(request, Enrolment.fromAuthResult(authResult)))
+      case authResult  => block(AuthenticatedRequest(request, authResult))
     }
   }
 }
