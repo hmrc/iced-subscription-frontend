@@ -22,11 +22,11 @@ import org.jsoup.nodes.{Document, Element}
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers
-import uk.gov.hmrc.icedsubscriptionfrontend.views.html.NonOrgGgwPage
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{IndividualGgwPage, NonOrgGgwPage}
 
-class NonOrgGgwPageSpec extends SpecBase {
+class IndividualGgwPageSpec extends SpecBase {
 
-  lazy val view: NonOrgGgwPage = inject[NonOrgGgwPage]
+  lazy val view: IndividualGgwPage = inject[IndividualGgwPage]
   lazy val signOutAndContinueUrl: String =
     controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start().url)).url
 
@@ -40,10 +40,11 @@ class NonOrgGgwPageSpec extends SpecBase {
   lazy val document: Document = Jsoup.parse(html.toString)
   lazy val content: Element   = document.select("#content").first
 
-  "NonOrgGgwPage" must {
+  "IndividualGgwPage" must {
 
     "have the correct title" in {
-      document.title shouldBe "You need to access this service through Government Gateway - Enrol with the Safety and Security service - GOV.UK"
+      document.title shouldBe
+        "You need a Government Gateway Organisation account to enrol for S&S GB - Enrol with the Safety and Security service - GOV.UK"
     }
 
     "have a sign out link" in {
@@ -54,25 +55,26 @@ class NonOrgGgwPageSpec extends SpecBase {
     }
 
     "have only one page heading" in {
-      document.select(Selectors.h1).text shouldBe "You need to access this service through Government Gateway"
+      document.select(Selectors.h1).text shouldBe "You need a Government Gateway Organisation account to enrol for S&S GB"
       document.select(Selectors.h1).size shouldBe 1
     }
 
-    "have a paragraph explaining the user is logged in to an invalid account" in {
+    "have a paragraph explaining the user is logged in with an Individual government gateway account" in {
       content.select(Selectors.paragraph).first().text shouldBe
-        "This is because you have signed in with the wrong account."
+        "You have signed in with an individual Government Gateway user ID."
     }
 
-    "have a paragraph explaining what is needed" in {
+    "have a paragraph explaining what need" in {
       content.select(Selectors.paragraph).get(1).text shouldBe
-        "To enrol with this service you need a Government Gateway account for your organisation."
+        "To enrol with S&S GB you need a Government Gateway account for your organisation."
     }
 
     "have a paragraph with a link explaining what to do if have another organisation account" in {
       val para = content.select(Selectors.paragraph).get(2)
 
       para.text shouldBe "If you have another Government Gateway user ID, return to the sign in page and enter the " +
-        "Government Gateway ID for your organisation."
+        "Government Gateway ID for your organisation. " +
+        "(You can create a Government Gateway account for your organisation if you do not have one.)"
 
       val link = para.select("#sign-in").get(0)
 

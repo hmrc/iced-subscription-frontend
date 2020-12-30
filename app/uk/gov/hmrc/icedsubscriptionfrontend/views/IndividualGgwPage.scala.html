@@ -1,0 +1,54 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.hmrcfrontend.views.html.components._
+@import uk.gov.hmrc.icedsubscriptionfrontend.controllers
+@import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
+
+
+@this(layout: Layout,
+        hmrcPageHeading: HmrcPageHeading,
+        p: p,
+        paragraph: paragraph,
+        heading2: heading2,
+        insetText: insetText,
+        bulletList: bulletList,
+        link: link,
+        govukButton: GovukButton)
+
+@()(implicit messages: Messages, requestHeader: RequestHeader)
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("individual.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
+
+    @hmrcPageHeading(PageHeading(text = messages("individual.heading")))
+
+    @p {
+        @messages("individual.wrongTypeOfAccount.1")
+        <strong>@messages("individual.wrongTypeOfAccount.2")</strong>
+        @messages("individual.wrongTypeOfAccount.3")
+    }
+    @p {
+        @messages("individual.ifYouDontHaveOrgAccount.1")
+        <strong>@messages("individual.ifYouDontHaveOrgAccount.2")</strong>@messages("individual.ifYouDontHaveOrgAccount.3")
+    }
+
+    @p {
+        @messages("individual.ifYouHaveOrgAccount.1")
+        @link(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url,
+            "individual.ifYouHaveOrgAccount.2", id = Some("sign-in"))
+        @messages("individual.ifYouHaveOrgAccount.3")
+        @messages("individual.ifYouHaveOrgAccount.4")
+    }
+}

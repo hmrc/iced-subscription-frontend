@@ -56,6 +56,19 @@ nonOrgGgwPage.ifYouHaveOrgAccount.1=If you have another Government Gateway user 
 nonOrgGgwPage.ifYouHaveOrgAccount.2=return to the sign in page
 nonOrgGgwPage.ifYouHaveOrgAccount.3=and enter the Government Gateway ID for your organisation.
 
+## Individual GGW Page
+individual.heading=You need a Government Gateway Organisation account to enrol for S&S GB
+individual.wrongTypeOfAccount.1=You have signed in with an
+individual.wrongTypeOfAccount.2=individual
+individual.wrongTypeOfAccount.3=Government Gateway user ID.
+individual.ifYouDontHaveOrgAccount.1=To enrol with S&S GB you need a Government Gateway account for your
+individual.ifYouDontHaveOrgAccount.2=organisation
+individual.ifYouDontHaveOrgAccount.3='.'
+individual.ifYouHaveOrgAccount.1=If you have another Government Gateway user ID,
+individual.ifYouHaveOrgAccount.2=return to the sign in page
+individual.ifYouHaveOrgAccount.3=and enter the Government Gateway ID for your organisation.
+individual.ifYouHaveOrgAccount.4=(You can create a Government Gateway account for your organisation if you do not have one.)
+
 ## Footer
 footer.cookies.text = Cookies
 footer.cookies.url = /help/cookies
