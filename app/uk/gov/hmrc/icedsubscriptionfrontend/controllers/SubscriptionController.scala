@@ -20,7 +20,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionWithProfile
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
-import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup.Individual
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.icedsubscriptionfrontend.services.AuthResult
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -35,7 +35,8 @@ class SubscriptionController @Inject()(
   landingPage: LandingPage,
   alreadyEnrolledPage: AlreadyEnrolledPage,
   nonOrgGgwPage: NonOrgGgwPage,
-  individualPage: BadUserIndividualPage)
+  individualPage: BadUserIndividualPage,
+  agentPage: BadUserAgentPage)
     extends FrontendController(mcc)
     with I18nSupport {
 
@@ -50,6 +51,7 @@ class SubscriptionController @Inject()(
       case AuthResult.EnrolledAsOrganisation      => Ok(alreadyEnrolledPage())
       case AuthResult.NotEnrolled                 => Redirect(appConfig.eoriCommonComponentStartUrl)
       case AuthResult.BadUserAffinity(Individual) => Ok(individualPage())
+      case AuthResult.BadUserAffinity(Agent)      => Ok(agentPage())
       case _                                      => Ok(nonOrgGgwPage())
     }
   }
