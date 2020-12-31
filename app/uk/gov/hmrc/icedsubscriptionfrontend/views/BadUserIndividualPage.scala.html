@@ -14,25 +14,19 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.hmrcfrontend.views.html.components._
 @import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
 
-
 @this(layout: Layout,
-        hmrcPageHeading: HmrcPageHeading,
         p: p,
         paragraph: paragraph,
         heading2: heading2,
-        insetText: insetText,
-        bulletList: bulletList,
-        link: link,
-        govukButton: GovukButton)
+        link: link)
 
 @()(implicit messages: Messages, requestHeader: RequestHeader)
 @layout(pageTitle = Some(messages("service.pageTitle.format", messages("individual.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
 
-    @hmrcPageHeading(PageHeading(text = messages("individual.heading")))
+    @heading2("individual.heading")
 
     @p {
         @messages("individual.wrongTypeOfAccount.1")
