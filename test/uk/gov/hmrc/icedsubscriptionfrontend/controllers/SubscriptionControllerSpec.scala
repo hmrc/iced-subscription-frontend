@@ -24,7 +24,7 @@ import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionWithProfile
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup.Individual
 import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
-import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, IndividualGgwPage, LandingPage, NonOrgGgwPage}
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, BadUserIndividualPage, LandingPage, NonOrgGgwPage}
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
 import scala.concurrent.Future
@@ -36,7 +36,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
   val landingPage: LandingPage                 = app.injector.instanceOf[LandingPage]
   val alreadyEnrolledPage: AlreadyEnrolledPage = app.injector.instanceOf[AlreadyEnrolledPage]
   val nonOrgGgwPage: NonOrgGgwPage             = app.injector.instanceOf[NonOrgGgwPage]
-  val individualGgwPage: IndividualGgwPage     = app.injector.instanceOf[IndividualGgwPage]
+  val individualPage: BadUserIndividualPage    = app.injector.instanceOf[BadUserIndividualPage]
 
   val authAction = new AuthActionWithProfile(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
@@ -48,7 +48,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       landingPage,
       alreadyEnrolledPage,
       nonOrgGgwPage,
-      individualGgwPage
+      individualPage
     )
 
   class Test {
@@ -110,8 +110,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
     }
 
     "authenticated but not as an organisation with GGW" when {
-      "an indivudual" should {
-        "return HTML for the 'individualGgwPage' page" in new Test {
+      "an individual" should {
+        "return HTML for the 'badUserIndividualPage' page" in new Test {
           MockAuthService.authenticate returns Future.successful(AuthResult.BadUserAffinity(Individual))
           val result: Future[Result] = controller.start(fakeRequest)
 

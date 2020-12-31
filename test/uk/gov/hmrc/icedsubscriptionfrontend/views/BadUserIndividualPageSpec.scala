@@ -22,11 +22,11 @@ import org.jsoup.nodes.{Document, Element}
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers
-import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{IndividualGgwPage, NonOrgGgwPage}
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html.BadUserIndividualPage
 
-class IndividualGgwPageSpec extends SpecBase {
+class BadUserIndividualPageSpec extends SpecBase {
 
-  lazy val view: IndividualGgwPage = inject[IndividualGgwPage]
+  lazy val view: BadUserIndividualPage = inject[BadUserIndividualPage]
   lazy val signOutAndContinueUrl: String =
     controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start().url)).url
 
@@ -40,7 +40,7 @@ class IndividualGgwPageSpec extends SpecBase {
   lazy val document: Document = Jsoup.parse(html.toString)
   lazy val content: Element   = document.select("#content").first
 
-  "IndividualGgwPage" must {
+  "BadUserIndividualPage" must {
 
     "have the correct title" in {
       document.title shouldBe
