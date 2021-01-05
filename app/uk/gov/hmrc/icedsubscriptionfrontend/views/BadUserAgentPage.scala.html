@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
 
 @this(layout: Layout,
+        hmrcPageHeading: HmrcPageHeading,
         p: p,
         paragraph: paragraph,
         heading2: heading2,
@@ -26,7 +27,7 @@
 @()(implicit messages: Messages, requestHeader: RequestHeader)
 @layout(pageTitle = Some(messages("service.pageTitle.format", messages("agent.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
 
-    @heading2("agent.heading")
+    @hmrcPageHeading(PageHeading(text = messages("agent.heading")))
 
     @p {
         @messages("agent.wrongTypeOfAccount.1")
