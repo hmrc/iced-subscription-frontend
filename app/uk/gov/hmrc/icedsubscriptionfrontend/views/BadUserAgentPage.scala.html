@@ -14,34 +14,33 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.hmrcfrontend.views.html.components._
 @import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
-
 
 @this(layout: Layout,
         hmrcPageHeading: HmrcPageHeading,
         p: p,
         paragraph: paragraph,
         heading2: heading2,
-        insetText: insetText,
-        bulletList: bulletList,
-        link: link,
-        govukButton: GovukButton)
+        link: link)
 
 @()(implicit messages: Messages, requestHeader: RequestHeader)
-@layout(pageTitle = Some(messages("service.pageTitle.format", messages("nonOrgGgwPage.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("agent.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
 
-    @hmrcPageHeading(PageHeading(text = messages("nonOrgGgwPage.heading")))
-
-    @paragraph("nonOrgGgwPage.wrongTypeOfAccount", Some("you-have-signed-in"))
-
-    @paragraph("nonOrgGgwPage.ifYouDontHaveOrgAccount")
+    @hmrcPageHeading(PageHeading(text = messages("agent.heading")))
 
     @p {
-        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.1")
+        @messages("agent.wrongTypeOfAccount.1")
+        <strong>@messages("agent.wrongTypeOfAccount.2")</strong>
+        @messages("agent.wrongTypeOfAccount.3")
+    }
+
+    @paragraph("agent.ifYouDontHaveOrgAccount")
+
+    @p {
+        @messages("agent.ifYouHaveOrgAccount.1")
         @link(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url,
-            "nonOrgGgwPage.ifYouHaveOrgAccount.2", id = Some("sign-in"))
-        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.3")
+            "agent.ifYouHaveOrgAccount.2", id = Some("sign-in"))
+        @messages("agent.ifYouHaveOrgAccount.3")
     }
 }

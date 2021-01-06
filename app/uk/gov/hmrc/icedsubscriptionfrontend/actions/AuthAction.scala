@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,10 +48,8 @@ class AuthActionWithProfile @Inject()(defaultParser: PlayBodyParsers, authServic
     import AuthResult._
 
     authService.authenticate().flatMap {
-      case EnrolledAsOrganisation => block(AuthenticatedRequest(request, Enrolment.EnrolledAsOrganisation))
-      case NotEnrolled            => block(AuthenticatedRequest(request, Enrolment.NotEnrolled))
-      case NonOrganisationUser    => block(AuthenticatedRequest(request, Enrolment.NonOrganisationUser))
-      case NotLoggedIn            => Future.successful(redirectToLogin(request))
+      case NotLoggedIn => Future.successful(redirectToLogin(request))
+      case authResult  => block(AuthenticatedRequest(request, authResult))
     }
   }
 }

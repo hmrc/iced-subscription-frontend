@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@ import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionWithProfile
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
-import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, LandingPage, NonOrgGgwPage}
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html._
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
 import scala.concurrent.Future
@@ -35,6 +36,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
   val landingPage: LandingPage                 = app.injector.instanceOf[LandingPage]
   val alreadyEnrolledPage: AlreadyEnrolledPage = app.injector.instanceOf[AlreadyEnrolledPage]
   val nonOrgGgwPage: NonOrgGgwPage             = app.injector.instanceOf[NonOrgGgwPage]
+  val individualPage: BadUserIndividualPage    = app.injector.instanceOf[BadUserIndividualPage]
+  val agentPage: BadUserAgentPage              = app.injector.instanceOf[BadUserAgentPage]
 
   val authAction = new AuthActionWithProfile(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
@@ -45,7 +48,10 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       stubMessagesControllerComponents(),
       landingPage,
       alreadyEnrolledPage,
-      nonOrgGgwPage)
+      nonOrgGgwPage,
+      individualPage,
+      agentPage
+    )
 
   class Test {
     MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes ()
@@ -105,14 +111,36 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       }
     }
 
-    "authenticated with but as an not as an organisation with GGW" should {
-      "return HTML for the 'nonOrganisationPage' page" in new Test {
-        MockAuthService.authenticate returns Future.successful(AuthResult.NonOrganisationUser)
-        val result: Future[Result] = controller.start(fakeRequest)
+    "authenticated but not as an organisation with GGW" when {
+      "an individual" should {
+        "return HTML for the 'badUserIndividualPage' page" in new Test {
+          MockAuthService.authenticate returns Future.successful(AuthResult.BadUserAffinity(Individual))
+          val result: Future[Result] = controller.start(fakeRequest)
 
-        contentType(result)     shouldBe Some("text/html")
-        charset(result)         shouldBe Some("utf-8")
-        contentAsString(result) should include("nonOrgGgwPage.heading")
+          contentType(result)     shouldBe Some("text/html")
+          charset(result)         shouldBe Some("utf-8")
+          contentAsString(result) should include("individual.heading")
+        }
+      }
+      "an agent" should {
+        "return HTML for the 'badUserAgentPage' page" in new Test {
+          MockAuthService.authenticate returns Future.successful(AuthResult.BadUserAffinity(Agent))
+          val result: Future[Result] = controller.start(fakeRequest)
+
+          contentType(result)     shouldBe Some("text/html")
+          charset(result)         shouldBe Some("utf-8")
+          contentAsString(result) should include("agent.heading")
+        }
+      }
+      "None of the above" should {
+        "return HTML for the 'nonOrganisationPage' page" in new Test {
+          MockAuthService.authenticate returns Future.successful(AuthResult.NonGovernmentGatewayUser)
+          val result: Future[Result] = controller.start(fakeRequest)
+
+          contentType(result)     shouldBe Some("text/html")
+          charset(result)         shouldBe Some("utf-8")
+          contentAsString(result) should include("nonOrgGgwPage.heading")
+        }
       }
     }
   }

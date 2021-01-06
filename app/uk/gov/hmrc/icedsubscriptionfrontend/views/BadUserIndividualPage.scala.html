@@ -14,34 +14,36 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.hmrcfrontend.views.html.components._
 @import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
-
 
 @this(layout: Layout,
         hmrcPageHeading: HmrcPageHeading,
         p: p,
         paragraph: paragraph,
         heading2: heading2,
-        insetText: insetText,
-        bulletList: bulletList,
-        link: link,
-        govukButton: GovukButton)
+        link: link)
 
 @()(implicit messages: Messages, requestHeader: RequestHeader)
-@layout(pageTitle = Some(messages("service.pageTitle.format", messages("nonOrgGgwPage.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("individual.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
 
-    @hmrcPageHeading(PageHeading(text = messages("nonOrgGgwPage.heading")))
-
-    @paragraph("nonOrgGgwPage.wrongTypeOfAccount", Some("you-have-signed-in"))
-
-    @paragraph("nonOrgGgwPage.ifYouDontHaveOrgAccount")
+    @hmrcPageHeading(PageHeading(text = messages("individual.heading")))
 
     @p {
-        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.1")
+        @messages("individual.wrongTypeOfAccount.1")
+        <strong>@messages("individual.wrongTypeOfAccount.2")</strong>
+        @messages("individual.wrongTypeOfAccount.3")
+    }
+    @p {
+        @messages("individual.ifYouDontHaveOrgAccount.1")
+        <strong>@messages("individual.ifYouDontHaveOrgAccount.2")</strong>@messages("individual.ifYouDontHaveOrgAccount.3")
+    }
+
+    @p {
+        @messages("individual.ifYouHaveOrgAccount.1")
         @link(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url,
-            "nonOrgGgwPage.ifYouHaveOrgAccount.2", id = Some("sign-in"))
-        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.3")
+            "individual.ifYouHaveOrgAccount.2", id = Some("sign-in"))
+        @messages("individual.ifYouHaveOrgAccount.3")
+        @messages("individual.ifYouHaveOrgAccount.4")
     }
 }

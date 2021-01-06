@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,16 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import uk.gov.hmrc.icedsubscriptionfrontend.actions.{AuthActionWithProfile, Enrolment}
+import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionWithProfile
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
-import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{AlreadyEnrolledPage, LandingPage, NonOrgGgwPage}
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup.{Agent, Individual}
+import uk.gov.hmrc.icedsubscriptionfrontend.services.AuthResult
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class SubscriptionController @Inject()(
@@ -31,7 +34,9 @@ class SubscriptionController @Inject()(
   mcc: MessagesControllerComponents,
   landingPage: LandingPage,
   alreadyEnrolledPage: AlreadyEnrolledPage,
-  nonOrgGgwPage: NonOrgGgwPage)
+  nonOrgGgwPage: NonOrgGgwPage,
+  individualPage: BadUserIndividualPage,
+  agentPage: BadUserAgentPage)
     extends FrontendController(mcc)
     with I18nSupport {
 
@@ -42,10 +47,12 @@ class SubscriptionController @Inject()(
   }
 
   def start: Action[AnyContent] = authAction { implicit request =>
-    request.enrolment match {
-      case Enrolment.EnrolledAsOrganisation => Ok(alreadyEnrolledPage())
-      case Enrolment.NotEnrolled            => Redirect(appConfig.eoriCommonComponentStartUrl)
-      case Enrolment.NonOrganisationUser    => Ok(nonOrgGgwPage())
+    request.authResult match {
+      case AuthResult.EnrolledAsOrganisation      => Ok(alreadyEnrolledPage())
+      case AuthResult.NotEnrolled                 => Redirect(appConfig.eoriCommonComponentStartUrl)
+      case AuthResult.BadUserAffinity(Individual) => Ok(individualPage())
+      case AuthResult.BadUserAffinity(Agent)      => Ok(agentPage())
+      case _                                      => Ok(nonOrgGgwPage())
     }
   }
 }

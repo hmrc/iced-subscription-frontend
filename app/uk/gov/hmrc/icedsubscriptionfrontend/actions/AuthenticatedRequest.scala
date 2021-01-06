@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,5 +17,6 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.actions
 
 import play.api.mvc.{Request, WrappedRequest}
+import uk.gov.hmrc.icedsubscriptionfrontend.services.AuthResult
 
-case class AuthenticatedRequest[A](request: Request[A], enrolment: Enrolment) extends WrappedRequest(request)
+case class AuthenticatedRequest[A](request: Request[A], authResult: AuthResult) extends WrappedRequest(request)
