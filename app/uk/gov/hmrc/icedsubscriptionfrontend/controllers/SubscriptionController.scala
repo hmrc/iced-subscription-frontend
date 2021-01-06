@@ -36,7 +36,8 @@ class SubscriptionController @Inject()(
   alreadyEnrolledPage: AlreadyEnrolledPage,
   nonOrgGgwPage: NonOrgGgwPage,
   individualPage: BadUserIndividualPage,
-  agentPage: BadUserAgentPage)
+  agentPage: BadUserAgentPage,
+  verifyUserPage: BadUserVerifyPage)
     extends FrontendController(mcc)
     with I18nSupport {
 
@@ -52,6 +53,7 @@ class SubscriptionController @Inject()(
       case AuthResult.NotEnrolled                 => Redirect(appConfig.eoriCommonComponentStartUrl)
       case AuthResult.BadUserAffinity(Individual) => Ok(individualPage())
       case AuthResult.BadUserAffinity(Agent)      => Ok(agentPage())
+      case AuthResult.VerifyUser                  => Ok(verifyUserPage())
       case _                                      => Ok(nonOrgGgwPage())
     }
   }

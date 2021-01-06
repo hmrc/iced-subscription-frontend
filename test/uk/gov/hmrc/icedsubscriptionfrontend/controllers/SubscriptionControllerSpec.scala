@@ -38,6 +38,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
   val nonOrgGgwPage: NonOrgGgwPage             = app.injector.instanceOf[NonOrgGgwPage]
   val individualPage: BadUserIndividualPage    = app.injector.instanceOf[BadUserIndividualPage]
   val agentPage: BadUserAgentPage              = app.injector.instanceOf[BadUserAgentPage]
+  val verifyUserPage: BadUserVerifyPage        = app.injector.instanceOf[BadUserVerifyPage]
 
   val authAction = new AuthActionWithProfile(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
@@ -50,7 +51,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       alreadyEnrolledPage,
       nonOrgGgwPage,
       individualPage,
-      agentPage
+      agentPage,
+      verifyUserPage
     )
 
   class Test {
@@ -132,6 +134,18 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
           contentAsString(result) should include("agent.heading")
         }
       }
+
+      "a 'verify' user" should {
+        "return HTML for the 'badUserVerifyPage' page" in new Test {
+          MockAuthService.authenticate returns Future.successful(AuthResult.VerifyUser)
+          val result: Future[Result] = controller.start(fakeRequest)
+
+          contentType(result)     shouldBe Some("text/html")
+          charset(result)         shouldBe Some("utf-8")
+          contentAsString(result) should include("verify.heading")
+        }
+      }
+
       "None of the above" should {
         "return HTML for the 'nonOrganisationPage' page" in new Test {
           MockAuthService.authenticate returns Future.successful(AuthResult.NonGovernmentGatewayUser)

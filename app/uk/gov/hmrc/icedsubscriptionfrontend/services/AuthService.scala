@@ -20,7 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
-import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, ~}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, EmptyRetrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup
 
@@ -35,6 +35,8 @@ object AuthResult {
 
   case object EnrolledAsOrganisation extends AuthResult
 
+  case object VerifyUser extends AuthResult
+
   case object NonGovernmentGatewayUser extends AuthResult
 
   case class BadUserAffinity(unsupportedAffinityGroup: UnsupportedAffinityGroup) extends AuthResult
@@ -44,20 +46,24 @@ object AuthResult {
 class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: ExecutionContext)
     extends AuthorisedFunctions {
 
+  private val VerifyProviderType = "Verify"
+
   // Note: the logic is primarily implemented using retrievals rather than lists of
   // predicates so that we can closely control the order of checks rather than
   // relying on any correspondence between predicate order and
   // the exception that is thrown in a particular scenario...
   def authenticate()(implicit hc: HeaderCarrier): Future[AuthResult] =
-    authorised(AuthProviders(AuthProvider.GovernmentGateway))
-      .retrieve(allEnrolments and affinityGroup) {
-        case enrolments ~ Some(AffinityGroup.Organisation) if hasActiveEnrolment(enrolments) =>
+    authorised(AuthProviders(AuthProvider.GovernmentGateway, AuthProvider.Verify))
+      .retrieve(allEnrolments and affinityGroup and credentials) {
+        case _ ~ _ ~ Some(Credentials(_, VerifyProviderType)) =>
+          Future.successful(AuthResult.VerifyUser)
+        case enrolments ~ Some(AffinityGroup.Organisation) ~ _ if hasActiveEnrolment(enrolments) =>
           Future.successful(AuthResult.EnrolledAsOrganisation)
-        case _ ~ Some(AffinityGroup.Organisation) =>
+        case _ ~ Some(AffinityGroup.Organisation) ~ _ =>
           Future.successful(AuthResult.NotEnrolled)
-        case _ ~ Some(AffinityGroup.Individual) =>
+        case _ ~ Some(AffinityGroup.Individual) ~ _ =>
           Future.successful(AuthResult.BadUserAffinity(UnsupportedAffinityGroup.Individual))
-        case _ ~ Some(AffinityGroup.Agent) =>
+        case _ ~ Some(AffinityGroup.Agent) ~ _ =>
           Future.successful(AuthResult.BadUserAffinity(UnsupportedAffinityGroup.Agent))
         case _ =>
           Future.successful(AuthResult.NonGovernmentGatewayUser)
