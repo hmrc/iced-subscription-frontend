@@ -18,11 +18,11 @@ package uk.gov.hmrc.icedsubscriptionfrontend.services
 
 import base.SpecBase
 import org.scalamock.handlers.CallHandler
-import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, EmptyRetrieval, ~}
 import uk.gov.hmrc.auth.core.syntax.retrieved.authSyntaxForRetrieved
+import uk.gov.hmrc.auth.core.{Enrolments, _}
 import uk.gov.hmrc.icedsubscriptionfrontend.connectors.MockAuthConnector
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup
 
@@ -44,6 +44,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
     val activeSsEnrolments = Enrolments(Set(ssEnrolment))
     val otherEnrolments    = Enrolments(Set(activeEnrolment("OTHER")))
+    val emptyEnrolments    = Enrolments(Set.empty)
 
     val ggwCreds = Credentials(providerId = "someId", providerType = "GovernmentGateway")
 
@@ -55,38 +56,53 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
       }
     }
 
-    "user is an individual (even with correct enrolment)" must {
-      "return BadUserAffinity" in {
-        stubAuth() returns Future.successful(activeSsEnrolments and Some(AffinityGroup.Individual) and Some(ggwCreds))
+    "user is an individual (regardless of enrolments)" must {
+      Seq(activeSsEnrolments, otherEnrolments, emptyEnrolments).foreach(test)
+
+      def test(enrolments: Enrolments): Unit = s"return BadUserAffinity with enrolments $enrolments" in {
+        stubAuth() returns Future.successful(enrolments and Some(AffinityGroup.Individual) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.BadUserAffinity(UnsupportedAffinityGroup.Individual)
       }
     }
 
-    "user is an agent (even with correct enrolment)" must {
-      "return BadUserAffinity" in {
-        stubAuth() returns Future.successful(activeSsEnrolments and Some(AffinityGroup.Agent) and Some(ggwCreds))
+    "user is an agent (regardless of enrolments)" must {
+      Seq(activeSsEnrolments, otherEnrolments, emptyEnrolments).foreach(test)
+
+      def test(enrolments: Enrolments): Unit = s"return BadUserAffinity with enrolments $enrolments" in {
+        stubAuth() returns Future.successful(enrolments and Some(AffinityGroup.Agent) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.BadUserAffinity(UnsupportedAffinityGroup.Agent)
       }
     }
 
-    "user has no affinity group (even with correct enrolment)" must {
-      "return NonGovernmentGatewayUser" in {
-        stubAuth() returns Future.successful(activeSsEnrolments and None and Some(ggwCreds))
+    "user has no affinity group (regardless of enrolments)" must {
+      Seq(activeSsEnrolments, otherEnrolments, emptyEnrolments).foreach(test)
+
+      def test(enrolments: Enrolments): Unit = s"return NonGovernmentGatewayUser with enrolments $enrolments" in {
+        stubAuth() returns Future.successful(enrolments and None and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.NonGovernmentGatewayUser
       }
     }
 
-    "user is a 'Verify' user (even if somehow with correct enrolment and Organisation affinity group)" must {
-      "return VerifyUser" in {
-        val verifyCreds = Credentials(providerId = "someVerifyId", providerType = "Verify")
-        stubAuth() returns Future.successful(
-          activeSsEnrolments and Some(AffinityGroup.Organisation) and Some(verifyCreds))
+    "user is a 'Verify' user (regardless of enrolments and affinity group)" must {
+      for {
+        enrolment <- Seq(activeSsEnrolments, otherEnrolments, emptyEnrolments)
+        affinityGroup <- Seq(
+                          None,
+                          Some(AffinityGroup.Organisation),
+                          Some(AffinityGroup.Individual),
+                          Some(AffinityGroup.Agent))
+      } test(enrolment, affinityGroup)
 
-        service.authenticate().futureValue shouldBe AuthResult.VerifyUser
-      }
+      def test(enrolments: Enrolments, affinityGroup: Option[AffinityGroup]): Unit =
+        s"return VerifyUser with enrolments $enrolments and affinityGroup $affinityGroup" in {
+          val verifyCreds = Credentials(providerId = "someVerifyId", providerType = "Verify")
+          stubAuth() returns Future.successful(enrolments and affinityGroup and Some(verifyCreds))
+
+          service.authenticate().futureValue shouldBe AuthResult.VerifyUser
+        }
     }
 
     "user is some other non-GGW user" must {
@@ -99,8 +115,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
     "user has no enrolment" must {
       "return NotEnrolled" in {
-        stubAuth() returns Future.successful(
-          Enrolments(Set.empty) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+        stubAuth() returns Future.successful(emptyEnrolments and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.NotEnrolled
       }
