@@ -79,6 +79,19 @@ agent.ifYouHaveOrgAccount.1=If you have another Government Gateway user ID,
 agent.ifYouHaveOrgAccount.2=return to the sign in page
 agent.ifYouHaveOrgAccount.3=and enter the Government Gateway ID for your organisation.
 
+## Bad User Verify Account Page
+verify.heading=You need a Government Gateway Organisation account to enrol for S&S GB
+verify.wrongTypeOfAccount.1=This is because you have signed in using your
+verify.wrongTypeOfAccount.2=GOV.UK Verify
+verify.wrongTypeOfAccount.3=user ID.
+verify.ifYouDontHaveOrgAccount.1=To enrol with S&S GB you need a Government Gateway account for your
+verify.ifYouDontHaveOrgAccount.2=organisation
+verify.ifYouDontHaveOrgAccount.3='.'
+verify.ifYouHaveOrgAccount.1=If you have another Government Gateway user ID,
+verify.ifYouHaveOrgAccount.2=return to the sign in page
+verify.ifYouHaveOrgAccount.3=and enter the Government Gateway ID for your organisation.
+verify.ifYouHaveOrgAccount.4=(You can create a Government Gateway account for your organisation if you do not have one.)
+
 ## Footer
 footer.cookies.text = Cookies
 footer.cookies.url = /help/cookies
