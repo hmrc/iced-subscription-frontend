@@ -22,7 +22,7 @@ import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, EmptyRetrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup
+import uk.gov.hmrc.icedsubscriptionfrontend.actions.UserType
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,15 +31,7 @@ sealed trait AuthResult
 object AuthResult {
   case object NotLoggedIn extends AuthResult
 
-  case object NotEnrolled extends AuthResult
-
-  case object EnrolledAsOrganisation extends AuthResult
-
-  case object VerifyUser extends AuthResult
-
-  case object NonGovernmentGatewayUser extends AuthResult
-
-  case class BadUserAffinity(unsupportedAffinityGroup: UnsupportedAffinityGroup) extends AuthResult
+  case class LoggedIn(userType: UserType) extends AuthResult
 }
 
 @Singleton
@@ -54,23 +46,23 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
   // the exception that is thrown in a particular scenario...
   def authenticate()(implicit hc: HeaderCarrier): Future[AuthResult] =
     authorised(AuthProviders(AuthProvider.GovernmentGateway, AuthProvider.Verify))
-      .retrieve(allEnrolments and affinityGroup and credentials) {
-        case _ ~ _ ~ Some(Credentials(_, VerifyProviderType)) =>
-          Future.successful(AuthResult.VerifyUser)
-        case enrolments ~ Some(AffinityGroup.Organisation) ~ _ if hasActiveEnrolment(enrolments) =>
-          Future.successful(AuthResult.EnrolledAsOrganisation)
-        case _ ~ Some(AffinityGroup.Organisation) ~ _ =>
-          Future.successful(AuthResult.NotEnrolled)
-        case _ ~ Some(AffinityGroup.Individual) ~ _ =>
-          Future.successful(AuthResult.BadUserAffinity(UnsupportedAffinityGroup.Individual))
-        case _ ~ Some(AffinityGroup.Agent) ~ _ =>
-          Future.successful(AuthResult.BadUserAffinity(UnsupportedAffinityGroup.Agent))
-        case _ =>
-          Future.successful(AuthResult.NonGovernmentGatewayUser)
+      .retrieve(allEnrolments and affinityGroup and credentials) { retrievals =>
+        import UserType._
+
+        val userType = retrievals match {
+          case _ ~ _ ~ Some(Credentials(_, VerifyProviderType))                                    => UnsupportedVerifyUser
+          case enrolments ~ Some(AffinityGroup.Organisation) ~ _ if hasActiveEnrolment(enrolments) => AlreadyEnrolled
+          case _ ~ Some(AffinityGroup.Organisation) ~ _                                            => NotEnrolled
+          case _ ~ Some(AffinityGroup.Individual) ~ _                                              => UnsupportedAffinityIndividual
+          case _ ~ Some(AffinityGroup.Agent) ~ _                                                   => UnsupportedAffinityAgent
+          case _                                                                                   => NonGovernmentGatewayUser
+        }
+
+        Future.successful(AuthResult.LoggedIn(userType))
       }
       .recover {
         case _: NoActiveSession         => AuthResult.NotLoggedIn
-        case _: UnsupportedAuthProvider => AuthResult.NonGovernmentGatewayUser
+        case _: UnsupportedAuthProvider => AuthResult.LoggedIn(UserType.NonGovernmentGatewayUser)
       }
 
   private def hasActiveEnrolment(enrolments: Enrolments) =

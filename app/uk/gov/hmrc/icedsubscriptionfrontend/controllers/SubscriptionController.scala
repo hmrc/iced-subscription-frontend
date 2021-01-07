@@ -18,10 +18,8 @@ package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionWithProfile
+import uk.gov.hmrc.icedsubscriptionfrontend.actions.{AuthActionWithProfile, UserType}
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
-import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup.{Agent, Individual}
-import uk.gov.hmrc.icedsubscriptionfrontend.services.AuthResult
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -48,13 +46,15 @@ class SubscriptionController @Inject()(
   }
 
   def start: Action[AnyContent] = authAction { implicit request =>
-    request.authResult match {
-      case AuthResult.EnrolledAsOrganisation      => Ok(alreadyEnrolledPage())
-      case AuthResult.NotEnrolled                 => Redirect(appConfig.eoriCommonComponentStartUrl)
-      case AuthResult.BadUserAffinity(Individual) => Ok(individualPage())
-      case AuthResult.BadUserAffinity(Agent)      => Ok(agentPage())
-      case AuthResult.VerifyUser                  => Ok(verifyUserPage())
-      case _                                      => Ok(nonOrgGgwPage())
+    import UserType._
+
+    request.userType match {
+      case AlreadyEnrolled               => Ok(alreadyEnrolledPage())
+      case NotEnrolled                   => Redirect(appConfig.eoriCommonComponentStartUrl)
+      case UnsupportedAffinityIndividual => Ok(individualPage())
+      case UnsupportedAffinityAgent      => Ok(agentPage())
+      case UnsupportedVerifyUser         => Ok(verifyUserPage())
+      case NonGovernmentGatewayUser      => Ok(nonOrgGgwPage())
     }
   }
 }

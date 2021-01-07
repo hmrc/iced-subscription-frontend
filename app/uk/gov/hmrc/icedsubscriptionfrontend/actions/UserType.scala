@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.icedsubscriptionfrontend.controllers
+package uk.gov.hmrc.icedsubscriptionfrontend.actions
 
-sealed trait UnsupportedAffinityGroup
+sealed trait UserType
 
-object UnsupportedAffinityGroup {
-  case object Individual extends UnsupportedAffinityGroup
-  case object Agent extends UnsupportedAffinityGroup
+object UserType {
+  case object NotEnrolled extends UserType
+  case object AlreadyEnrolled extends UserType
+  case object UnsupportedAffinityIndividual extends UserType
+  case object UnsupportedAffinityAgent extends UserType
+  case object UnsupportedVerifyUser extends UserType
+  case object NonGovernmentGatewayUser extends UserType
 }
