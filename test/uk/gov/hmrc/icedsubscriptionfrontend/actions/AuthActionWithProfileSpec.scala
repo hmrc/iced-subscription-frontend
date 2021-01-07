@@ -21,7 +21,6 @@ import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
-import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup
 import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
@@ -37,14 +36,7 @@ class AuthActionWithProfileSpec extends SpecBase with MockAuthService with MockA
   val authAction = new AuthActionWithProfile(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
   class Controller extends FrontendController(stubMessagesControllerComponents()) {
-    def handleRequest(): Action[AnyContent] = authAction { req =>
-      req.authResult match {
-        case AuthResult.EnrolledAsOrganisation   => Ok("enrolled Organisation")
-        case AuthResult.NonGovernmentGatewayUser => Ok("non organisation user")
-        case AuthResult.NotEnrolled              => Ok("not enrolled")
-        case AuthResult.BadUserAffinity(group)   => Ok(s"bad user affinity $group")
-      }
-    }
+    def handleRequest(): Action[AnyContent] = authAction(req => Ok(req.userType.toString))
   }
 
   val controller = new Controller
@@ -66,60 +58,23 @@ class AuthActionWithProfileSpec extends SpecBase with MockAuthService with MockA
       }
     }
 
-    "no HMRC-SS-ORG enrolment" must {
-      "call the block with an un-enrolled request" in {
-        MockAuthService.authenticate returns Future.successful(AuthResult.NotEnrolled)
+    "logged in" must {
+      Seq(
+        UserType.UnsupportedVerifyUser,
+        UserType.UnsupportedAffinityAgent,
+        UserType.UnsupportedAffinityIndividual,
+        UserType.NonGovernmentGatewayUser,
+        UserType.NotEnrolled,
+        UserType.AlreadyEnrolled
+      ).foreach(test)
+
+      def test(userType: UserType): Unit = s"call the block with the user type $userType" in {
+        MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(userType))
 
         val result = controller.handleRequest()(FakeRequest())
 
         status(result)          shouldBe OK
-        contentAsString(result) shouldBe "not enrolled"
-      }
-    }
-
-    "active HMRC-SS-ORG enrolment found for an organisation" must {
-      "call the block with an enrolled request" in {
-        MockAuthService.authenticate returns Future.successful(AuthResult.EnrolledAsOrganisation)
-
-        val result = controller.handleRequest()(FakeRequest())
-
-        status(result)          shouldBe OK
-        contentAsString(result) shouldBe "enrolled Organisation"
-      }
-    }
-
-    "user is unsupported" when {
-      "Non-GG user" must {
-        "call the block with UnsupportedUser" in {
-          MockAuthService.authenticate returns Future.successful(AuthResult.NonGovernmentGatewayUser)
-
-          val result = controller.handleRequest()(FakeRequest())
-
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "non organisation user"
-        }
-      }
-      "BadUserAffinity(Individual)" must {
-        "call the block with BadUserAffinity" in {
-          val group = UnsupportedAffinityGroup.Individual
-          MockAuthService.authenticate returns Future.successful(AuthResult.BadUserAffinity(group))
-
-          val result = controller.handleRequest()(FakeRequest())
-
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe s"bad user affinity $group"
-        }
-      }
-      "BadUserAffinity(Agent)" must {
-        "call the block with BadUserAffinity" in {
-          val group = UnsupportedAffinityGroup.Agent
-          MockAuthService.authenticate returns Future.successful(AuthResult.BadUserAffinity(group))
-
-          val result = controller.handleRequest()(FakeRequest())
-
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe s"bad user affinity $group"
-        }
+        contentAsString(result) shouldBe userType.toString
       }
     }
   }

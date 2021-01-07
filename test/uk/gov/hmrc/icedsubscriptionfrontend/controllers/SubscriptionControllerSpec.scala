@@ -20,9 +20,8 @@ import base.SpecBase
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import uk.gov.hmrc.icedsubscriptionfrontend.actions.AuthActionWithProfile
+import uk.gov.hmrc.icedsubscriptionfrontend.actions.{AuthActionWithProfile, UserType}
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
-import uk.gov.hmrc.icedsubscriptionfrontend.controllers.UnsupportedAffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html._
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
@@ -38,6 +37,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
   val nonOrgGgwPage: NonOrgGgwPage             = app.injector.instanceOf[NonOrgGgwPage]
   val individualPage: BadUserIndividualPage    = app.injector.instanceOf[BadUserIndividualPage]
   val agentPage: BadUserAgentPage              = app.injector.instanceOf[BadUserAgentPage]
+  val verifyUserPage: BadUserVerifyPage        = app.injector.instanceOf[BadUserVerifyPage]
 
   val authAction = new AuthActionWithProfile(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
@@ -50,7 +50,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       alreadyEnrolledPage,
       nonOrgGgwPage,
       individualPage,
-      agentPage
+      agentPage,
+      verifyUserPage
     )
 
   class Test {
@@ -93,7 +94,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       "redirect to the eori common component frontend" in new Test {
         val eoriCommonComponentStartUrl: String = "http://localhost:1234/customs-enrolment-services/gbss/subscribe"
         MockAppConfig.eoriCommonComponentStartUrl returns eoriCommonComponentStartUrl
-        MockAuthService.authenticate returns Future.successful(AuthResult.NotEnrolled)
+        MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(UserType.NotEnrolled))
 
         val result: Future[Result] = controller.start(fakeRequest)
         redirectLocation(result) shouldBe Some(eoriCommonComponentStartUrl)
@@ -102,7 +103,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
 
     "authenticated with a HMRC-SS-ORG" should {
       "return HTML for the 'Already enrolled' page" in new Test {
-        MockAuthService.authenticate returns Future.successful(AuthResult.EnrolledAsOrganisation)
+        MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(UserType.AlreadyEnrolled))
         val result: Future[Result] = controller.start(fakeRequest)
 
         contentType(result)     shouldBe Some("text/html")
@@ -114,7 +115,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
     "authenticated but not as an organisation with GGW" when {
       "an individual" should {
         "return HTML for the 'badUserIndividualPage' page" in new Test {
-          MockAuthService.authenticate returns Future.successful(AuthResult.BadUserAffinity(Individual))
+          MockAuthService.authenticate returns Future.successful(
+            AuthResult.LoggedIn(UserType.UnsupportedAffinityIndividual))
           val result: Future[Result] = controller.start(fakeRequest)
 
           contentType(result)     shouldBe Some("text/html")
@@ -124,7 +126,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       }
       "an agent" should {
         "return HTML for the 'badUserAgentPage' page" in new Test {
-          MockAuthService.authenticate returns Future.successful(AuthResult.BadUserAffinity(Agent))
+          MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(UserType.UnsupportedAffinityAgent))
           val result: Future[Result] = controller.start(fakeRequest)
 
           contentType(result)     shouldBe Some("text/html")
@@ -132,9 +134,21 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
           contentAsString(result) should include("agent.heading")
         }
       }
+
+      "a 'verify' user" should {
+        "return HTML for the 'badUserVerifyPage' page" in new Test {
+          MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(UserType.UnsupportedVerifyUser))
+          val result: Future[Result] = controller.start(fakeRequest)
+
+          contentType(result)     shouldBe Some("text/html")
+          charset(result)         shouldBe Some("utf-8")
+          contentAsString(result) should include("verify.heading")
+        }
+      }
+
       "None of the above" should {
         "return HTML for the 'nonOrganisationPage' page" in new Test {
-          MockAuthService.authenticate returns Future.successful(AuthResult.NonGovernmentGatewayUser)
+          MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(UserType.NonGovernmentGatewayUser))
           val result: Future[Result] = controller.start(fakeRequest)
 
           contentType(result)     shouldBe Some("text/html")

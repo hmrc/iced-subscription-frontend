@@ -19,4 +19,4 @@ package uk.gov.hmrc.icedsubscriptionfrontend.actions
 import play.api.mvc.{Request, WrappedRequest}
 import uk.gov.hmrc.icedsubscriptionfrontend.services.AuthResult
 
-case class AuthenticatedRequest[A](request: Request[A], authResult: AuthResult) extends WrappedRequest(request)
+case class AuthenticatedRequest[A](request: Request[A], userType: UserType) extends WrappedRequest(request)

@@ -51,7 +51,7 @@ alreadyEnrolled.makeADeclaration=Gwneud datganiad Crynodeb Mynediad
 ## Non Organisation GGW Page
 nonOrgGgwPage.heading=Mae angen i chi gael at y gwasanaeth hwn drwy Borth y Llywodraeth
 nonOrgGgwPage.wrongTypeOfAccount=Mae hyn oherwydd eich bod wedi mewngofnodi gyda’r cyfrif anghywir.
-nonOrgGgwPage.ifYouDontHaveOrgAccount=I ymrestru ar gyfer y gwasanaeth hwn, mae angen cyfrif Porth y Llywodraeth arnoch ar gyfer eich sefydliad.
+nonOrgGgwPage.youNeed=I ymrestru ar gyfer y gwasanaeth hwn, mae angen cyfrif Porth y Llywodraeth arnoch ar gyfer eich sefydliad.
 nonOrgGgwPage.ifYouHaveOrgAccount.1=Os oes gennych Ddynodydd Defnyddiwr arall ar gyfer Porth y Llywodraeth,
 nonOrgGgwPage.ifYouHaveOrgAccount.2=ewch yn ôl i’r dudalen fewngofnodi
 nonOrgGgwPage.ifYouHaveOrgAccount.3=a nodi Dynodydd Defnyddiwr Porth y Llywodraeth ar gyfer eich sefydliad.

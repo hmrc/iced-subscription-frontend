@@ -14,34 +14,36 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.hmrcfrontend.views.html.components._
 @import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
-
 
 @this(layout: Layout,
         hmrcPageHeading: HmrcPageHeading,
         p: p,
         paragraph: paragraph,
         heading2: heading2,
-        insetText: insetText,
-        bulletList: bulletList,
-        link: link,
-        govukButton: GovukButton)
+        link: link)
 
 @()(implicit messages: Messages, requestHeader: RequestHeader)
-@layout(pageTitle = Some(messages("service.pageTitle.format", messages("nonOrgGgwPage.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("verify.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
 
-    @hmrcPageHeading(PageHeading(text = messages("nonOrgGgwPage.heading")))
-
-    @paragraph("nonOrgGgwPage.wrongTypeOfAccount", Some("you-have-signed-in"))
-
-    @paragraph("nonOrgGgwPage.youNeed")
+    @hmrcPageHeading(PageHeading(text = messages("verify.heading")))
 
     @p {
-        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.1")
+        @messages("verify.wrongTypeOfAccount.1")
+        <strong>@messages("verify.wrongTypeOfAccount.2")</strong>
+        @messages("verify.wrongTypeOfAccount.3")
+    }
+    @p {
+        @messages("verify.youNeed.1")
+        <strong>@messages("verify.youNeed.2")</strong>@messages("verify.youNeed.3")
+    }
+
+    @p {
+        @messages("verify.ifYouHaveOrgAccount.1")
         @link(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url,
-            "nonOrgGgwPage.ifYouHaveOrgAccount.2", id = Some("sign-in"))
-        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.3")
+            "verify.ifYouHaveOrgAccount.2", id = Some("sign-in"))
+        @messages("verify.ifYouHaveOrgAccount.3")
+        @messages("verify.ifYouHaveOrgAccount.4")
     }
 }

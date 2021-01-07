@@ -45,11 +45,9 @@ class AuthActionWithProfile @Inject()(defaultParser: PlayBodyParsers, authServic
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val headerCarrier: HeaderCarrier = hc(request)
 
-    import AuthResult._
-
     authService.authenticate().flatMap {
-      case NotLoggedIn => Future.successful(redirectToLogin(request))
-      case authResult  => block(AuthenticatedRequest(request, authResult))
+      case AuthResult.NotLoggedIn        => Future.successful(redirectToLogin(request))
+      case AuthResult.LoggedIn(userType) => block(AuthenticatedRequest(request, userType))
     }
   }
 }
