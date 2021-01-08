@@ -32,18 +32,19 @@
 
     @hmrcPageHeading(PageHeading(text = messages("successfullyEnrolled.heading")))
 
-    @paragraph("successfullyEnrolled.para.1")
+    @paragraph("successfullyEnrolled.para.1.1")
+    <br>
+    @paragraph("successfullyEnrolled.para.1.2")
 
-    @paragraph("successfullyEnrolled.para.1")
-
-    @hmrcPageHeading(PageHeading(text = messages("successfullyEnrolled.heading")))
-
-    @paragraph("successfullyEnrolled.para.1")
-
-    @paragraph("successfullyEnrolled.para.1")
+    <div id="info">
+          @heading2("successfullyEnrolled.csp.heading")
+          @paragraph("successfullyEnrolled.contact")
+          @paragraph("successfullyEnrolled.times")
+    </div>
 
     @p {
         @messages("successfullyEnrolled.findCallcharges")
-        @link(href = "https://https://www.gov.uk/call-charges", messageKey = "successfullyEnrolled.findCallcharges.linkText").
+        @link(href = "https://https://www.gov.uk/call-charges", messageKey = "successfullyEnrolled.findCallcharges.linkText")
+        content = Text(messages("successfullyEnrolled.link"))
     }
 }

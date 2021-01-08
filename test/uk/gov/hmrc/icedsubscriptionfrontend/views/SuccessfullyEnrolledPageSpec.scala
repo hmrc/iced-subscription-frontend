@@ -28,16 +28,17 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
   lazy val view: SuccessfullyEnrolledPage = inject[SuccessfullyEnrolledPage]
 
   object Selectors {
-    val h1        = "h1"
-    val h2        = "h2"
+    val h1 = "h1"
+    val h2 = "h2"
     val paragraph = "p"
-    val listItem  = "li"
-    val link      = ".govuk-link"
+    val listItem = "li"
+    val infoSection = "#info"
+    val link = ".govuk-link"
   }
 
-  lazy val html: Html         = view()(messages, FakeRequest())
+  lazy val html: Html = view()(messages, FakeRequest())
   lazy val document: Document = Jsoup.parse(html.toString)
-  lazy val content: Element   = document.select("#content").first
+  lazy val content: Element = document.select("#content").first
 
   "SuccessfullyEnrolledPage" must {
 
@@ -64,27 +65,27 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
         .text shouldBe "You will need to use third party software in order to do this"
     }
 
-    "have a only help heading" in {
-      content
-        .select(Selectors.h2).text shouldBe "If you need help"
-    }
 
-      "have a paragraph telephone" in {
-        content
+    "have information about call charges" in {
+      val section = content.select(Selectors.infoSection)
+
+      section.select(Selectors.h2).text shouldBe "If you need help"
+
+      section
         .select(Selectors.paragraph)
         .get(1)
         .text shouldBe "Telephone: 0300 322 7067"
 
-        content
-          .select(Selectors.paragraph)
-          .get(1)
-          .text shouldBe "Monday to Friday, 9am to 5pm (except public holidays)"
+      section
+        .select(Selectors.paragraph)
+        .get(1)
+        .text shouldBe "Monday to Friday, 9am to 5pm (except public holidays)"
 
       val link = content
         .select(Selectors.link)
         .first
 
-      link.text         shouldBe "Find out about call charges"
+      link.text shouldBe "Find out about call charges"
       link.attr("href") shouldBe "https://https://www.gov.uk/call-charges"
     }
   }

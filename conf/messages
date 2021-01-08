@@ -35,12 +35,13 @@ landing.start=Start now
 
 ## Successfully enrolled page
 successfullyEnrolled.heading=You have successfully enrolled with S&S GB
-successfullyEnrolled.para.1=You can submit an Entry Summary declaration, once your account is active
-successfullyEnrolled.para.1=You will need to use third party software in order to do this
-successfullyEnrolled.heading=If you need help
-successfullyEnrolled.para.1=Telephone: 0300 322 7067
-successfullyEnrolled.para.1=Monday to Friday, 9am to 5pm (except public holidays)
+successfullyEnrolled.para.1.1=You can submit an Entry Summary declaration, once your account is active
+successfullyEnrolled.para.1.2=You will need to use third party software in order to do this
+successfullyEnrolled.csp.heading=If you need help
+successfullyEnrolled.contact=Telephone: 0300 322 7067
+successfullyEnrolled.times=Monday to Friday, 9am to 5pm (except public holidays)
 successfullyEnrolled.findCallcharges=Find out about call charges
+successfullyEnrolled.link=Find out about call charges
 
 ## Already enrolled page
 alreadyEnrolled.heading=Enrol with the Safety and Security service
