@@ -29,6 +29,7 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
 
   object Selectors {
     val h1        = "h1"
+    val h2        = "h2"
     val paragraph = "p"
     val listItem  = "li"
     val link      = ".govuk-link"
@@ -53,42 +54,38 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
       content
         .select(Selectors.paragraph)
         .first
-        .text shouldBe "Your enrolment will be active in 2 hours."
+        .text shouldBe "You can submit an Entry Summary declaration, once your account is active"
     }
 
-    "have a paragraph explaining S&S" in {
+    "have a paragraph explaining third party" in {
       content
         .select(Selectors.paragraph)
         .get(1)
-        .text shouldBe "S&S GB handles digital communications between customs administrators and carriers or their appointed representatives."
+        .text shouldBe "You will need to use third party software in order to do this"
     }
 
-    "have a list of what S&S incorporates" in {
+    "have a only help heading" in {
       content
+        .select(Selectors.h2).text shouldBe "If you need help"
+    }
+
+      "have a paragraph telephone" in {
+        content
         .select(Selectors.paragraph)
-        .get(2)
-        .text shouldBe "S&S GB incorporates the:"
-      content
-        .select(Selectors.listItem)
-        .first
-        .text shouldBe "lodging, handling and processing of an Entry Summary declaration (sometimes called an ENS) " +
-        "in advance of the arrival of goods into the UK from outside the UK"
-      content
-        .select(Selectors.listItem)
         .get(1)
-        .text shouldBe "issuing of a Movement Reference Number (MRN)"
-    }
+        .text shouldBe "Telephone: 0300 322 7067"
 
-    "have a link to make a declaration" in {
-      content
-        .select(Selectors.paragraph)
-        .get(3)
-        .text shouldBe "Once your account is active, you can submit an Entry Summary declaration."
+        content
+          .select(Selectors.paragraph)
+          .get(1)
+          .text shouldBe "Monday to Friday, 9am to 5pm (except public holidays)"
 
-      content
+      val link = content
         .select(Selectors.link)
-        .get(0)
-        .attr("href") shouldBe "https://www.gov.uk/guidance/making-an-entry-summary-declaration"
+        .first
+
+      link.text         shouldBe "Find out about call charges"
+      link.attr("href") shouldBe "https://https://www.gov.uk/call-charges"
     }
   }
 }
