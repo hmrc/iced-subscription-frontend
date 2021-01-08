@@ -73,13 +73,8 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
 
       section
         .select(Selectors.paragraph)
-        .get(1)
-        .text shouldBe "Telephone: 0300 322 7067"
-
-      section
-        .select(Selectors.paragraph)
-        .get(1)
-        .text shouldBe "Monday to Friday, 9am to 5pm (except public holidays)"
+        .get(0)
+        .text shouldBe "Telephone: 0300 322 7067" + " Monday to Friday, 9am to 5pm (except public holidays)"
 
       val link = content
         .select(Selectors.link)
