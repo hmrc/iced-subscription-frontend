@@ -81,7 +81,7 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
         .first
 
       link.text shouldBe "Find out about call charges"
-      link.attr("href") shouldBe "https://https://www.gov.uk/call-charges"
+      link.attr("href") shouldBe "https://www.gov.uk/call-charges"
     }
   }
 }
