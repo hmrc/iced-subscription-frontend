@@ -28,15 +28,17 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
   lazy val view: SuccessfullyEnrolledPage = inject[SuccessfullyEnrolledPage]
 
   object Selectors {
-    val h1        = "h1"
+    val h1 = "h1"
+    val h2 = "h2"
     val paragraph = "p"
-    val listItem  = "li"
-    val link      = ".govuk-link"
+    val listItem = "li"
+    val infoSection = "#info"
+    val link = ".govuk-link"
   }
 
-  lazy val html: Html         = view()(messages, FakeRequest())
+  lazy val html: Html = view()(messages, FakeRequest())
   lazy val document: Document = Jsoup.parse(html.toString)
-  lazy val content: Element   = document.select("#content").first
+  lazy val content: Element = document.select("#content").first
 
   "SuccessfullyEnrolledPage" must {
 
@@ -53,42 +55,33 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
       content
         .select(Selectors.paragraph)
         .first
-        .text shouldBe "Your enrolment will be active in 2 hours."
+        .text shouldBe "You can submit an Entry Summary declaration, once your account is active"
     }
 
-    "have a paragraph explaining S&S" in {
+    "have a paragraph explaining third party" in {
       content
         .select(Selectors.paragraph)
         .get(1)
-        .text shouldBe "S&S GB handles digital communications between customs administrators and carriers or their appointed representatives."
+        .text shouldBe "You will need to use third party software in order to do this"
     }
 
-    "have a list of what S&S incorporates" in {
-      content
-        .select(Selectors.paragraph)
-        .get(2)
-        .text shouldBe "S&S GB incorporates the:"
-      content
-        .select(Selectors.listItem)
-        .first
-        .text shouldBe "lodging, handling and processing of an Entry Summary declaration (sometimes called an ENS) " +
-        "in advance of the arrival of goods into the UK from outside the UK"
-      content
-        .select(Selectors.listItem)
-        .get(1)
-        .text shouldBe "issuing of a Movement Reference Number (MRN)"
-    }
 
-    "have a link to make a declaration" in {
-      content
-        .select(Selectors.paragraph)
-        .get(3)
-        .text shouldBe "Once your account is active, you can submit an Entry Summary declaration."
+    "have information about call charges" in {
+      val section = content.select(Selectors.infoSection)
 
-      content
-        .select(Selectors.link)
+      section.select(Selectors.h2).text shouldBe "If you need help"
+
+      section
+        .select(Selectors.paragraph)
         .get(0)
-        .attr("href") shouldBe "https://www.gov.uk/guidance/making-an-entry-summary-declaration"
+        .text shouldBe "Telephone: 0300 322 7067" + " Monday to Friday, 9am to 5pm (except public holidays)"
+
+      val link = content
+        .select(Selectors.link)
+        .first
+
+      link.text shouldBe "Find out about call charges"
+      link.attr("href") shouldBe "https://https://www.gov.uk/call-charges"
     }
   }
 }

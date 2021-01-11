@@ -32,16 +32,20 @@
 
     @hmrcPageHeading(PageHeading(text = messages("successfullyEnrolled.heading")))
 
-    @paragraph("successfullyEnrolled.para.1")
+    @paragraph("successfullyEnrolled.para.1.1")
+    @paragraph("successfullyEnrolled.para.1.2")
 
-    @paragraph("successfullyEnrolled.coms")
+    <div id="info">
+          @heading2("successfullyEnrolled.csp.heading")
 
-    @paragraph("successfullyEnrolled.incorporates")
-    @bulletList(Seq(Html(messages("successfullyEnrolled.incorporates.1")), Html(messages("successfullyEnrolled.incorporates.2"))))
+          @p {
+            @messages("successfullyEnrolled.contact")
+            <br>
+            @messages("successfullyEnrolled.times")
+      }
+    </div>
 
     @p {
-        @messages("successfullyEnrolled.makeADeclaration")
-        @link(href = "https://www.gov.uk/guidance/making-an-entry-summary-declaration", messageKey = "successfullyEnrolled.makeADeclaration.linkText").
+        @link(href = "https://https://www.gov.uk/call-charges", messageKey = "successfullyEnrolled.link")
     }
 }
-

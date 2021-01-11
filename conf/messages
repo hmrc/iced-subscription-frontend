@@ -35,13 +35,13 @@ landing.start=Start now
 
 ## Successfully enrolled page
 successfullyEnrolled.heading=You have successfully enrolled with S&S GB
-successfullyEnrolled.para.1=Your enrolment will be active in 2 hours.
-successfullyEnrolled.coms=S&S GB handles digital communications between customs administrators and carriers or their appointed representatives.
-successfullyEnrolled.incorporates=S&S GB incorporates the:
-successfullyEnrolled.incorporates.1=lodging, handling and processing of an Entry Summary declaration (sometimes called an ENS) in advance of the arrival of goods into the UK from outside the UK
-successfullyEnrolled.incorporates.2=issuing of a Movement Reference Number (MRN)
-successfullyEnrolled.makeADeclaration=Once your account is active, you can submit an
-successfullyEnrolled.makeADeclaration.linkText=Entry Summary declaration
+successfullyEnrolled.para.1.1=You can submit an Entry Summary declaration, once your account is active
+successfullyEnrolled.para.1.2=You will need to use third party software in order to do this
+successfullyEnrolled.csp.heading=If you need help
+successfullyEnrolled.contact=Telephone: 0300 322 7067
+successfullyEnrolled.times=Monday to Friday, 9am to 5pm (except public holidays)
+successfullyEnrolled.findCallcharges=Find out about call charges
+successfullyEnrolled.link=Find out about call charges
 
 ## Already enrolled page
 alreadyEnrolled.heading=Enrol with the Safety and Security service
