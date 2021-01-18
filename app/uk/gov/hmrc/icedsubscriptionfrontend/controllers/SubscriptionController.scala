@@ -35,7 +35,8 @@ class SubscriptionController @Inject()(
   nonOrgGgwPage: NonOrgGgwPage,
   individualPage: BadUserIndividualPage,
   agentPage: BadUserAgentPage,
-  verifyUserPage: BadUserVerifyPage)
+  verifyUserPage: BadUserVerifyPage,
+  wrongCredentialRolePage: WrongCredentialRolePage)
     extends FrontendController(mcc)
     with I18nSupport {
 
@@ -51,6 +52,7 @@ class SubscriptionController @Inject()(
     request.userType match {
       case AlreadyEnrolled               => Ok(alreadyEnrolledPage())
       case NotEnrolled                   => Redirect(appConfig.eoriCommonComponentStartUrl)
+      case WrongCredentialRole           => Ok(wrongCredentialRolePage())
       case UnsupportedAffinityIndividual => Ok(individualPage())
       case UnsupportedAffinityAgent      => Ok(agentPage())
       case UnsupportedVerifyUser         => Ok(verifyUserPage())

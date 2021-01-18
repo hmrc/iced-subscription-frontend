@@ -92,6 +92,17 @@ verify.ifYouHaveOrgAccount.2=return to the sign in page
 verify.ifYouHaveOrgAccount.3=and enter the Government Gateway ID for your organisation.
 verify.ifYouHaveOrgAccount.4=(You can create a Government Gateway account for your organisation if you do not have one.)
 
+## Wrong Credential Role Page
+wrongRole.heading=You cannot use this service
+wrongRole.p1.1=An
+wrongRole.p1.2=administrator
+wrongRole.p1.3=for the business'' Government Gateway team needs to enrol with the S&S GB service.
+wrongRole.p2=Please log in as an administrator or contact an administrator for the Government Gateway team.
+wrongRole.p3.1=If you have another Government Gateway user ID,
+wrongRole.p3.link=return to the sign in page
+wrongRole.p3.2=and enter the Government Gateway ID for your organisation.
+
+
 ## Footer
 footer.cookies.text = Cookies
 footer.cookies.url = /help/cookies
