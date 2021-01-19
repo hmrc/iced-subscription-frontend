@@ -32,12 +32,13 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
   val appNme    = "iced-subscription-frontend"
   val returnUrl = ""
 
-  val landingPage: LandingPage                 = app.injector.instanceOf[LandingPage]
-  val alreadyEnrolledPage: AlreadyEnrolledPage = app.injector.instanceOf[AlreadyEnrolledPage]
-  val nonOrgGgwPage: NonOrgGgwPage             = app.injector.instanceOf[NonOrgGgwPage]
-  val individualPage: BadUserIndividualPage    = app.injector.instanceOf[BadUserIndividualPage]
-  val agentPage: BadUserAgentPage              = app.injector.instanceOf[BadUserAgentPage]
-  val verifyUserPage: BadUserVerifyPage        = app.injector.instanceOf[BadUserVerifyPage]
+  val landingPage: LandingPage                         = app.injector.instanceOf[LandingPage]
+  val alreadyEnrolledPage: AlreadyEnrolledPage         = app.injector.instanceOf[AlreadyEnrolledPage]
+  val nonOrgGgwPage: NonOrgGgwPage                     = app.injector.instanceOf[NonOrgGgwPage]
+  val individualPage: BadUserIndividualPage            = app.injector.instanceOf[BadUserIndividualPage]
+  val agentPage: BadUserAgentPage                      = app.injector.instanceOf[BadUserAgentPage]
+  val verifyUserPage: BadUserVerifyPage                = app.injector.instanceOf[BadUserVerifyPage]
+  val wrongCredentialRolePage: WrongCredentialRolePage = app.injector.instanceOf[WrongCredentialRolePage]
 
   val authAction = new AuthActionWithProfile(stubMessagesControllerComponents().parsers, mockAuthService, mockAppConfig)
 
@@ -51,7 +52,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       nonOrgGgwPage,
       individualPage,
       agentPage,
-      verifyUserPage
+      verifyUserPage,
+      wrongCredentialRolePage
     )
 
   class Test {
@@ -109,6 +111,17 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
         contentType(result)     shouldBe Some("text/html")
         charset(result)         shouldBe Some("utf-8")
         contentAsString(result) should include("alreadyEnrolled.heading")
+      }
+    }
+
+    "authenticated with a GGW Organisation account and Credential Role of Assistant" should {
+      "return HTML for the `Wrong Credential Role` page" in new Test {
+        MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(UserType.WrongCredentialRole))
+        val result: Future[Result] = controller.start(fakeRequest)
+
+        contentType(result)     shouldBe Some("text/html")
+        charset(result)         shouldBe Some("utf-8")
+        contentAsString(result) should include("wrongRole.heading")
       }
     }
 

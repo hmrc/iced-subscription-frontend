@@ -56,6 +56,16 @@ nonOrgGgwPage.ifYouHaveOrgAccount.1=Os oes gennych Ddynodydd Defnyddiwr arall ar
 nonOrgGgwPage.ifYouHaveOrgAccount.2=ewch yn ôl i’r dudalen fewngofnodi
 nonOrgGgwPage.ifYouHaveOrgAccount.3=a nodi Dynodydd Defnyddiwr Porth y Llywodraeth ar gyfer eich sefydliad.
 
+## Wrong Credential Role Page
+wrongRole.heading=You cannot use this service
+wrongRole.p1.1=An
+wrongRole.p1.2=administrator
+wrongRole.p1.3=for the business'' Government Gateway team needs to enrol with the S&S GB service.
+wrongRole.p2=Please log in as an administrator or contact an administrator for the Government Gateway team.
+wrongRole.p3.1=If you have another Government Gateway user ID,
+wrongRole.p3.link=return to the sign in page
+wrongRole.p3.2=and enter the Government Gateway ID for your organisation.
+
 ## Footer
 footer.cookies.text=Cwcis
 footer.cookies.url=/help/cookies

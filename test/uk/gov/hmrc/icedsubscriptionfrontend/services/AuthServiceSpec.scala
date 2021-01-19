@@ -33,10 +33,10 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
   val service = new AuthService(mockAuthConnector)
 
   "AuthService.authenticate" when {
-    def stubAuth(): CallHandler[Future[Enrolments ~ Option[AffinityGroup] ~ Option[Credentials]]] =
+    def stubAuth(): CallHandler[Future[Enrolments ~ Option[CredentialRole] ~ Option[AffinityGroup] ~ Option[Credentials]]] =
       MockAuthConnector.authorise(
         AuthProviders(AuthProvider.GovernmentGateway, AuthProvider.Verify),
-        allEnrolments and affinityGroup and credentials)
+        allEnrolments and credentialRole and affinityGroup and credentials)
 
     def activeEnrolment(key: String): Enrolment = Enrolment(key = key)
 
@@ -60,7 +60,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
       Seq(activeSsEnrolments, otherEnrolments, emptyEnrolments).foreach(test)
 
       def test(enrolments: Enrolments): Unit = s"return UnsupportedAffinityIndividual with enrolments $enrolments" in {
-        stubAuth() returns Future.successful(enrolments and Some(AffinityGroup.Individual) and Some(ggwCreds))
+        stubAuth() returns Future.successful(enrolments and Some(Assistant) and Some(AffinityGroup.Individual) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.UnsupportedAffinityIndividual)
       }
@@ -70,7 +70,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
       Seq(activeSsEnrolments, otherEnrolments, emptyEnrolments).foreach(test)
 
       def test(enrolments: Enrolments): Unit = s"return UnsupportedAffinityAgent with enrolments $enrolments" in {
-        stubAuth() returns Future.successful(enrolments and Some(AffinityGroup.Agent) and Some(ggwCreds))
+        stubAuth() returns Future.successful(enrolments and Some(Assistant) and Some(AffinityGroup.Agent) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.UnsupportedAffinityAgent)
       }
@@ -80,7 +80,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
       Seq(activeSsEnrolments, otherEnrolments, emptyEnrolments).foreach(test)
 
       def test(enrolments: Enrolments): Unit = s"return NonGovernmentGatewayUser with enrolments $enrolments" in {
-        stubAuth() returns Future.successful(enrolments and None and Some(ggwCreds))
+        stubAuth() returns Future.successful(enrolments and Some(Assistant) and None and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.NonGovernmentGatewayUser)
       }
@@ -99,7 +99,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
       def test(enrolments: Enrolments, affinityGroup: Option[AffinityGroup]): Unit =
         s"return UnsupportedVerifyUser with enrolments $enrolments and affinityGroup $affinityGroup" in {
           val verifyCreds = Credentials(providerId = "someVerifyId", providerType = "Verify")
-          stubAuth() returns Future.successful(enrolments and affinityGroup and Some(verifyCreds))
+          stubAuth() returns Future.successful(enrolments and Some(Assistant) and affinityGroup and Some(verifyCreds))
 
           service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.UnsupportedVerifyUser)
         }
@@ -115,7 +115,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
     "user has no enrolment" must {
       "return NotEnrolled" in {
-        stubAuth() returns Future.successful(emptyEnrolments and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+        stubAuth() returns Future.successful(emptyEnrolments and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.NotEnrolled)
       }
@@ -123,7 +123,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
     "user has a different enrolment" must {
       "return NotEnrolled" in {
-        stubAuth() returns Future.successful(otherEnrolments and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+        stubAuth() returns Future.successful(otherEnrolments and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.NotEnrolled)
       }
@@ -132,7 +132,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
     "user HMRC-SS-ORG enrolment is not active" must {
       "return NotEnrolled" in {
         stubAuth() returns Future.successful(
-          Enrolments(Set(ssEnrolment.copy(state = "disabled"))) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+          Enrolments(Set(ssEnrolment.copy(state = "disabled"))) and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.NotEnrolled)
       }
@@ -140,9 +140,27 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
     "user HMRC-SS-ORG enrolment is active" must {
       "return AlreadyEnrolled" in {
-        stubAuth() returns Future.successful(activeSsEnrolments and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+        stubAuth() returns Future.successful(activeSsEnrolments and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.AlreadyEnrolled)
+      }
+    }
+
+    "user is an Assistant" must {
+      "return AlreadyEnrolled" when {
+        "a HMRC-SS-ORG enrollment is present" in {
+          stubAuth() returns Future.successful(activeSsEnrolments and Some(Assistant) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+
+          service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.AlreadyEnrolled)
+        }
+      }
+
+      "return WrongCredentialRole" when {
+        "no HMRC-SS-ORG enrollment is present" in {
+          stubAuth() returns Future.successful(otherEnrolments and Some(Assistant) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+
+          service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.WrongCredentialRole)
+        }
       }
     }
   }

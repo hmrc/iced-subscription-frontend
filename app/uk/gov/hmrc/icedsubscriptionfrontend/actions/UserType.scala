@@ -21,6 +21,7 @@ sealed trait UserType
 object UserType {
   case object NotEnrolled extends UserType
   case object AlreadyEnrolled extends UserType
+  case object WrongCredentialRole extends UserType
   case object UnsupportedAffinityIndividual extends UserType
   case object UnsupportedAffinityAgent extends UserType
   case object UnsupportedVerifyUser extends UserType

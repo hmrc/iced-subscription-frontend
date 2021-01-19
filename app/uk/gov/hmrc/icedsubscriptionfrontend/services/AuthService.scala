@@ -17,7 +17,7 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.services
 
 import com.google.inject.{Inject, Singleton}
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.{CredentialRole, _}
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, EmptyRetrieval, ~}
@@ -46,16 +46,22 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
   // the exception that is thrown in a particular scenario...
   def authenticate()(implicit hc: HeaderCarrier): Future[AuthResult] =
     authorised(AuthProviders(AuthProvider.GovernmentGateway, AuthProvider.Verify))
-      .retrieve(allEnrolments and affinityGroup and credentials) { retrievals =>
+      .retrieve(allEnrolments and credentialRole and affinityGroup and credentials) { retrievals =>
         import UserType._
 
         val userType = retrievals match {
-          case _ ~ _ ~ Some(Credentials(_, VerifyProviderType))                                    => UnsupportedVerifyUser
-          case enrolments ~ Some(AffinityGroup.Organisation) ~ _ if hasActiveEnrolment(enrolments) => AlreadyEnrolled
-          case _ ~ Some(AffinityGroup.Organisation) ~ _                                            => NotEnrolled
-          case _ ~ Some(AffinityGroup.Individual) ~ _                                              => UnsupportedAffinityIndividual
-          case _ ~ Some(AffinityGroup.Agent) ~ _                                                   => UnsupportedAffinityAgent
-          case _                                                                                   => NonGovernmentGatewayUser
+          case _ ~ _ ~ Some(Credentials(_, VerifyProviderType)) => UnsupportedVerifyUser
+          case enrolments ~ role ~ Some(AffinityGroup.Organisation) ~ _ =>
+            if (hasActiveEnrolment(enrolments)) {
+              AlreadyEnrolled
+            } else if (isAdmin(role)) {
+              NotEnrolled
+            } else {
+              WrongCredentialRole
+            }
+          case _ ~ Some(AffinityGroup.Individual) ~ _ => UnsupportedAffinityIndividual
+          case _ ~ Some(AffinityGroup.Agent) ~ _      => UnsupportedAffinityAgent
+          case _                                      => NonGovernmentGatewayUser
         }
 
         Future.successful(AuthResult.LoggedIn(userType))
@@ -67,6 +73,8 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
 
   private def hasActiveEnrolment(enrolments: Enrolments) =
     enrolments.getEnrolment("HMRC-SS-ORG").exists(_.isActivated)
+
+  private def isAdmin(role: Option[CredentialRole]) = role.getOrElse(Assistant) == User
 
   def authenticateNoProfile()(implicit hc: HeaderCarrier): Future[Boolean] =
     authConnector
