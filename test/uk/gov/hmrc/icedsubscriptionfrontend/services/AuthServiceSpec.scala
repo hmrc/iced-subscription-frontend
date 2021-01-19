@@ -146,11 +146,21 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
       }
     }
 
-    "user is not an admin" must {
-      "return WrongCredentialRole" in {
-        stubAuth() returns Future.successful(otherEnrolments and Some(Assistant) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+    "user is an Assistant" must {
+      "return AlreadyEnrolled" when {
+        "a HMRC-SS-ORG enrollment is present" in {
+          stubAuth() returns Future.successful(activeSsEnrolments and Some(Assistant) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
-        service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.WrongCredentialRole)
+          service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.AlreadyEnrolled)
+        }
+      }
+
+      "return WrongCredentialRole" when {
+        "no HMRC-SS-ORG enrollment is present" in {
+          stubAuth() returns Future.successful(otherEnrolments and Some(Assistant) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+
+          service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.WrongCredentialRole)
+        }
       }
     }
   }

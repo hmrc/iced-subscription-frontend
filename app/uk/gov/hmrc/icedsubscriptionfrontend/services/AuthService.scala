@@ -51,13 +51,17 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
 
         val userType = retrievals match {
           case _ ~ _ ~ Some(Credentials(_, VerifyProviderType)) => UnsupportedVerifyUser
-          case enrolments ~ Some(User) ~ Some(AffinityGroup.Organisation) ~ _ if hasActiveEnrolment(enrolments) =>
-            AlreadyEnrolled
-          case _ ~ role ~ Some(AffinityGroup.Organisation) ~ _ if !isAdmin(role) => WrongCredentialRole
-          case _ ~ Some(AffinityGroup.Organisation) ~ _ => NotEnrolled
-          case _ ~ Some(AffinityGroup.Individual) ~ _   => UnsupportedAffinityIndividual
-          case _ ~ Some(AffinityGroup.Agent) ~ _        => UnsupportedAffinityAgent
-          case _                                        => NonGovernmentGatewayUser
+          case enrolments ~ role ~ Some(AffinityGroup.Organisation) ~ _ =>
+            if (hasActiveEnrolment(enrolments)) {
+              AlreadyEnrolled
+            } else if (isAdmin(role)) {
+              NotEnrolled
+            } else {
+              WrongCredentialRole
+            }
+          case _ ~ Some(AffinityGroup.Individual) ~ _ => UnsupportedAffinityIndividual
+          case _ ~ Some(AffinityGroup.Agent) ~ _      => UnsupportedAffinityAgent
+          case _                                      => NonGovernmentGatewayUser
         }
 
         Future.successful(AuthResult.LoggedIn(userType))
