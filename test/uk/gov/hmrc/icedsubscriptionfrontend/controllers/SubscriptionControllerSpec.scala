@@ -105,7 +105,7 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
 
     "authenticated with a HMRC-SS-ORG" should {
       "return HTML for the 'Already enrolled' page" in new Test {
-        MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(UserType.AlreadyEnrolled))
+        MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(UserType.AlreadyEnrolled(Some("GB1234567890"))))
         val result: Future[Result] = controller.start(fakeRequest)
 
         contentType(result)     shouldBe Some("text/html")

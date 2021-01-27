@@ -38,7 +38,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     val link        = ".govuk-link"
   }
 
-  lazy val html: Html         = view()(messages, FakeRequest())
+  lazy val html: Html         = view(Some("GB1234567890"))(messages, FakeRequest())
   lazy val document: Document = Jsoup.parse(html.toString)
   lazy val content: Element   = document.select("#content").first
 
