@@ -32,10 +32,23 @@
 
 @layout(pageTitle = Some(messages("service.pageTitle.basic.format")), showSignOutLink = true, showTimeoutDialog = true) {
 
- @hmrcPageHeading(PageHeading(text = messages("alreadyEnrolled.heading")))
+    @hmrcPageHeading(PageHeading(text = messages("alreadyEnrolled.heading")))
 
- @paragraph("alreadyEnrolled.notice")
+    @paragraph("alreadyEnrolled.para.1.1")
+    @paragraph("alreadyEnrolled.para.1.2")
 
- @link(href = "https://www.gov.uk/guidance/making-an-entry-summary-declaration", messageKey = "alreadyEnrolled.makeADeclaration")
+    <div id="info">
+          @heading2("alreadyEnrolled.csp.heading")
+
+          @p {
+            @messages("alreadyEnrolled.contact")
+            <br>
+            @messages("alreadyEnrolled.times")
+          }
+    </div>
+
+    @p {
+        @link(href = "https://www.gov.uk/call-charges", messageKey = "alreadyEnrolled.link")
+    }
 }
 

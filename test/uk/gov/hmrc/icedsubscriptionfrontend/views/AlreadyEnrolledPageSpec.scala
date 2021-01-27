@@ -34,6 +34,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     val paragraph   = "p"
     val listItem    = "li"
     val startButton = ".govuk-button--start"
+    val callSection = "#info"
     val link        = ".govuk-link"
   }
 
@@ -57,24 +58,41 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     }
 
     "have a only one page heading" in {
-      document.select(Selectors.h1).text shouldBe "Enrol with the Safety and Security service"
+      document.select(Selectors.h1).text shouldBe "Your organisation is already enrolled with S&S GB"
       document.select(Selectors.h1).size shouldBe 1
     }
 
-    "have inset text for with notice" in {
+    "have indication of when active" in {
       content
         .select(Selectors.paragraph)
         .first
-        .text shouldBe "The GB EORI you supplied is already enrolled with the Safety and Security service."
+        .text shouldBe "The GB EORI you supplied (GB123123000) is already enrolled with S&S GB."
     }
 
-    "have a link to make a declaration" in {
+    "have a paragraph explaining third party" in {
+      content
+        .select(Selectors.paragraph)
+        .get(1)
+        .text shouldBe "You can now use third party software to make an entry summary declaration."
+    }
+
+
+    "have information about call charges" in {
+      val section = content.select(Selectors.callSection)
+
+      section.select(Selectors.h2).text shouldBe "If you need help"
+
+      section
+        .select(Selectors.paragraph)
+        .get(0)
+        .text shouldBe "Telephone: 0300 322 7067" + " Monday to Friday, 9am to 5pm (except public holidays)"
+
       val link = content
         .select(Selectors.link)
         .first
 
-      link.text         shouldBe "Make an Entry Summary declaration"
-      link.attr("href") shouldBe "https://www.gov.uk/guidance/making-an-entry-summary-declaration"
+      link.text shouldBe "Find out about call charges"
+      link.attr("href") shouldBe "https://www.gov.uk/call-charges"
     }
   }
 }
