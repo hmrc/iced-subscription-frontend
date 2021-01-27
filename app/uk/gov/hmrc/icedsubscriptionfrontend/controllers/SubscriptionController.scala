@@ -50,7 +50,7 @@ class SubscriptionController @Inject()(
     import UserType._
 
     request.userType match {
-      case AlreadyEnrolled               => Ok(alreadyEnrolledPage())
+      case AlreadyEnrolled(eoriNumber)   => Ok(alreadyEnrolledPage(eoriNumber))
       case NotEnrolled                   => Redirect(appConfig.eoriCommonComponentStartUrl)
       case WrongCredentialRole           => Ok(wrongCredentialRolePage())
       case UnsupportedAffinityIndividual => Ok(individualPage())

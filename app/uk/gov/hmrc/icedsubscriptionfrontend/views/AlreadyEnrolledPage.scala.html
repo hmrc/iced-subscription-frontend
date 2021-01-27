@@ -27,24 +27,27 @@
         link: link,
         govukButton: GovukButton)
 
-@()(implicit messages: Messages, requestHeader: RequestHeader)
+@(eoriNumber: Option[String])(implicit messages: Messages, requestHeader: RequestHeader)
 
 
 @layout(pageTitle = Some(messages("service.pageTitle.basic.format")), showSignOutLink = true, showTimeoutDialog = true) {
 
     @hmrcPageHeading(PageHeading(text = messages("alreadyEnrolled.heading")))
 
-    @paragraph("alreadyEnrolled.para.1.1")
+    @p {
+        @messages("alreadyEnrolled.para.1.1")
+        @eori
+    }
     @paragraph("alreadyEnrolled.para.1.2")
 
     <div id="info">
-          @heading2("alreadyEnrolled.csp.heading")
+        @heading2("alreadyEnrolled.csp.heading")
 
-          @p {
+        @p {
             @messages("alreadyEnrolled.contact")
             <br>
-            @messages("alreadyEnrolled.times")
-          }
+                @messages("alreadyEnrolled.times")
+            }
     </div>
 
     @p {
@@ -52,3 +55,8 @@
     }
 }
 
+@eori = {
+    @if(eoriNumber.isDefined) {
+        (@eoriNumber)
+    }
+}
