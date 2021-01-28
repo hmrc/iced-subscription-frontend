@@ -30,6 +30,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
   object Selectors {
     val h1          = "h1"
     val h2          = "h2"
+    val h3          = "h3"
     val insetText   = ".govuk-inset-text"
     val paragraph   = "p"
     val listItem    = "li"
@@ -80,7 +81,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     "have information about call charges" in {
       val section = content.select(Selectors.callSection)
 
-      section.select(Selectors.h2).text shouldBe "If you need help"
+      section.select(Selectors.h3).text shouldBe "If you need help"
 
       section
         .select(Selectors.paragraph)

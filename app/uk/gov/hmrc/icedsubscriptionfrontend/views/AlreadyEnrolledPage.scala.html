@@ -22,6 +22,7 @@
         p: p,
         paragraph: paragraph,
         heading2: heading2,
+        heading3: heading3,
         insetText: insetText,
         bulletList: bulletList,
         link: link,
@@ -41,13 +42,16 @@
     }
     @paragraph("alreadyEnrolled.para.1.3")
 
+    <br>
+    <br>
+
     <div id="info">
-        @heading2("alreadyEnrolled.csp.heading")
+        @heading3("alreadyEnrolled.csp.heading")
 
         @p {
             @messages("alreadyEnrolled.contact")
             <br>
-                @messages("alreadyEnrolled.times")
+            @messages("alreadyEnrolled.times")
             }
     </div>
 
