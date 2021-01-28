@@ -35,7 +35,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     val paragraph   = "p"
     val listItem    = "li"
     val startButton = ".govuk-button--start"
-    val callSection = "#info"
+    val callSection = "#call"
     val link        = ".govuk-link"
   }
 
@@ -67,7 +67,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
       content
         .select(Selectors.paragraph)
         .first
-        .text shouldBe "The GB EORI you supplied (GB123123000) is already enrolled with S&S GB."
+        .text shouldBe "The GB EORI you supplied (GB1234567890) is already enrolled with S&S GB."
     }
 
     "have a paragraph explaining third party" in {
@@ -81,7 +81,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     "have information about call charges" in {
       val section = content.select(Selectors.callSection)
 
-      section.select(Selectors.h3).text shouldBe "If you need help"
+      section.select(Selectors.h2).text shouldBe "If you need help"
 
       section
         .select(Selectors.paragraph)
