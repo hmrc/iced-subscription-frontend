@@ -8,6 +8,7 @@ service.sign-out = Sign out
 ## Signed Out page
 signedOut.heading=For your security, we signed you out
 signedOut.signInButton=Sign in
+signedOut.notSaved=We did not save your answers.
 
 ## Landing page
 landing.heading=Enrol with the Safety and Security service

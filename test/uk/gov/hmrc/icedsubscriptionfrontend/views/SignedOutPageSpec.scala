@@ -28,8 +28,9 @@ class SignedOutPageSpec extends SpecBase {
 
   lazy val view: SignedOutPage = inject[SignedOutPage]
   object Selectors {
-    val h1     = "h1"
-    val button = ".govuk-button"
+    val h1        = "h1"
+    val button    = ".govuk-button"
+    val paragraph = "p"
   }
 
   lazy val html: Html         = view()(messages, FakeRequest())
@@ -48,5 +49,12 @@ class SignedOutPageSpec extends SpecBase {
   "have a sign in button with the correct URL" in {
     content.select(Selectors.button).text         shouldBe "Sign in"
     content.select(Selectors.button).attr("href") shouldBe controllers.routes.SubscriptionController.start.url
+  }
+
+  "indicate that answers were not saved" in {
+    content
+      .select(Selectors.paragraph)
+      .get(0)
+      .text shouldBe "We did not save your answers."
   }
 }
