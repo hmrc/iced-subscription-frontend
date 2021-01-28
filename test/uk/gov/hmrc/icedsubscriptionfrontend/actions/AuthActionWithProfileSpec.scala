@@ -65,7 +65,7 @@ class AuthActionWithProfileSpec extends SpecBase with MockAuthService with MockA
         UserType.UnsupportedAffinityIndividual,
         UserType.NonGovernmentGatewayUser,
         UserType.NotEnrolled,
-        UserType.AlreadyEnrolled
+        UserType.AlreadyEnrolled(Some("GB1234567890"))
       ).foreach(test)
 
       def test(userType: UserType): Unit = s"call the block with the user type $userType" in {

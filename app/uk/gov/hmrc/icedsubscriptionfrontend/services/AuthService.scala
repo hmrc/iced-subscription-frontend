@@ -36,9 +36,11 @@ object AuthResult {
 
 @Singleton
 class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: ExecutionContext)
-    extends AuthorisedFunctions {
+  extends AuthorisedFunctions {
 
   private val VerifyProviderType = "Verify"
+
+  private val safetyAndSecurityEnrolmentKey = "HMRC-SS-ORG"
 
   // Note: the logic is primarily implemented using retrievals rather than lists of
   // predicates so that we can closely control the order of checks rather than
@@ -53,7 +55,7 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
           case _ ~ _ ~ Some(Credentials(_, VerifyProviderType)) => UnsupportedVerifyUser
           case enrolments ~ role ~ Some(AffinityGroup.Organisation) ~ _ =>
             if (hasActiveEnrolment(enrolments)) {
-              AlreadyEnrolled
+              AlreadyEnrolled(getIdentifier(enrolments))
             } else if (isAdmin(role)) {
               NotEnrolled
             } else {
@@ -72,7 +74,7 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
       }
 
   private def hasActiveEnrolment(enrolments: Enrolments) =
-    enrolments.getEnrolment("HMRC-SS-ORG").exists(_.isActivated)
+    enrolments.getEnrolment(safetyAndSecurityEnrolmentKey).exists(_.isActivated)
 
   private def isAdmin(role: Option[CredentialRole]) = role.getOrElse(Assistant) == User
 
@@ -83,4 +85,10 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
       .recover {
         case _: NoActiveSession => false
       }
+
+  private def getIdentifier(enrolments: Enrolments):Option[String] =
+    enrolments.getEnrolment(safetyAndSecurityEnrolmentKey) match {
+      case Some(enrolment) => enrolment.getIdentifier("EORINumber") map(_.value)
+      case _ => None
+    }
 }

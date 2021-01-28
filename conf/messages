@@ -44,9 +44,14 @@ successfullyEnrolled.findCallcharges=Find out about call charges
 successfullyEnrolled.link=Find out about call charges
 
 ## Already enrolled page
-alreadyEnrolled.heading=Enrol with the Safety and Security service
-alreadyEnrolled.notice=The GB EORI you supplied is already enrolled with the Safety and Security service.
-alreadyEnrolled.makeADeclaration=Make an Entry Summary declaration
+alreadyEnrolled.heading=Your organisation is already enrolled with S&S GB
+alreadyEnrolled.para.1.1=The GB EORI you supplied
+alreadyEnrolled.para.1.2=is already enrolled with S&S GB.
+alreadyEnrolled.para.1.3=You can now use third party software to make an entry summary declaration.
+alreadyEnrolled.csp.heading=If you need help
+alreadyEnrolled.contact=Telephone: 0300 322 7067
+alreadyEnrolled.times=Monday to Friday, 9am to 5pm (except public holidays)
+alreadyEnrolled.link=Find out about call charges
 
 ## Non Organisation GGW Page
 nonOrgGgwPage.heading=You need to access this service through Government Gateway

@@ -33,18 +33,24 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
   val service = new AuthService(mockAuthConnector)
 
   "AuthService.authenticate" when {
-    def stubAuth(): CallHandler[Future[Enrolments ~ Option[CredentialRole] ~ Option[AffinityGroup] ~ Option[Credentials]]] =
+    def stubAuth()
+      : CallHandler[Future[Enrolments ~ Option[CredentialRole] ~ Option[AffinityGroup] ~ Option[Credentials]]] =
       MockAuthConnector.authorise(
         AuthProviders(AuthProvider.GovernmentGateway, AuthProvider.Verify),
         allEnrolments and credentialRole and affinityGroup and credentials)
 
     def activeEnrolment(key: String): Enrolment = Enrolment(key = key)
 
-    val ssEnrolment = activeEnrolment("HMRC-SS-ORG")
+    val ssEnrolmentIdentifier = "EoriNumber"
+    val ssEnrolmentValue      = "GB1234567890"
+    val ssEnrolment = activeEnrolment("HMRC-SS-ORG").copy(
+      identifiers = Seq(EnrolmentIdentifier(ssEnrolmentIdentifier, ssEnrolmentValue)))
 
-    val activeSsEnrolments = Enrolments(Set(ssEnrolment))
-    val otherEnrolments    = Enrolments(Set(activeEnrolment("OTHER")))
-    val emptyEnrolments    = Enrolments(Set.empty)
+    val activeSsEnrolments       = Enrolments(Set(ssEnrolment))
+    val activeSsEnrolmentsNoEori = Enrolments(Set(activeEnrolment("HMRC-SS-ORG")))
+
+    val otherEnrolments = Enrolments(Set(activeEnrolment("OTHER")))
+    val emptyEnrolments = Enrolments(Set.empty)
 
     val ggwCreds = Credentials(providerId = "someId", providerType = "GovernmentGateway")
 
@@ -60,7 +66,8 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
       Seq(activeSsEnrolments, otherEnrolments, emptyEnrolments).foreach(test)
 
       def test(enrolments: Enrolments): Unit = s"return UnsupportedAffinityIndividual with enrolments $enrolments" in {
-        stubAuth() returns Future.successful(enrolments and Some(Assistant) and Some(AffinityGroup.Individual) and Some(ggwCreds))
+        stubAuth() returns Future.successful(
+          enrolments and Some(Assistant) and Some(AffinityGroup.Individual) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.UnsupportedAffinityIndividual)
       }
@@ -70,7 +77,8 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
       Seq(activeSsEnrolments, otherEnrolments, emptyEnrolments).foreach(test)
 
       def test(enrolments: Enrolments): Unit = s"return UnsupportedAffinityAgent with enrolments $enrolments" in {
-        stubAuth() returns Future.successful(enrolments and Some(Assistant) and Some(AffinityGroup.Agent) and Some(ggwCreds))
+        stubAuth() returns Future.successful(
+          enrolments and Some(Assistant) and Some(AffinityGroup.Agent) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.UnsupportedAffinityAgent)
       }
@@ -115,7 +123,8 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
     "user has no enrolment" must {
       "return NotEnrolled" in {
-        stubAuth() returns Future.successful(emptyEnrolments and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+        stubAuth() returns Future.successful(
+          emptyEnrolments and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.NotEnrolled)
       }
@@ -123,7 +132,8 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
     "user has a different enrolment" must {
       "return NotEnrolled" in {
-        stubAuth() returns Future.successful(otherEnrolments and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+        stubAuth() returns Future.successful(
+          otherEnrolments and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.NotEnrolled)
       }
@@ -131,33 +141,53 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
 
     "user HMRC-SS-ORG enrolment is not active" must {
       "return NotEnrolled" in {
-        stubAuth() returns Future.successful(
-          Enrolments(Set(ssEnrolment.copy(state = "disabled"))) and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+        stubAuth() returns Future.successful(Enrolments(Set(ssEnrolment.copy(state = "disabled"))) and Some(User) and Some(
+          AffinityGroup.Organisation) and Some(ggwCreds))
 
         service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.NotEnrolled)
       }
     }
 
     "user HMRC-SS-ORG enrolment is active" must {
-      "return AlreadyEnrolled" in {
-        stubAuth() returns Future.successful(activeSsEnrolments and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+      "return AlreadyEnrolled with an EORI" in {
+        stubAuth() returns Future.successful(
+          activeSsEnrolments and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
-        service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.AlreadyEnrolled)
+        service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.AlreadyEnrolled(Some("GB1234567890")))
+      }
+
+      "return AlreadyEnrolled without an EORI" in {
+        stubAuth() returns Future.successful(
+          activeSsEnrolmentsNoEori and Some(User) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+
+        service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.AlreadyEnrolled(None))
       }
     }
 
     "user is an Assistant" must {
-      "return AlreadyEnrolled" when {
+      "return AlreadyEnrolled with an EORI" when {
         "a HMRC-SS-ORG enrollment is present" in {
-          stubAuth() returns Future.successful(activeSsEnrolments and Some(Assistant) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+          stubAuth() returns Future.successful(
+            activeSsEnrolments and Some(Assistant) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
-          service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.AlreadyEnrolled)
+          service.authenticate().futureValue shouldBe AuthResult.LoggedIn(
+            UserType.AlreadyEnrolled(Some("GB1234567890")))
+        }
+      }
+
+      "return AlreadyEnrolled without an EORI" when {
+        "a HMRC-SS-ORG enrollment is present" in {
+          stubAuth() returns Future.successful(
+            activeSsEnrolmentsNoEori and Some(Assistant) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+
+          service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.AlreadyEnrolled(None))
         }
       }
 
       "return WrongCredentialRole" when {
         "no HMRC-SS-ORG enrollment is present" in {
-          stubAuth() returns Future.successful(otherEnrolments and Some(Assistant) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
+          stubAuth() returns Future.successful(
+            otherEnrolments and Some(Assistant) and Some(AffinityGroup.Organisation) and Some(ggwCreds))
 
           service.authenticate().futureValue shouldBe AuthResult.LoggedIn(UserType.WrongCredentialRole)
         }

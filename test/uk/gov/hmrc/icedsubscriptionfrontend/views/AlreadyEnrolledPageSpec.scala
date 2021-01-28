@@ -30,21 +30,23 @@ class AlreadyEnrolledPageSpec extends SpecBase {
   object Selectors {
     val h1          = "h1"
     val h2          = "h2"
+    val h3          = "h3"
     val insetText   = ".govuk-inset-text"
     val paragraph   = "p"
     val listItem    = "li"
     val startButton = ".govuk-button--start"
+    val callSection = "#call"
     val link        = ".govuk-link"
   }
 
-  lazy val html: Html         = view()(messages, FakeRequest())
+  lazy val html: Html         = view(Some("GB1234567890"))(messages, FakeRequest())
   lazy val document: Document = Jsoup.parse(html.toString)
   lazy val content: Element   = document.select("#content").first
 
   "AlreadyEnrolledPage" must {
 
     "have the correct title" in {
-      document.title shouldBe "Enrol with the Safety and Security service - GOV.UK"
+      document.title shouldBe "Your organisation is already enrolled with S&S GB - Enrol with the Safety and Security service - GOV.UK"
     }
 
     "have a sign out link" in {
@@ -57,24 +59,51 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     }
 
     "have a only one page heading" in {
-      document.select(Selectors.h1).text shouldBe "Enrol with the Safety and Security service"
-      document.select(Selectors.h1).size shouldBe 1
+      document.select(Selectors.h1).text shouldBe "Your organisation is already enrolled with S&S GB"
     }
 
-    "have inset text for with notice" in {
+    "have indication of when active" in {
       content
         .select(Selectors.paragraph)
         .first
-        .text shouldBe "The GB EORI you supplied is already enrolled with the Safety and Security service."
+        .text shouldBe "The GB EORI you supplied (GB1234567890) is already enrolled with S&S GB."
     }
 
-    "have a link to make a declaration" in {
+    "have indication of when active but no EORI is given" in {
+      lazy val html: Html         = view(None)(messages, FakeRequest())
+      lazy val document: Document = Jsoup.parse(html.toString)
+      lazy val content: Element   = document.select("#content").first
+
+      content
+        .select(Selectors.paragraph)
+        .first
+        .text shouldBe "The GB EORI you supplied is already enrolled with S&S GB."
+    }
+
+    "have a paragraph explaining third party" in {
+      content
+        .select(Selectors.paragraph)
+        .get(1)
+        .text shouldBe "You can now use third party software to make an entry summary declaration."
+    }
+
+
+    "have information about call charges" in {
+      val section = content.select(Selectors.callSection)
+
+      section.select(Selectors.h2).text shouldBe "If you need help"
+
+      section
+        .select(Selectors.paragraph)
+        .get(0)
+        .text shouldBe "Telephone: 0300 322 7067" + " Monday to Friday, 9am to 5pm (except public holidays)"
+
       val link = content
         .select(Selectors.link)
         .first
 
-      link.text         shouldBe "Make an Entry Summary declaration"
-      link.attr("href") shouldBe "https://www.gov.uk/guidance/making-an-entry-summary-declaration"
+      link.text shouldBe "Find out about call charges"
+      link.attr("href") shouldBe "https://www.gov.uk/call-charges"
     }
   }
 }

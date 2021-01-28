@@ -22,20 +22,46 @@
         p: p,
         paragraph: paragraph,
         heading2: heading2,
+        heading3: heading3,
         insetText: insetText,
         bulletList: bulletList,
         link: link,
         govukButton: GovukButton)
 
-@()(implicit messages: Messages, requestHeader: RequestHeader)
+@(eoriNumber: Option[String])(implicit messages: Messages, requestHeader: RequestHeader)
 
 
-@layout(pageTitle = Some(messages("service.pageTitle.basic.format")), showSignOutLink = true, showTimeoutDialog = true) {
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("alreadyEnrolled.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
 
- @hmrcPageHeading(PageHeading(text = messages("alreadyEnrolled.heading")))
+    @hmrcPageHeading(PageHeading(text = messages("alreadyEnrolled.heading")))
 
- @paragraph("alreadyEnrolled.notice")
+    @p {
+        @messages("alreadyEnrolled.para.1.1")
+        @eori
+        @messages("alreadyEnrolled.para.1.2")
+    }
+    @paragraph("alreadyEnrolled.para.1.3")
 
- @link(href = "https://www.gov.uk/guidance/making-an-entry-summary-declaration", messageKey = "alreadyEnrolled.makeADeclaration")
+    <br>
+    <br>
+
+    <div id="call">
+        @heading3("alreadyEnrolled.csp.heading")
+
+        @p {
+            @messages("alreadyEnrolled.contact")
+            <br>
+            @messages("alreadyEnrolled.times")
+            }
+    </div>
+
+    @p {
+        @link(href = "https://www.gov.uk/call-charges", messageKey = "alreadyEnrolled.link")
+    }
 }
 
+@eori = {
+    @if(eoriNumber.isDefined) {
+        (@eoriNumber)
+    }
+}
