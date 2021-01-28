@@ -46,7 +46,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
   "AlreadyEnrolledPage" must {
 
     "have the correct title" in {
-      document.title shouldBe "Enrol with the Safety and Security service - GOV.UK"
+      document.title shouldBe "Your organisation is already enrolled with S&S GB - Enrol with the Safety and Security service - GOV.UK"
     }
 
     "have a sign out link" in {
@@ -60,7 +60,6 @@ class AlreadyEnrolledPageSpec extends SpecBase {
 
     "have a only one page heading" in {
       document.select(Selectors.h1).text shouldBe "Your organisation is already enrolled with S&S GB"
-      document.select(Selectors.h1).size shouldBe 1
     }
 
     "have indication of when active" in {
@@ -68,6 +67,17 @@ class AlreadyEnrolledPageSpec extends SpecBase {
         .select(Selectors.paragraph)
         .first
         .text shouldBe "The GB EORI you supplied (GB1234567890) is already enrolled with S&S GB."
+    }
+
+    "have indication of when active but no EORI is given" in {
+      lazy val html: Html         = view(None)(messages, FakeRequest())
+      lazy val document: Document = Jsoup.parse(html.toString)
+      lazy val content: Element   = document.select("#content").first
+
+      content
+        .select(Selectors.paragraph)
+        .first
+        .text shouldBe "The GB EORI you supplied is already enrolled with S&S GB."
     }
 
     "have a paragraph explaining third party" in {
