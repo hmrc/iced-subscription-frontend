@@ -16,9 +16,11 @@
 
 @import uk.gov.hmrc.hmrcfrontend.views.html.components._
 @import uk.gov.hmrc.icedsubscriptionfrontend.controllers
+@import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers._
 
 
 @this(layout: Layout,
+        paragraph: paragraph,
         hmrcPageHeading: HmrcPageHeading,
         govukButton: GovukButton)
 
@@ -26,6 +28,8 @@
 @layout(pageTitle = Some(messages("service.pageTitle.format", messages("signedOut.heading")))) {
 
  @hmrcPageHeading(PageHeading(text = messages("signedOut.heading")))
+
+ @paragraph("signedOut.notSaved")
 
  @govukButton(Button(
   href = Some(controllers.routes.SubscriptionController.start.url),
