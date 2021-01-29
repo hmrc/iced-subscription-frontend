@@ -17,7 +17,6 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import base.SpecBase
-import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.icedsubscriptionfrontend.actions.{AuthActionWithProfile, UserType}
@@ -32,7 +31,6 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
   val appNme    = "iced-subscription-frontend"
   val returnUrl = ""
 
-  val landingPage: LandingPage                         = app.injector.instanceOf[LandingPage]
   val alreadyEnrolledPage: AlreadyEnrolledPage         = app.injector.instanceOf[AlreadyEnrolledPage]
   val nonOrgGgwPage: NonOrgGgwPage                     = app.injector.instanceOf[NonOrgGgwPage]
   val individualPage: BadUserIndividualPage            = app.injector.instanceOf[BadUserIndividualPage]
@@ -47,7 +45,6 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       mockAppConfig,
       authAction,
       stubMessagesControllerComponents(),
-      landingPage,
       alreadyEnrolledPage,
       nonOrgGgwPage,
       individualPage,
@@ -60,20 +57,6 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
     MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes ()
     MockAppConfig.sessionCountdownSeconds returns 1 anyNumberOfTimes ()
     MockAppConfig.sessionTimeoutSeconds returns 1 anyNumberOfTimes ()
-  }
-
-  "GET /" should {
-    "return 200" in new Test {
-      val result: Future[Result] = controller.index(fakeRequest)
-      status(result) shouldBe Status.OK
-    }
-
-    "return HTML for the 'Landing' page" in new Test {
-      val result: Future[Result] = controller.index(fakeRequest)
-      contentType(result)     shouldBe Some("text/html")
-      charset(result)         shouldBe Some("utf-8")
-      contentAsString(result) should include("landing.heading")
-    }
   }
 
   "GET /start" when {
@@ -105,7 +88,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
 
     "authenticated with a HMRC-SS-ORG" should {
       "return HTML for the 'Already enrolled' page" in new Test {
-        MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(UserType.AlreadyEnrolled(Some("GB1234567890"))))
+        MockAuthService.authenticate returns Future.successful(
+          AuthResult.LoggedIn(UserType.AlreadyEnrolled(Some("GB1234567890"))))
         val result: Future[Result] = controller.start(fakeRequest)
 
         contentType(result)     shouldBe Some("text/html")
