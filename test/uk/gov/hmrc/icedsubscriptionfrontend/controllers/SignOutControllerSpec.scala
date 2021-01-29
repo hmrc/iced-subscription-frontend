@@ -86,7 +86,7 @@ class SignOutControllerSpec extends SpecBase with MockAppConfig {
       status(result) shouldBe Status.OK
     }
 
-    "return HTML for the 'Landing' page" in new Test {
+    "return HTML for the 'signed out' page" in new Test {
       val result: Future[Result] = controller.signedOut()(fakeRequest)
       contentType(result)     shouldBe Some("text/html")
       charset(result)         shouldBe Some("utf-8")
