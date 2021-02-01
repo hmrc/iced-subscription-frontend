@@ -29,7 +29,7 @@ class LanguageSwitchController @Inject()(
   cc: ControllerComponents)
     extends LanguageController(configuration, languageUtils, cc) {
 
-  protected lazy val fallbackURL: String = routes.SubscriptionController.index().url
+  protected lazy val fallbackURL: String = routes.SubscriptionController.start().url
 
   protected lazy val languageMap: Map[String, Lang] =
     Map("en" -> Lang("en"), "cy" -> Lang("cy"))

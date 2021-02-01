@@ -16,7 +16,6 @@ Run Unit Tests: `sbt test`
 
 | Path | Supported Methods | Description |
 | ----------------------------------------------------------| ----------------- | ------------|
-|```/safety-and-security-subscription```  |        GET        | Landing page showing information about enrolment with button to start the process. |
 |```/safety-and-security-subscription/start```   |        GET        | Starts the enrolment process. |
 |```/safety-and-security-subscription/sign-out```|        GET        | Clears the session. |
 |```/safety-and-security-subscription/keep-alive```   |        GET        | Endpoint used by session logout timer to stay signed in. |

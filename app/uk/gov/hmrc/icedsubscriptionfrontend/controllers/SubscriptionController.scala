@@ -30,7 +30,6 @@ class SubscriptionController @Inject()(
   appConfig: AppConfig,
   authAction: AuthActionWithProfile,
   mcc: MessagesControllerComponents,
-  landingPage: LandingPage,
   alreadyEnrolledPage: AlreadyEnrolledPage,
   nonOrgGgwPage: NonOrgGgwPage,
   individualPage: BadUserIndividualPage,
@@ -41,10 +40,6 @@ class SubscriptionController @Inject()(
     with I18nSupport {
 
   implicit val config: AppConfig = appConfig
-
-  val index: Action[AnyContent] = Action { implicit request =>
-    Ok(landingPage())
-  }
 
   def start: Action[AnyContent] = authAction { implicit request =>
     import UserType._
