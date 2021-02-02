@@ -24,10 +24,9 @@ import uk.gov.hmrc.play.language.{LanguageController, LanguageUtils}
 
 @Singleton
 class LanguageSwitchController @Inject()(
-  configuration: Configuration,
-  languageUtils: LanguageUtils,
-  cc: ControllerComponents)
-    extends LanguageController(configuration, languageUtils, cc) {
+                                          languageUtils: LanguageUtils,
+                                          cc: ControllerComponents)
+  extends LanguageController(languageUtils, cc) {
 
   protected lazy val fallbackURL: String = routes.SubscriptionController.start().url
 
