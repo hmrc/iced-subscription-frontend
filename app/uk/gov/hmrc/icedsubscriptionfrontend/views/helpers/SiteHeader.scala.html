@@ -23,5 +23,5 @@
 
 @hmrcHeader(Header(
     serviceName = Some(messages("service.name")),
-    signOutHref = if (showSignOut) Some(controllers.routes.SignOutController.signOut(None).url) else None
+    signOutHref = if (showSignOut) Some(controllers.routes.SignOutController.signOut.url) else None
 ))

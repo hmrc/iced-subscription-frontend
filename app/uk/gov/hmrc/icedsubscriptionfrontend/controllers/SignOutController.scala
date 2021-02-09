@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.SignedOutPage
@@ -34,10 +34,11 @@ class SignOutController @Inject()(
     extends FrontendController(mcc)
     with I18nSupport {
 
-  def signOut(continueURL: Option[String]): Action[AnyContent] = Action.async {
-    Future.successful(
-      Redirect(continueURL.getOrElse(controllers.routes.SignOutController.signedOut().url)).withNewSession)
-  }
+  def signOut: Action[AnyContent] = doSignOut(controllers.routes.SignOutController.signedOut())
+
+  def signOutToRestart: Action[AnyContent] = doSignOut(controllers.routes.SubscriptionController.start())
+
+  private def doSignOut(continue: Call): Action[AnyContent] = Action(Redirect(continue.url).withNewSession)
 
   def signedOut(): Action[AnyContent] = Action { implicit request =>
     Ok(signedOutPage())

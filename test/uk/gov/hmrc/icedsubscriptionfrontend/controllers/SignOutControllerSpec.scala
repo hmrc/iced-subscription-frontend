@@ -36,47 +36,43 @@ class SignOutControllerSpec extends SpecBase with MockAppConfig {
     MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes ()
   }
 
-  "GET /sign-out" when {
-    "given a continue URL" should {
-      val continueUrl = Some("/continue")
+  "GET /sign-out" must {
+    "return 303" in {
+      val result = controller.signOut(fakeRequest)
 
-      "return 303" in {
-        val result = controller.signOut(continueUrl)(fakeRequest)
-
-        status(result) shouldBe 303
-      }
-
-      "redirect to given URL" in {
-        val result = controller.signOut(continueUrl)(fakeRequest)
-
-        redirectLocation(result) shouldBe continueUrl
-      }
-
-      "start a new session" in {
-        val result = controller.signOut(continueUrl)(fakeRequest.withSession(("test", "test")))
-
-        Await.result(result, defaultAwaitTimeout.duration).newSession shouldBe Some(Session())
-      }
+      status(result) shouldBe 303
     }
 
-    "not given a continue URL" should {
-      "return 303" in {
-        val result = controller.signOut(None)(fakeRequest)
+    "redirect to the signed-out page" in {
+      val result = controller.signOut(fakeRequest)
 
-        status(result) shouldBe 303
-      }
+      redirectLocation(result) shouldBe Some("/safety-and-security-subscription/signed-out")
+    }
 
-      "redirect to the signed page" in {
-        val result = controller.signOut(None)(fakeRequest)
+    "start a new session" in {
+      val result = controller.signOut(fakeRequest.withSession(("test", "test")))
 
-        redirectLocation(result) shouldBe Some("/safety-and-security-subscription/signed-out")
-      }
+      Await.result(result, defaultAwaitTimeout.duration).newSession shouldBe Some(Session())
+    }
+  }
 
-      "start a new session" in {
-        val result = controller.signOut(None)(fakeRequest.withSession(("test", "test")))
+  "GET /sign-out-to-restart" must {
+    "return 303" in {
+      val result = controller.signOutToRestart(fakeRequest)
 
-        Await.result(result, defaultAwaitTimeout.duration).newSession shouldBe Some(Session())
-      }
+      status(result) shouldBe 303
+    }
+
+    "redirect to start" in {
+      val result = controller.signOutToRestart(fakeRequest)
+
+      redirectLocation(result) shouldBe Some("/safety-and-security-subscription/start")
+    }
+
+    "start a new session" in {
+      val result = controller.signOutToRestart(fakeRequest.withSession(("test", "test")))
+
+      Await.result(result, defaultAwaitTimeout.duration).newSession shouldBe Some(Session())
     }
   }
 

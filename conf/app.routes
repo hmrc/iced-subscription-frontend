@@ -3,7 +3,8 @@
 ->         /govuk-frontend               govuk.Routes
 ->         /hmrc-frontend                hmrcfrontend.Routes
 GET        /start                        uk.gov.hmrc.icedsubscriptionfrontend.controllers.SubscriptionController.start
-GET        /sign-out                     uk.gov.hmrc.icedsubscriptionfrontend.controllers.SignOutController.signOut(continueURL:Option[String])
+GET        /sign-out                     uk.gov.hmrc.icedsubscriptionfrontend.controllers.SignOutController.signOut
+GET        /sign-out-to-restart          uk.gov.hmrc.icedsubscriptionfrontend.controllers.SignOutController.signOutToRestart
 GET        /signed-out                   uk.gov.hmrc.icedsubscriptionfrontend.controllers.SignOutController.signedOut
 GET        /keep-alive                   uk.gov.hmrc.icedsubscriptionfrontend.controllers.KeepAliveController.keepAlive
 GET        /successfully-enrolled        uk.gov.hmrc.icedsubscriptionfrontend.controllers.HandbackController.successfullyEnrolled

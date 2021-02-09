@@ -27,13 +27,11 @@ import uk.gov.hmrc.icedsubscriptionfrontend.views.html.BadUserIndividualPage
 class BadUserIndividualPageSpec extends SpecBase {
 
   lazy val view: BadUserIndividualPage = inject[BadUserIndividualPage]
-  lazy val signOutAndContinueUrl: String =
-    controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start().url)).url
 
   object Selectors {
-    val h1          = "h1"
-    val paragraph   = "p"
-    val link        = ".govuk-link"
+    val h1        = "h1"
+    val paragraph = "p"
+    val link      = ".govuk-link"
   }
 
   lazy val html: Html         = view()(messages, FakeRequest())
@@ -51,11 +49,13 @@ class BadUserIndividualPageSpec extends SpecBase {
       val link = document.select(Selectors.link).first()
 
       link.text         shouldBe "Sign out"
-      link.attr("href") shouldBe "/safety-and-security-subscription/sign-out"
+      link.attr("href") shouldBe controllers.routes.SignOutController.signOut().url
     }
 
     "have only one page heading" in {
-      document.select(Selectors.h1).text shouldBe "You need a Government Gateway Organisation account to enrol for S&S GB"
+      document
+        .select(Selectors.h1)
+        .text                            shouldBe "You need a Government Gateway Organisation account to enrol for S&S GB"
       document.select(Selectors.h1).size shouldBe 1
     }
 
@@ -79,7 +79,7 @@ class BadUserIndividualPageSpec extends SpecBase {
       val link = para.select("#sign-in").get(0)
 
       link.text         shouldBe "return to the sign in page"
-      link.attr("href") shouldBe signOutAndContinueUrl
+      link.attr("href") shouldBe controllers.routes.SignOutController.signOutToRestart().url
     }
   }
 }
