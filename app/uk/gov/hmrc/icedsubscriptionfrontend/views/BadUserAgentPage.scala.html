@@ -39,7 +39,7 @@
 
     @p {
         @messages("agent.ifYouHaveOrgAccount.1")
-        @link(controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start.url)).url,
+        @link(controllers.routes.SignOutController.signOutToRestart().url,
             "agent.ifYouHaveOrgAccount.2", id = Some("sign-in"))
         @messages("agent.ifYouHaveOrgAccount.3")
     }

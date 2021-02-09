@@ -27,8 +27,6 @@ import uk.gov.hmrc.icedsubscriptionfrontend.views.html.WrongCredentialRolePage
 class WrongCredentialRolePageSpec extends SpecBase {
 
   lazy val view: WrongCredentialRolePage = inject[WrongCredentialRolePage]
-  lazy val signOutAndContinueUrl: String =
-    controllers.routes.SignOutController.signOut(Some(controllers.routes.SubscriptionController.start().url)).url
 
   object Selectors {
     val h1        = "h1"
@@ -50,7 +48,7 @@ class WrongCredentialRolePageSpec extends SpecBase {
       val link = document.select(Selectors.link).first()
 
       link.text         shouldBe "Sign out"
-      link.attr("href") shouldBe "/safety-and-security-subscription/sign-out"
+      link.attr("href") shouldBe controllers.routes.SignOutController.signOut().url
     }
 
     "have only one page heading" in {
@@ -76,7 +74,7 @@ class WrongCredentialRolePageSpec extends SpecBase {
       val link = para.select("#sign-in").get(0)
 
       link.text         shouldBe "return to the sign in page"
-      link.attr("href") shouldBe signOutAndContinueUrl
+      link.attr("href") shouldBe controllers.routes.SignOutController.signOutToRestart().url
     }
   }
 }

@@ -30,7 +30,7 @@
         countdown = Some(appConfig.sessionCountdownSeconds),
         timeout = Some(appConfig.sessionTimeoutSeconds),
         keepAliveUrl = Some(icedsubscriptionfrontend.controllers.routes.KeepAliveController.keepAlive.url),
-        signOutUrl = Some(icedsubscriptionfrontend.controllers.routes.SignOutController.signOut(None).url)
+        signOutUrl = Some(icedsubscriptionfrontend.controllers.routes.SignOutController.signOut().url)
     ))
 }
 

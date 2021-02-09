@@ -21,6 +21,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import play.api.test.FakeRequest
 import play.twirl.api.Html
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.AlreadyEnrolledPage
 
 class AlreadyEnrolledPageSpec extends SpecBase {
@@ -55,7 +56,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
         .first()
 
       link.text         shouldBe "Sign out"
-      link.attr("href") shouldBe "/safety-and-security-subscription/sign-out"
+      link.attr("href") shouldBe controllers.routes.SignOutController.signOut().url
     }
 
     "have a only one page heading" in {
@@ -87,7 +88,6 @@ class AlreadyEnrolledPageSpec extends SpecBase {
         .text shouldBe "You can now use third party software to make an entry summary declaration."
     }
 
-
     "have information about call charges" in {
       val section = content.select(Selectors.callSection)
 
@@ -102,7 +102,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
         .select(Selectors.link)
         .first
 
-      link.text shouldBe "Find out about call charges"
+      link.text         shouldBe "Find out about call charges"
       link.attr("href") shouldBe "https://www.gov.uk/call-charges"
     }
   }
