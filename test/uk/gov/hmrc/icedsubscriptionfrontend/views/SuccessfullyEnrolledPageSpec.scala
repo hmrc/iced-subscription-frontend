@@ -21,6 +21,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import play.api.test.FakeRequest
 import play.twirl.api.Html
+import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.SuccessfullyEnrolledPage
 
 class SuccessfullyEnrolledPageSpec extends SpecBase {
@@ -44,6 +45,15 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
 
     "have the correct title" in {
       document.title shouldBe "You have successfully enrolled with S&S GB - Enrol with the Safety and Security service - GOV.UK"
+    }
+
+    "have a sign out link" in {
+      val link = document
+        .select(Selectors.link)
+        .first()
+
+      link.text         shouldBe "Sign out"
+      link.attr("href") shouldBe controllers.routes.SignOutController.signOut().url
     }
 
     "have a only one page heading" in {
