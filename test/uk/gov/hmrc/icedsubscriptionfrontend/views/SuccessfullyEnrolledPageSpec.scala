@@ -55,14 +55,14 @@ class SuccessfullyEnrolledPageSpec extends SpecBase {
       content
         .select(Selectors.paragraph)
         .first
-        .text shouldBe "You can submit an Entry Summary declaration, once your account is active"
+        .text shouldBe "You can submit an Entry Summary declaration, once your account is active."
     }
 
     "have a paragraph explaining third party" in {
       content
         .select(Selectors.paragraph)
         .get(1)
-        .text shouldBe "You will need to use third party software in order to do this"
+        .text shouldBe "You will need to use third party software in order to do this."
     }
 
 
