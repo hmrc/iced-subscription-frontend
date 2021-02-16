@@ -45,7 +45,7 @@
     pageTitle = pageTitle,
     headBlock = Some(head(headBlock, showTimeoutDialog)),
     scriptsBlock = scriptsBlock,
-    headerBlock = Some(siteHeader(showSignOutLink)),
+    headerBlock = Some(siteHeader(showSignOutLink, if(messages.lang.code == "cy") Cy else En)),
     beforeContentBlock = Some(languageSelectBlock),
     footerItems = FooterLinks()) {
     <div id="content">@contentBlock</div>
