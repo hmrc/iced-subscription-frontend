@@ -16,12 +16,14 @@
 
 @import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.header.Header
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En, Language, LanguageToggle}
 
 @this(hmrcHeader: HmrcHeader)
 
-@(showSignOut: Boolean = true)(implicit messages: Messages)
+@(showSignOut: Boolean = true, language: Language)(implicit messages: Messages)
 
 @hmrcHeader(Header(
     serviceName = Some(messages("service.name")),
+    language = language,
     signOutHref = if (showSignOut) Some(controllers.routes.SignOutController.signOut.url) else None
 ))
