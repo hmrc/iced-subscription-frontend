@@ -19,6 +19,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import uk.gov.hmrc.icedsubscriptionfrontend.actions.{AuthActionWithProfile, UserType}
+import uk.gov.hmrc.icedsubscriptionfrontend.audit.{AuditEvent, AuditHandler}
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -35,7 +36,8 @@ class SubscriptionController @Inject()(
   individualPage: BadUserIndividualPage,
   agentPage: BadUserAgentPage,
   verifyUserPage: BadUserVerifyPage,
-  wrongCredentialRolePage: WrongCredentialRolePage)
+  wrongCredentialRolePage: WrongCredentialRolePage,
+  auditHandler: AuditHandler)
     extends FrontendController(mcc)
     with I18nSupport {
 
@@ -45,7 +47,9 @@ class SubscriptionController @Inject()(
     import UserType._
 
     request.userType match {
-      case AlreadyEnrolled(eoriNumber)   => Ok(alreadyEnrolledPage(eoriNumber))
+      case AlreadyEnrolled(eoriNumber) =>
+        auditHandler.audit(AuditEvent.forAlreadyEnrolledTrader(eoriNumber))
+        Ok(alreadyEnrolledPage(eoriNumber))
       case NotEnrolled                   => Redirect(appConfig.eoriCommonComponentStartUrl)
       case WrongCredentialRole           => Ok(wrongCredentialRolePage())
       case UnsupportedAffinityIndividual => Ok(individualPage())
