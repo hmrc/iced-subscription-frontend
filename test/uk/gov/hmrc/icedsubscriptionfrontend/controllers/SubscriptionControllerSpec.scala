@@ -17,9 +17,11 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import base.SpecBase
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.icedsubscriptionfrontend.actions.{AuthActionWithProfile, UserType}
+import uk.gov.hmrc.icedsubscriptionfrontend.audit.{AuditEvent, MockAuditHandler}
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
 import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, MockAuthService}
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html._
@@ -27,7 +29,7 @@ import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
 import scala.concurrent.Future
 
-class SubscriptionControllerSpec extends SpecBase with MockAuthService with MockAppConfig {
+class SubscriptionControllerSpec extends SpecBase with MockAuthService with MockAppConfig with MockAuditHandler {
   val appNme    = "iced-subscription-frontend"
   val returnUrl = ""
 
@@ -50,7 +52,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
       individualPage,
       agentPage,
       verifyUserPage,
-      wrongCredentialRolePage
+      wrongCredentialRolePage,
+      mockAuditHandler
     )
 
   class Test {
@@ -88,8 +91,36 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
 
     "authenticated with a HMRC-SS-ORG" should {
       "return HTML for the 'Already enrolled' page" in new Test {
+        val eori = "GB1234567890"
         MockAuthService.authenticate returns Future.successful(
-          AuthResult.LoggedIn(UserType.AlreadyEnrolled(Some("GB1234567890"))))
+          AuthResult.LoggedIn(UserType.AlreadyEnrolled(Some(eori))))
+
+        MockAuditHandler.audit(
+          AuditEvent(
+            auditType       = "AlreadyEnrolled",
+            transactionName = "S&S Already Enrolled",
+            detail          = Json.obj("eori" -> eori)
+          ))
+
+        val result: Future[Result] = controller.start(fakeRequest)
+
+        contentType(result)     shouldBe Some("text/html")
+        charset(result)         shouldBe Some("utf-8")
+        contentAsString(result) should include("alreadyEnrolled.heading")
+      }
+    }
+
+    "authenticated with a HMRC-SS-ORG without an eoriNumber" should {
+      "return HTML for the 'Already enrolled' page" in new Test {
+        MockAuthService.authenticate returns Future.successful(AuthResult.LoggedIn(UserType.AlreadyEnrolled(None)))
+
+        MockAuditHandler.audit(
+          AuditEvent(
+            auditType       = "AlreadyEnrolled",
+            transactionName = "S&S Already Enrolled",
+            detail          = JsObject.empty
+          ))
+
         val result: Future[Result] = controller.start(fakeRequest)
 
         contentType(result)     shouldBe Some("text/html")
