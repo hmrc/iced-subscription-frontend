@@ -21,7 +21,7 @@ successfullyEnrolled.findCallcharges=Gwybodaeth am gostau galwadau
 successfullyEnrolled.link=Gwybodaeth am gostau galwadau
 
 ## Already enrolled page
-alreadyEnrolled.heading=Mae’ch sefydliad eisoes wedi ymrestru ar gyfer y gwasanaeth Diogelwch (S&S GB)
+alreadyEnrolled.heading=Mae’ch sefydliad eisoes wedi ymrestru ar gyfer y S&S GB
 alreadyEnrolled.para.1.1=Mae’r rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI GB) a roesoch
 alreadyEnrolled.para.1.2=eisoes wedi ymrestru ar gyfer S&S GB.
 alreadyEnrolled.para.1.3=Gallwch ddefnyddio’r feddalwedd trydydd parti i wneud datganiad Cryno wrth Gyrraedd.
@@ -39,7 +39,7 @@ nonOrgGgwPage.ifYouHaveOrgAccount.2=ewch yn ôl i’r dudalen fewngofnodi
 nonOrgGgwPage.ifYouHaveOrgAccount.3=a nodi Dynodydd Defnyddiwr Porth y Llywodraeth ar gyfer eich sefydliad.
 
 ## Bad User Individual Page
-individual.heading=Mae angen cyfrif Sefydliad Porth y Llywodraeth arnoch i ymrestru ar gyfer S&S GB
+individual.heading=Mae angen cyfrif Sefydliad Porth y Llywodraeth arnoch i ymrestru ar gyfer y gwasanaeth Diogelwch (S&S GB)
 individual.wrongTypeOfAccount.1=Rydych wedi mewngofnodi gyda
 individual.wrongTypeOfAccount.2=Dynodydd Defnyddiwr (ID) unigolyn
 individual.wrongTypeOfAccount.3=ar gyfer Porth y Llywodraeth.
@@ -53,9 +53,9 @@ individual.ifYouHaveOrgAccount.4=(Gallwch greu cyfrif Porth y Llywodraeth ar gyf
 
 ## Bad User Agent Page
 agent.heading=Ni allwch ddefnyddio’r gwasanaeth hwn
-agent.wrongTypeOfAccount.1=Mae hyn oherwydd eich bod eisoes wedi mewngofnodi i Borth y Llywodraeth gyda
-agent.wrongTypeOfAccount.2=chyfrif
-agent.wrongTypeOfAccount.3=gwasanaethau asiant.
+agent.wrongTypeOfAccount.1=Mae hyn oherwydd eich bod eisoes wedi mewngofnodi i Borth y Llywodraeth gyda chyfrif gwasanaethau
+agent.wrongTypeOfAccount.2=asiant
+agent.wrongTypeOfAccount.3=.
 agent.youNeed=Mae angen i chi fewngofnodi gyda chyfrif Porth y Llywodraeth ar gyfer y sefydliad sy’n gwneud cais am fynediad i S&S GB.
 agent.ifYouHaveOrgAccount.1=Os oes gennych Ddynodydd Defnyddiwr arall ar gyfer Porth Llywodraeth,
 agent.ifYouHaveOrgAccount.2=ewch yn ôl i’r dudalen fewngofnodi
@@ -63,9 +63,9 @@ agent.ifYouHaveOrgAccount.3=a nodi Dynodydd Defnyddiwr Porth y Llywodraeth ar gy
 
 ## Bad User Verify Account Page
 verify.heading=Mae angen cyfrif Sefydliad Porth y Llywodraeth arnoch i ymrestru ar gyfer S&S GB
-verify.wrongTypeOfAccount.1=Mae hyn oherwydd eich bod wedi mewngofnodi gan ddefnyddio’ch
-verify.wrongTypeOfAccount.2=Dynodydd Defnyddiwr (ID)
-verify.wrongTypeOfAccount.3=GOV.UK Verify.
+verify.wrongTypeOfAccount.1=Mae hyn oherwydd eich bod wedi mewngofnodi gan ddefnyddio’ch Dynodydd Defnyddiwr (ID)
+verify.wrongTypeOfAccount.2=GOV.UK Verify
+verify.wrongTypeOfAccount.3=.
 verify.youNeed.1=I ymrestru gyda S&S GB, mae angen cyfrif Porth y Llywodraeth arnoch ar gyfer eich
 verify.youNeed.2=sefydliad
 verify.youNeed.3='.'
