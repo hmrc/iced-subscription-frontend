@@ -17,19 +17,32 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import play.api.i18n.Lang
+import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc._
-import uk.gov.hmrc.play.language.{LanguageController, LanguageUtils}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.play.language.LanguageUtils
+
+
 
 @Singleton
 class LanguageSwitchController @Inject()(
                                           languageUtils: LanguageUtils,
-                                          cc: ControllerComponents)
-  extends LanguageController(languageUtils, cc) {
+                                          mcc: MessagesControllerComponents) extends FrontendController(mcc)
+  with I18nSupport{
 
-  protected lazy val fallbackURL: String = routes.SubscriptionController.start().url
+  protected lazy val fallbackRoute: Call = routes.SubscriptionController.start
 
   protected lazy val languageMap: Map[String, Lang] =
     Map("en" -> Lang("en"), "cy" -> Lang("cy"))
+
+  def switchToLanguage(lang: String) = Action { implicit request =>
+    val enabled: Boolean = languageMap.get(lang).exists(languageUtils.isLangAvailable)
+    val newLang = if (enabled) languageMap(lang) else languageMap("en")
+
+
+    request.headers.get(REFERER) match {
+      case Some(referrer) => Redirect(referrer).withLang(newLang)
+      case None => Redirect(fallbackRoute).withLang(newLang)
+    }
+  }
 }
