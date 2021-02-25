@@ -4,6 +4,7 @@ service.pageTitle.basic.format=Enrol with the Safety and Security service - GOV.
 service.homePageUrl = /safety-and-security-subscription
 service.text = This is your new service
 service.sign-out = Sign out
+service.skip-to-main = Skip to main content
 
 ## Signed Out page
 signedOut.heading=For your security, we signed you out
