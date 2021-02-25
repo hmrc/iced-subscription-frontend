@@ -17,7 +17,7 @@
 package uk.gov.hmrc.icedsubscriptionfrontend.views
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.footer.FooterItem
+import uk.gov.hmrc.hmrcfrontend.views.viewmodels.footer.FooterItem
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 
 object FooterLinks {

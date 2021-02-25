@@ -18,9 +18,12 @@
 @import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.FooterLinks
 @import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers.SiteHeader
+@import uk.gov.hmrc.hmrcfrontend.views.Aliases.Meta
 
 @this(
-        govukLayout: GovukLayout,
+        govukTemplate: GovukTemplate,
+        govukSkipLink: GovukSkipLink,
+        hmrcFooter: HmrcFooter,
         head: Head,
         siteHeader: SiteHeader,
         hmrcLanguageSelect: HmrcLanguageSelect
@@ -41,14 +44,29 @@
     ))
 }
 
-@govukLayout(
+    @footer = @{
+        hmrcFooter(new uk.gov.hmrc.hmrcfrontend.views.html.components.Footer(meta = Some(Meta(items = Some(FooterLinks()(messages = messages, appConfig)))), language = if(messages.lang.code == "cy") Cy else En))
+    }
+
+    @skipLink = @{
+    govukSkipLink(SkipLink(
+        href = "#main-content",
+        content = HtmlContent(messages("service.skip-to-main"))
+    ))
+}
+
+@govukTemplate(
     pageTitle = pageTitle,
+    skipLinkBlock = Some(skipLink),
     headBlock = Some(head(headBlock, showTimeoutDialog)),
-    scriptsBlock = scriptsBlock,
-    headerBlock = Some(siteHeader(showSignOutLink, if(messages.lang.code == "cy") Cy else En)),
+    headerBlock = siteHeader(showSignOutLink, if(messages.lang.code == "cy") Cy else En),
     beforeContentBlock = Some(languageSelectBlock),
-    footerItems = FooterLinks()) {
-    <div id="content">@contentBlock</div>
+    footerBlock = footer) {
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div id="content">@contentBlock</div>
+        </div>
+    </div>
 
     <script src='@routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
     <script src='@routes.Assets.versioned("lib/hmrc-frontend/hmrc/all.js")'></script>

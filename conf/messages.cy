@@ -4,6 +4,8 @@ service.pageTitle.basic.format=Ymrestru ar gyfer y gwasanaeth Diogelwch - GOV.UK
 service.homePageUrl=/safety-and-security-subscription
 service.text=Dyma'ch gwasanaeth newydd
 service.sign-out=Allgofnodi
+service.skip-to-main = Ewch yn syth i‘r prif gynnwys
+
 
 ## Signed Out page
 signedOut.heading=Er eich diogelwch, gwnaethom eich allgofnodi
