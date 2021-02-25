@@ -62,7 +62,11 @@
     headerBlock = siteHeader(showSignOutLink, if(messages.lang.code == "cy") Cy else En),
     beforeContentBlock = Some(languageSelectBlock),
     footerBlock = footer) {
-    <div id="content">@contentBlock</div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div id="content">@contentBlock</div>
+        </div>
+    </div>
 
     <script src='@routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
     <script src='@routes.Assets.versioned("lib/hmrc-frontend/hmrc/all.js")'></script>
