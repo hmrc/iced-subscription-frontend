@@ -39,9 +39,9 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
   lazy val loginUrl: String        = config.get[String]("login.url")
   lazy val loginReturnBase: String = config.get[String]("login.return-base")
 
-  private val eoriCommonComponentBaseUri  = config.get[String]("eori-common-component-froontend.base")
-  private val eoriCommonComponentStartUri = config.get[String]("eori-common-component-froontend.start")
-  lazy val eoriCommonComponentStartUrl         = s"$eoriCommonComponentBaseUri$eoriCommonComponentStartUri"
+  private val eoriCommonComponentBaseUri  = config.get[String]("eori-common-component-frontend.base")
+  private val eoriCommonComponentStartUri = config.get[String]("eori-common-component-frontend.start")
+  lazy val eoriCommonComponentStartUrl    = s"$eoriCommonComponentBaseUri$eoriCommonComponentStartUri"
 
   lazy val sessionTimeoutSeconds: Int   = config.get[Int]("session.timeoutSeconds")
   lazy val sessionCountdownSeconds: Int = config.get[Int]("session.countdownSeconds")
