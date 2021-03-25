@@ -85,6 +85,11 @@ wrongRole.p3.1=If you have another Government Gateway user ID,
 wrongRole.p3.link=return to the sign in page
 wrongRole.p3.2=and enter the Government Gateway ID for your organisation.
 
+# Not found page
+global.error.pageNotFound404.title = Page not found
+global.error.pageNotFound404.heading = Page not found
+global.error.pageNotFound404.message.p1 = If you typed the web address, check it is correct.
+global.error.pageNotFound404.message.p2 = If you pasted the web address, check you copied the entire address.
 
 ## Footer
 footer.cookies.text = Cookies

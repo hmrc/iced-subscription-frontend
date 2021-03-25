@@ -16,18 +16,25 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.config
 
-import javax.inject.{Inject, Singleton}
-
 import play.api.i18n.MessagesApi
 import play.api.mvc.Request
 import play.twirl.api.Html
+import uk.gov.hmrc.icedsubscriptionfrontend.views.html.{ErrorTemplate, NotFoundTemplate}
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
-import uk.gov.hmrc.icedsubscriptionfrontend.views.html.ErrorTemplate
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ErrorHandler @Inject()(errorTemplate: ErrorTemplate, val messagesApi: MessagesApi)(implicit appConfig: AppConfig)
+class ErrorHandler @Inject()(
+  errorTemplate: ErrorTemplate,
+  notFoundTemplate: NotFoundTemplate,
+  val messagesApi: MessagesApi)
     extends FrontendErrorHandler {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html =
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(
+    implicit request: Request[_]): Html =
     errorTemplate(pageTitle, heading, message)
+
+  override def notFoundTemplate(implicit request: Request[_]): Html = notFoundTemplate()
+
 }

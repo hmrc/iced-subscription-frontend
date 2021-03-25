@@ -86,6 +86,12 @@ wrongRole.p3.1=Os oes gennych Ddynodydd Defnyddiwr arall ar gyfer Porth Llywodra
 wrongRole.p3.link=ewch yn ôl i’r dudalen fewngofnodi
 wrongRole.p3.2=a nodi Dynodydd Defnyddiwr Porth y Llywodraeth ar gyfer eich sefydliad.
 
+# Not found page
+global.error.pageNotFound404.title = Heb ddod o hyd i’r dudalen
+global.error.pageNotFound404.heading = Heb ddod o hyd i’r dudalen
+global.error.pageNotFound404.message.p1 = Os gwnaethoch deipio’r cyfeiriad gwe, dylech wirio ei fod yn gywir.
+global.error.pageNotFound404.message.p2 = Os gwnaethoch bastio’r cyfeiriad gwe, dylech wirio’ch bod wedi copïo’r cyfeiriad yn llawn.
+
 ## Footer
 footer.cookies.text=Cwcis
 footer.cookies.url=/help/cookies

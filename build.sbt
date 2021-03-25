@@ -17,9 +17,9 @@ lazy val microservice = Project(appName, file("."))
     ScalafmtCorePlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
-    majorVersion                     := 0,
-    scalaVersion                     := "2.12.11",
-    libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test,
+    majorVersion := 0,
+    scalaVersion := "2.12.11",
+    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     PlayKeys.playDefaultPort := 9837,
     TwirlKeys.templateImports ++= Seq(
       "uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig",
@@ -30,7 +30,7 @@ lazy val microservice = Project(appName, file("."))
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*filters.*;.*handlers.*;.*repositories.*;" +
       ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;" +
       ".*ControllerConfiguration;.*testonly.*;.*config.*",
-    ScoverageKeys.coverageMinimum := 70,
+    ScoverageKeys.coverageMinimum := 80,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     // ***************
