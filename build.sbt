@@ -1,11 +1,10 @@
 import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
-import uk.gov.hmrc.SbtArtifactory
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "iced-subscription-frontend"
 
-val silencerVersion = "1.7.0"
+val silencerVersion = "1.7.1"
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(
@@ -13,7 +12,6 @@ lazy val microservice = Project(appName, file("."))
     SbtAutoBuildPlugin,
     SbtGitVersioning,
     SbtDistributablesPlugin,
-    SbtArtifactory,
     ScalafmtCorePlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
