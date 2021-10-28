@@ -56,7 +56,7 @@ class AlreadyEnrolledPageSpec extends SpecBase {
         .first()
 
       link.text         shouldBe "Sign out"
-      link.attr("href") shouldBe controllers.routes.SignOutController.signOut().url
+      link.attr("href") shouldBe controllers.routes.SignOutController.signOut.url
     }
 
     "have a only one page heading" in {

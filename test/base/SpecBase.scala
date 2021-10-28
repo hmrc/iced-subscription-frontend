@@ -18,7 +18,9 @@ package base
 
 import akka.stream.Materializer
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{Matchers, TryValues, WordSpecLike}
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.TryValues
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.guice._
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -32,7 +34,7 @@ import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 import scala.concurrent.ExecutionContext
 
 trait SpecBase
-    extends WordSpecLike with Matchers
+    extends AnyWordSpec with Matchers
     with GuiceOneAppPerSuite
     with TryValues
     with ScalaFutures
