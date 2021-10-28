@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.icedsubscriptionfrontend.actions
 
-import controllers.Assets.Redirect
-import javax.inject.Inject
+import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
 import uk.gov.hmrc.icedsubscriptionfrontend.services.{AuthResult, AuthService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 

@@ -49,7 +49,7 @@ class BadUserIndividualPageSpec extends SpecBase {
       val link = document.select(Selectors.link).first()
 
       link.text         shouldBe "Sign out"
-      link.attr("href") shouldBe controllers.routes.SignOutController.signOut().url
+      link.attr("href") shouldBe controllers.routes.SignOutController.signOut.url
     }
 
     "have only one page heading" in {
@@ -79,7 +79,7 @@ class BadUserIndividualPageSpec extends SpecBase {
       val link = para.select("#sign-in").get(0)
 
       link.text         shouldBe "return to the sign in page"
-      link.attr("href") shouldBe controllers.routes.SignOutController.signOutToRestart().url
+      link.attr("href") shouldBe controllers.routes.SignOutController.signOutToRestart.url
     }
   }
 }

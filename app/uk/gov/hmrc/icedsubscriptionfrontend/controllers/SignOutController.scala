@@ -24,8 +24,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.SignedOutPage
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
-import scala.concurrent.Future
-
 @Singleton
 class SignOutController @Inject()(
   signedOutPage: SignedOutPage,
@@ -34,9 +32,9 @@ class SignOutController @Inject()(
     extends FrontendController(mcc)
     with I18nSupport {
 
-  def signOut: Action[AnyContent] = doSignOut(controllers.routes.SignOutController.signedOut())
+  def signOut: Action[AnyContent] = doSignOut(controllers.routes.SignOutController.signedOut)
 
-  def signOutToRestart: Action[AnyContent] = doSignOut(controllers.routes.SubscriptionController.start())
+  def signOutToRestart: Action[AnyContent] = doSignOut(controllers.routes.SubscriptionController.start)
 
   private def doSignOut(continue: Call): Action[AnyContent] = Action(Redirect(continue.url).withNewSession)
 
