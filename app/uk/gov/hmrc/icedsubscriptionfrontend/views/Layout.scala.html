@@ -15,19 +15,18 @@
  *@
 
 @import uk.gov.hmrc.icedsubscriptionfrontend.controllers
-@import uk.gov.hmrc.icedsubscriptionfrontend.config.AppConfig
-@import uk.gov.hmrc.icedsubscriptionfrontend.views.FooterLinks
-@import uk.gov.hmrc.icedsubscriptionfrontend.views.html.helpers.SiteHeader
-@import uk.gov.hmrc.hmrcfrontend.views.Aliases.Meta
+@import uk.gov.hmrc.icedsubscriptionfrontend
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcReportTechnicalIssueHelper
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTimeoutDialogHelper
+@import views.html.helper.CSPNonce
 
 @this(
-        govukTemplate: GovukTemplate,
-        govukSkipLink: GovukSkipLink,
-        hmrcFooter: HmrcFooter,
-        head: Head,
-        siteHeader: SiteHeader,
+        hmrcLayout: HmrcLayout,
+        hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
+        problemLinkHelper: HmrcReportTechnicalIssueHelper,
         hmrcLanguageSelect: HmrcLanguageSelect
-)(implicit appConfig: AppConfig)
+)
 
 @(pageTitle: Option[String] = None,
         headBlock: Option[Html] = None,
@@ -36,50 +35,18 @@
         showTimeoutDialog: Boolean = false
 )(contentBlock: Html)(implicit messages: Messages, requestHeader: RequestHeader)
 
-@languageSelectBlock = @{
-    hmrcLanguageSelect(LanguageSelect(
-        if(messages.lang.code == "cy") Cy else En,
-        (En, controllers.routes.LanguageSwitchController.switchToLanguage("en").url),
-        (Cy, controllers.routes.LanguageSwitchController.switchToLanguage("cy").url)
-    ))
+@content = {
+    @contentBlock
+    @problemLinkHelper()
 }
 
-    @footer = @{
-        hmrcFooter(new uk.gov.hmrc.hmrcfrontend.views.html.components.Footer(meta = Some(Meta(items = Some(FooterLinks()(messages = messages, appConfig)))), language = if(messages.lang.code == "cy") Cy else En))
-    }
+@signOutUrl = @{(icedsubscriptionfrontend.controllers.routes.SignOutController.signOut.url)}
 
-    @skipLink = @{
-    govukSkipLink(SkipLink(
-        href = "#main-content",
-        content = HtmlContent(messages("service.skip-to-main"))
-    ))
-}
-
-@govukTemplate(
+@hmrcLayout(
     pageTitle = pageTitle,
-    skipLinkBlock = Some(skipLink),
-    headBlock = Some(head(headBlock, showTimeoutDialog)),
-    headerBlock = siteHeader(showSignOutLink, if(messages.lang.code == "cy") Cy else En),
-    beforeContentBlock = Some(languageSelectBlock),
-    footerBlock = footer) {
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <div id="content">@contentBlock</div>
-        </div>
-    </div>
-
-    <script src='@routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
-    <script src='@routes.Assets.versioned("lib/hmrc-frontend/hmrc/all.js")'></script>
-    <script>
-            window.GOVUKFrontend.initAll();
-    </script>
-
-    @if(showTimeoutDialog) {
-        <script>
-                const timeoutDialog = document.getElementsByName("hmrc-timeout-dialog").item(0);
-                if (timeoutDialog && window.HMRCFrontend.TimeoutDialog) {
-                    new window.HMRCFrontend.TimeoutDialog(timeoutDialog).init();
-                }
-        </script>
-    }
-}
+    additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = signOutUrl)),
+    signOutUrl = Some(signOutUrl),
+    isWelshTranslationAvailable = true,
+    serviceUrl = Some(controllers.routes.SubscriptionController.start.url),
+    nonce = CSPNonce.get
+    )(content)

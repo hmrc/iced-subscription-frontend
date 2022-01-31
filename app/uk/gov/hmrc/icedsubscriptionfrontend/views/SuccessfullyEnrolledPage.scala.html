@@ -38,14 +38,16 @@
     <div id="info">
           @heading2("successfullyEnrolled.csp.heading")
 
-          @p {
+        @p {
             @messages("successfullyEnrolled.contact")
-            <br>
+        <br>
             @messages("successfullyEnrolled.times")
       }
     </div>
 
-    @p {
-        @link(href = "https://www.gov.uk/call-charges", messageKey = "successfullyEnrolled.link")
-    }
+    <div class="govuk-!-padding-bottom-9">
+        @p {
+            @link(href = "https://www.gov.uk/call-charges", messageKey = "successfullyEnrolled.link")
+        }
+    </div>
 }

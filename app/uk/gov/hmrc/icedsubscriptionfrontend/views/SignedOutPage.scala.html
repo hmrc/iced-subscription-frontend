@@ -31,7 +31,9 @@
 
  @paragraph("signedOut.notSaved")
 
- @govukButton(Button(
-  href = Some(controllers.routes.SubscriptionController.start.url),
-  content = Text(messages("signedOut.signInButton"))))
+    <div class="govuk-form-group">
+        @govukButton(Button(
+          href = Some(controllers.routes.SubscriptionController.start.url),
+          content = Text(messages("signedOut.signInButton"))))
+    </div>
 }

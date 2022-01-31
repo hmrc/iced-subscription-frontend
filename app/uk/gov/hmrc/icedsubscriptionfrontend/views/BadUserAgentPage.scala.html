@@ -29,6 +29,7 @@
 
     @hmrcPageHeading(PageHeading(text = messages("agent.heading")))
 
+<div class="govuk-!-padding-bottom-9">
     @p {
         @messages("agent.wrongTypeOfAccount.1")
         <strong>@messages("agent.wrongTypeOfAccount.2")</strong>@messages("agent.wrongTypeOfAccount.3")
@@ -42,4 +43,5 @@
             "agent.ifYouHaveOrgAccount.2", id = Some("sign-in"))
         @messages("agent.ifYouHaveOrgAccount.3")
     }
+</div>
 }
