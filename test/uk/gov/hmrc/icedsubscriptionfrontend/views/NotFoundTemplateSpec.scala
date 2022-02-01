@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.views
 
 import base.SpecBase
 import org.jsoup.Jsoup
-import org.jsoup.nodes.{Document, Element}
+import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.NotFoundTemplate
@@ -34,9 +34,7 @@ class NotFoundTemplateSpec extends SpecBase {
 
   lazy val html: Html         = view()(messages, FakeRequest())
   lazy val document: Document = Jsoup.parse(html.toString)
-  lazy val content: Element   = document.select("#content").first
 
-  // According to https://design.tax.service.gov.uk/hmrc-design-patterns/page-not-found/
   "NotFoundTemplate" must {
 
     "have the correct title" in {
@@ -49,10 +47,19 @@ class NotFoundTemplateSpec extends SpecBase {
     }
 
     "have suitable message" in {
-      content.select(Selectors.paragraph).first().text shouldBe
+      document.select("#main-content > div > div > div > p:nth-child(1)").text shouldBe
         "If you typed the web address, check it is correct."
-      content.select(Selectors.paragraph).get(1).text shouldBe
+      document.select("#main-content > div > div > div > p:nth-child(2)").text shouldBe
         "If you pasted the web address, check you copied the entire address."
+    }
+
+    "have a technical issues link" in {
+
+      val link = document.select("#main-content > div > div > a")
+
+      link.text shouldBe "Is this page not working properly? (opens in new tab)"
+      link.attr("href") should contain
+      "http://localhost:9250/contact/report-technical-problem?newTab=true&service=iced-subscription-frontend&referrerUrl=%2F"
     }
   }
 }

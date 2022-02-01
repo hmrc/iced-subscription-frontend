@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.views
 
 import base.SpecBase
 import org.jsoup.Jsoup
-import org.jsoup.nodes.{Document, Element}
+import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers
@@ -36,7 +36,6 @@ class BadUserAgentPageSpec extends SpecBase {
 
   lazy val html: Html         = view()(messages, FakeRequest())
   lazy val document: Document = Jsoup.parse(html.toString)
-  lazy val content: Element   = document.select("#content").first
 
   "BadUserAgentPage" must {
 
@@ -46,9 +45,10 @@ class BadUserAgentPageSpec extends SpecBase {
     }
 
     "have a sign out link" in {
-      val link = document.select(Selectors.link).first()
 
-      link.text         shouldBe "Sign out"
+      val link = document.select(".hmrc-sign-out-nav__link")
+
+      link.text shouldBe "Sign out"
       link.attr("href") shouldBe controllers.routes.SignOutController.signOut.url
     }
 
@@ -58,25 +58,36 @@ class BadUserAgentPageSpec extends SpecBase {
     }
 
     "have a paragraph explaining the user is logged in with an Agent government gateway account" in {
-      content.select(Selectors.paragraph).first().text shouldBe
+
+      document.select("#main-content > div > div > div > p:nth-child(1)").text shouldBe
         "This is because you have signed in to Government Gateway with an agent services account."
     }
 
     "have a paragraph explaining what need" in {
-      content.select(Selectors.paragraph).get(1).text shouldBe
+
+      document.select("#main-content > div > div > div > p:nth-child(2)").text shouldBe
         "You need to sign in with the Government Gateway account for the organisation that is applying for access to S&S GB."
     }
 
     "have a paragraph with a link explaining what to do if have another organisation account" in {
-      val para = content.select(Selectors.paragraph).get(2)
 
-      para.text shouldBe "If you have another Government Gateway user ID, return to the sign in page and enter the " +
+      document.select("#main-content > div > div > div > p:nth-child(3)").text shouldBe
+        "If you have another Government Gateway user ID, return to the sign in page and enter the " +
         "Government Gateway ID for your organisation."
 
-      val link = para.select("#sign-in").get(0)
+      val link = document.select("#sign-in")
 
-      link.text         shouldBe "return to the sign in page"
+      link.text shouldBe "return to the sign in page"
       link.attr("href") shouldBe controllers.routes.SignOutController.signOutToRestart.url
+    }
+
+    "have a technical issues link" in {
+
+      val link = document.select("#main-content > div > div > a")
+
+      link.text shouldBe "Is this page not working properly? (opens in new tab)"
+      link.attr("href") should contain
+      "http://localhost:9250/contact/report-technical-problem?newTab=true&service=iced-subscription-frontend&referrerUrl=%2F"
     }
   }
 }
