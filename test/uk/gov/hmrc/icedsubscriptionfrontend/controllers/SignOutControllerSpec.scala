@@ -33,7 +33,6 @@ class SignOutControllerSpec extends SpecBase with MockAppConfig {
   private val controller = new SignOutController(signedOutPage, stubMessagesControllerComponents(), mockAppConfig)
 
   class Test {
-    MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes ()
   }
 
   "GET /sign-out" must {

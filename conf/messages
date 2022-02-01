@@ -90,15 +90,3 @@ global.error.pageNotFound404.title = Page not found
 global.error.pageNotFound404.heading = Page not found
 global.error.pageNotFound404.message.p1 = If you typed the web address, check it is correct.
 global.error.pageNotFound404.message.p2 = If you pasted the web address, check you copied the entire address.
-
-## Footer
-footer.cookies.text = Cookies
-footer.cookies.url = /help/cookies
-footer.privacy.text = Privacy policy
-footer.privacy.url = /help/privacy
-footer.termsConditions.text = Terms and conditions
-footer.termsConditions.url = /help/terms-and-conditions
-footer.govukHelp.text = Help using GOV.UK
-footer.govukHelp.url = https://www.gov.uk/help
-footer.accessibilityStatement.text=Accessibility statement
-footer.accessibilityStatement.url=/accessibility-statement/safety-and-security-subscription

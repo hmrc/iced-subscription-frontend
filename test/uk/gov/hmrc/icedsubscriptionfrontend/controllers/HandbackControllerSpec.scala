@@ -35,7 +35,6 @@ class HandbackControllerSpec extends SpecBase with MockAuthService with MockAppC
     new HandbackController(appConfig, stubMessagesControllerComponents(), successfullyEnrolledPage)
 
   class Test {
-    MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes ()
   }
 
   "GET /" should {

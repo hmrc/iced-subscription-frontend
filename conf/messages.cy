@@ -91,15 +91,3 @@ global.error.pageNotFound404.title = Heb ddod o hyd i’r dudalen
 global.error.pageNotFound404.heading = Heb ddod o hyd i’r dudalen
 global.error.pageNotFound404.message.p1 = Os gwnaethoch deipio’r cyfeiriad gwe, dylech wirio ei fod yn gywir.
 global.error.pageNotFound404.message.p2 = Os gwnaethoch bastio’r cyfeiriad gwe, dylech wirio’ch bod wedi copïo’r cyfeiriad yn llawn.
-
-## Footer
-footer.cookies.text=Cwcis
-footer.cookies.url=/help/cookies
-footer.privacy.text=Polisi preifatrwydd
-footer.privacy.url=/help/privacy
-footer.termsConditions.text=Telerau ac amodau
-footer.termsConditions.url=/help/terms-and-conditions
-footer.govukHelp.text=Help wrth ddefnyddio GOV.UK
-footer.govukHelp.url=https://www.gov.uk/help
-footer.accessibilityStatement.text=Datganiad hygyrchedd
-footer.accessibilityStatement.url=/accessibility-statement/safety-and-security-subscription

@@ -57,7 +57,6 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
     )
 
   class Test {
-    MockAppConfig.footerLinkItems returns Nil anyNumberOfTimes ()
     MockAppConfig.sessionCountdownSeconds returns 1 anyNumberOfTimes ()
     MockAppConfig.sessionTimeoutSeconds returns 1 anyNumberOfTimes ()
   }
