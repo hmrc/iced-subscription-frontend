@@ -25,8 +25,6 @@ trait MockAppConfig extends MockFactory {
   object MockAppConfig {
     def appName: CallHandler[String] = (mockAppConfig.appName _).expects()
 
-    def footerLinkItems: CallHandler[Seq[String]] = (mockAppConfig.footerLinkItems _).expects()
-
     def loginUrl: CallHandler[String] = (mockAppConfig.loginUrl _).expects()
 
     def loginReturnBase: CallHandler[String] = (mockAppConfig.loginReturnBase _).expects()

@@ -25,13 +25,21 @@
         govukButton: GovukButton)
 
 @()(implicit messages: Messages, requestHeader: RequestHeader)
-@layout(pageTitle = Some(messages("service.pageTitle.format", messages("signedOut.heading")))) {
 
- @hmrcPageHeading(PageHeading(text = messages("signedOut.heading")))
+@content = {
+    @hmrcPageHeading(PageHeading(text = messages("signedOut.heading")))
 
- @paragraph("signedOut.notSaved")
+    @paragraph("signedOut.notSaved")
 
- @govukButton(Button(
-  href = Some(controllers.routes.SubscriptionController.start.url),
-  content = Text(messages("signedOut.signInButton"))))
+       <div class="govuk-form-group">
+           @govukButton(Button(
+             href = Some(controllers.routes.SubscriptionController.start.url),
+             content = Text(messages("signedOut.signInButton"))))
+       </div>
 }
+
+@layout(
+    pageTitle = Some(messages("service.pageTitle.format", messages("signedOut.heading"))),
+    showSignOut = false
+
+)(content)

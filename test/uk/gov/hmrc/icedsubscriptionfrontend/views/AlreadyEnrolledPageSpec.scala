@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.views
 
 import base.SpecBase
 import org.jsoup.Jsoup
-import org.jsoup.nodes.{Document, Element}
+import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import uk.gov.hmrc.icedsubscriptionfrontend.controllers
@@ -42,7 +42,6 @@ class AlreadyEnrolledPageSpec extends SpecBase {
 
   lazy val html: Html         = view(Some("GB1234567890"))(messages, FakeRequest())
   lazy val document: Document = Jsoup.parse(html.toString)
-  lazy val content: Element   = document.select("#content").first
 
   "AlreadyEnrolledPage" must {
 
@@ -51,11 +50,10 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     }
 
     "have a sign out link" in {
-      val link = document
-        .select(Selectors.link)
-        .first()
 
-      link.text         shouldBe "Sign out"
+      val link = document.select(".hmrc-sign-out-nav__link")
+
+      link.text shouldBe "Sign out"
       link.attr("href") shouldBe controllers.routes.SignOutController.signOut.url
     }
 
@@ -64,46 +62,47 @@ class AlreadyEnrolledPageSpec extends SpecBase {
     }
 
     "have indication of when active" in {
-      content
-        .select(Selectors.paragraph)
-        .first
-        .text shouldBe "The GB EORI you supplied (GB1234567890) is already enrolled with S&S GB."
+
+        document.select("#main-content > div > div > p:nth-child(2)").text shouldBe
+          "The GB EORI you supplied (GB1234567890) is already enrolled with S&S GB."
     }
 
     "have indication of when active but no EORI is given" in {
       lazy val html: Html         = view(None)(messages, FakeRequest())
       lazy val document: Document = Jsoup.parse(html.toString)
-      lazy val content: Element   = document.select("#content").first
 
-      content
-        .select(Selectors.paragraph)
-        .first
-        .text shouldBe "The GB EORI you supplied is already enrolled with S&S GB."
+      document.select("#main-content > div > div > p:nth-child(2)").text shouldBe
+        "The GB EORI you supplied is already enrolled with S&S GB."
     }
 
     "have a paragraph explaining third party" in {
-      content
-        .select(Selectors.paragraph)
-        .get(1)
-        .text shouldBe "You can now use third party software to make an entry summary declaration."
+
+      document.select("#main-content > div > div > p:nth-child(3)").text shouldBe
+        "You can now use third party software to make an entry summary declaration."
     }
 
     "have information about call charges" in {
-      val section = content.select(Selectors.callSection)
+      val section = document.select(Selectors.callSection)
 
       section.select(Selectors.h2).text shouldBe "If you need help"
 
       section
         .select(Selectors.paragraph)
-        .get(0)
         .text shouldBe "Telephone: 0300 322 7067" + " Monday to Friday, 9am to 5pm (except public holidays)"
 
-      val link = content
-        .select(Selectors.link)
-        .first
+      val link = document.select("#main-content > div > div > div > p > a")
 
-      link.text         shouldBe "Find out about call charges"
+      link.text shouldBe "Find out about call charges"
       link.attr("href") shouldBe "https://www.gov.uk/call-charges"
+    }
+
+    "have a technical issues link" in {
+
+      val link = document.select("#main-content > div > div > a")
+
+      link.text shouldBe "Is this page not working properly? (opens in new tab)"
+      link.attr("href") should contain
+      "http://localhost:9250/contact/report-technical-problem?newTab=true&service=iced-subscription-frontend&referrerUrl=%2F"
     }
   }
 }

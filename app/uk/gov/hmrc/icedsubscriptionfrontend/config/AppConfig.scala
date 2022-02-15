@@ -22,7 +22,6 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
   def appName: String
-  def footerLinkItems: Seq[String]
   def loginUrl: String
   def loginReturnBase: String
   def eoriCommonComponentStartUrl: String
@@ -33,8 +32,6 @@ trait AppConfig {
 @Singleton
 class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesConfig) extends AppConfig {
   lazy val appName: String = config.getOptional[String]("appName").getOrElse("APP NAME NOT SET")
-
-  lazy val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
 
   lazy val loginUrl: String        = config.get[String]("login.url")
   lazy val loginReturnBase: String = config.get[String]("login.return-base")

@@ -18,7 +18,7 @@ package uk.gov.hmrc.icedsubscriptionfrontend.config
 
 import base.SpecBase
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
+import org.jsoup.nodes.Document
 import play.api.Application
 import play.api.i18n.MessagesApi
 import play.api.inject.bind
@@ -43,11 +43,10 @@ class ErrorHandlerSpec extends SpecBase {
         val result: Future[Result] = errorHandler.onClientError(FakeRequest(), NOT_FOUND)
         status(result) shouldBe NOT_FOUND
 
-        val content: Element = Jsoup.parse(contentAsString(result)).select("#content").first
-
+        lazy val document: Document = Jsoup.parse(contentAsString(result))
         // These are not present on the default template
-        content.select("p").first().text shouldBe "global.error.pageNotFound404.message.p1"
-        content.select("p").get(1).text  shouldBe "global.error.pageNotFound404.message.p2"
+        document.select("#main-content > div > div > div > p:nth-child(1)").text shouldBe messages("global.error.pageNotFound404.message.p1")
+        document.select("#main-content > div > div > div > p:nth-child(2)").text shouldBe messages("global.error.pageNotFound404.message.p2")
       }
     }
   }

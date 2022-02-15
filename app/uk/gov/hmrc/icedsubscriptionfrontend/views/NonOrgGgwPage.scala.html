@@ -30,7 +30,7 @@
         govukButton: GovukButton)
 
 @()(implicit messages: Messages, requestHeader: RequestHeader)
-@layout(pageTitle = Some(messages("service.pageTitle.format", messages("nonOrgGgwPage.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("nonOrgGgwPage.heading")))) {
 
     @hmrcPageHeading(PageHeading(text = messages("nonOrgGgwPage.heading")))
 
@@ -38,10 +38,12 @@
 
     @paragraph("nonOrgGgwPage.youNeed")
 
-    @p {
-        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.1")
-        @link(controllers.routes.SignOutController.signOutToRestart.url,
-            "nonOrgGgwPage.ifYouHaveOrgAccount.2", id = Some("sign-in"))
-        @messages("nonOrgGgwPage.ifYouHaveOrgAccount.3")
-    }
+    <div class="govuk-!-padding-bottom-9">
+        @p {
+            @messages("nonOrgGgwPage.ifYouHaveOrgAccount.1")
+            @link(controllers.routes.SignOutController.signOutToRestart.url,
+                "nonOrgGgwPage.ifYouHaveOrgAccount.2", id = Some("sign-in"))
+            @messages("nonOrgGgwPage.ifYouHaveOrgAccount.3")
+        }
+    </div>
 }

@@ -31,7 +31,7 @@
 @(eoriNumber: Option[String])(implicit messages: Messages, requestHeader: RequestHeader)
 
 
-@layout(pageTitle = Some(messages("service.pageTitle.format", messages("alreadyEnrolled.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("alreadyEnrolled.heading")))) {
 
     @hmrcPageHeading(PageHeading(text = messages("alreadyEnrolled.heading")))
 
@@ -52,9 +52,11 @@
             }
     </div>
 
-    @p {
-        @link(href = "https://www.gov.uk/call-charges", messageKey = "alreadyEnrolled.link")
-    }
+    <div class="govuk-!-padding-bottom-9">
+        @p {
+            @link(href = "https://www.gov.uk/call-charges", messageKey = "alreadyEnrolled.link")
+           }
+    </div>
 }
 
 @eori = {
