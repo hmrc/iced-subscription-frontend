@@ -25,7 +25,7 @@
         link: link)
 
 @()(implicit messages: Messages, requestHeader: RequestHeader)
-@layout(pageTitle = Some(messages("service.pageTitle.format", messages("individual.heading"))), showSignOutLink = true, showTimeoutDialog = true) {
+@layout(pageTitle = Some(messages("service.pageTitle.format", messages("individual.heading")))) {
 
     @hmrcPageHeading(PageHeading(text = messages("individual.heading")))
 

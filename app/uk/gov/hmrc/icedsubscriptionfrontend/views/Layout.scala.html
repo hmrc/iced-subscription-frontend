@@ -28,11 +28,10 @@
         hmrcLanguageSelect: HmrcLanguageSelect
 )
 
-@(pageTitle: Option[String] = None,
-        headBlock: Option[Html] = None,
-        scriptsBlock: Option[Html] = None,
-        showSignOutLink: Boolean = false,
-        showTimeoutDialog: Boolean = false
+@(
+    pageTitle: Option[String] = None,
+    showSignOut: Boolean = true
+
 )(contentBlock: Html)(implicit messages: Messages, requestHeader: RequestHeader)
 
 @content = {
@@ -45,7 +44,7 @@
 @hmrcLayout(
     pageTitle = pageTitle,
     additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = signOutUrl)),
-    signOutUrl = Some(signOutUrl),
+    signOutUrl = if(showSignOut) Some(signOutUrl) else None,
     isWelshTranslationAvailable = true,
     serviceUrl = Some(controllers.routes.SubscriptionController.start.url),
     nonce = CSPNonce.get
