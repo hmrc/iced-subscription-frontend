@@ -57,8 +57,8 @@ class SubscriptionControllerSpec extends SpecBase with MockAuthService with Mock
     )
 
   class Test {
-    MockAppConfig.sessionCountdownSeconds returns 1 anyNumberOfTimes ()
-    MockAppConfig.sessionTimeoutSeconds returns 1 anyNumberOfTimes ()
+    MockAppConfig.sessionCountdownSeconds.returns(1).anyNumberOfTimes()
+    MockAppConfig.sessionTimeoutSeconds.returns(1).anyNumberOfTimes()
   }
 
   "GET /start" when {

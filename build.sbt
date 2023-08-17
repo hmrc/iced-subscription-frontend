@@ -3,8 +3,6 @@ import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 
 val appName = "iced-subscription-frontend"
 
-val silencerVersion = "1.7.1"
-
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(
     PlayScala,
@@ -13,7 +11,7 @@ lazy val microservice = Project(appName, file("."))
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.12.12",
+    scalaVersion := "2.13.8",
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     PlayKeys.playDefaultPort := 9837,
     TwirlKeys.templateImports ++= Seq(
@@ -30,12 +28,7 @@ lazy val microservice = Project(appName, file("."))
     // ***************
     // Use the silencer plugin to suppress warnings
     // You may turn it on for `views` too to suppress warnings from unused imports in compiled twirl templates, but this will hide other warnings.
-    scalacOptions += "-P:silencer:pathFilters=routes",
-    scalacOptions += "-P:silencer:lineContentFilters=^\\w",
-    libraryDependencies ++= Seq(
-      compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
-      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
-    )
+    scalacOptions ++= Seq("-Wconf:src=routes/.*:s", "-Wconf:cat=unused-imports&src=html/.*:s")
     // ***************
   )
   .configs(IntegrationTest)
