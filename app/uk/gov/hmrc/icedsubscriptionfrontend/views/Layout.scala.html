@@ -19,7 +19,6 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcReportTechnicalIssueHelper
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTimeoutDialogHelper
-@import views.html.helper.CSPNonce
 
 @this(
         hmrcLayout: HmrcLayout,
@@ -46,6 +45,5 @@
     additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = signOutUrl)),
     signOutUrl = if(showSignOut) Some(signOutUrl) else None,
     isWelshTranslationAvailable = true,
-    serviceUrl = Some(controllers.routes.SubscriptionController.start.url),
-    nonce = CSPNonce.get
+    serviceUrl = Some(controllers.routes.SubscriptionController.start.url)
     )(content)
