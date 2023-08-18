@@ -23,15 +23,15 @@ trait MockAppConfig extends MockFactory {
   val mockAppConfig: AppConfig = mock[AppConfig]
 
   object MockAppConfig {
-    def appName: CallHandler[String] = (mockAppConfig.appName _).expects()
+    def appName: CallHandler[String] = (() => mockAppConfig.appName).expects()
 
-    def loginUrl: CallHandler[String] = (mockAppConfig.loginUrl _).expects()
+    def loginUrl: CallHandler[String] = (() => mockAppConfig.loginUrl).expects()
 
-    def loginReturnBase: CallHandler[String] = (mockAppConfig.loginReturnBase _).expects()
+    def loginReturnBase: CallHandler[String] = (() => mockAppConfig.loginReturnBase).expects()
 
-    def eoriCommonComponentStartUrl: CallHandler[String] = (mockAppConfig.eoriCommonComponentStartUrl _).expects()
+    def eoriCommonComponentStartUrl: CallHandler[String] = (() => mockAppConfig.eoriCommonComponentStartUrl).expects()
 
-    def sessionTimeoutSeconds: CallHandler[Int]   = (mockAppConfig.sessionTimeoutSeconds _).expects()
-    def sessionCountdownSeconds: CallHandler[Int] = (mockAppConfig.sessionCountdownSeconds _).expects()
+    def sessionTimeoutSeconds: CallHandler[Int]   = (() => mockAppConfig.sessionTimeoutSeconds).expects()
+    def sessionCountdownSeconds: CallHandler[Int] = (() => mockAppConfig.sessionCountdownSeconds).expects()
   }
 }

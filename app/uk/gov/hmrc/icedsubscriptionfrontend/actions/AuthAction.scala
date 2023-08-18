@@ -25,7 +25,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvi
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.language.higherKinds
 
 abstract class AuthAction[P[_]](defaultParser: PlayBodyParsers, appConfig: AppConfig)
     extends ActionBuilder[P, AnyContent]
