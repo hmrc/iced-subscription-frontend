@@ -14,4 +14,6 @@ object AppDependencies {
     "org.jsoup"         %  "jsoup"                  % "1.16.1",
     "com.typesafe.play" %% "play-test"              % PlayVersion.current
   ).map(_ % "test, it")
+
+  val itDependencies: Seq[ModuleID] = Seq()
 }

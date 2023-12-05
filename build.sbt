@@ -1,7 +1,10 @@
 import scoverage.ScoverageKeys
-import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
+import uk.gov.hmrc.DefaultBuildSettings
 
 val appName = "iced-subscription-frontend"
+
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := "2.13.8"
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(
@@ -10,8 +13,6 @@ lazy val microservice = Project(appName, file("."))
     ScalafmtCorePlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
-    majorVersion := 0,
-    scalaVersion := "2.13.8",
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     PlayKeys.playDefaultPort := 9837,
     TwirlKeys.templateImports ++= Seq(
@@ -32,6 +33,12 @@ lazy val microservice = Project(appName, file("."))
     // ***************
   )
   .configs(IntegrationTest)
-  .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
+
+lazy val it = project
+  .enablePlugins(PlayScala)
+  .dependsOn(microservice % "test->test") // the "test->test" allows reusing test code and test dependencies
+  .settings(DefaultBuildSettings.itSettings)
+  .settings(libraryDependencies ++= AppDependencies.itDependencies)
+
 
