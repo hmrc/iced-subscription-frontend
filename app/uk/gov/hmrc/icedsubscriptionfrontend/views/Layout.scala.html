@@ -21,12 +21,16 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTimeoutDialogHelper
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
 
 @this(
-hmrcStandardPage: HmrcStandardPage,
-hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-problemLinkHelper: HmrcReportTechnicalIssueHelper,
-)
+    hmrcStandardPage: HmrcStandardPage,
+    autocompleteCss: HmrcAccessibleAutocompleteCss,
+    autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
+    hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
+    problemLinkHelper: HmrcReportTechnicalIssueHelper,
+    )
 
 @(pageTitle: Option[String] = None,showSignOut: Boolean = true)(contentBlock: Html)(implicit messages: Messages, requestHeader: RequestHeader)
 
@@ -43,6 +47,11 @@ problemLinkHelper: HmrcReportTechnicalIssueHelper,
             serviceURLs = ServiceURLs(
             serviceUrl = Some(controllers.routes.SubscriptionController.start.url),
             signOutUrl = if(showSignOut) Some(signOutUrl) else None,
+            ),
+            banners = Banners(displayHmrcBanner = false),
+            templateOverrides = TemplateOverrides(
+            additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = signOutUrl)),
+            additionalScriptsBlock = Some(autocompleteJavascript())
             ),
             pageTitle = pageTitle,
             isWelshTranslationAvailable = true
