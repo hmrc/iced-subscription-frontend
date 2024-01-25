@@ -21,13 +21,10 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTimeoutDialogHelper
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
+
 
 @this(
     hmrcStandardPage: HmrcStandardPage,
-    autocompleteCss: HmrcAccessibleAutocompleteCss,
-    autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
     problemLinkHelper: HmrcReportTechnicalIssueHelper,
     )
@@ -50,10 +47,13 @@
             ),
             banners = Banners(displayHmrcBanner = false),
             templateOverrides = TemplateOverrides(
-            additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = signOutUrl)),
-            additionalScriptsBlock = Some(autocompleteJavascript())
+            additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = signOutUrl))
             ),
             pageTitle = pageTitle,
             isWelshTranslationAvailable = true
 
     ))(content)
+
+@{
+//$COVERAGE-OFF$
+}
