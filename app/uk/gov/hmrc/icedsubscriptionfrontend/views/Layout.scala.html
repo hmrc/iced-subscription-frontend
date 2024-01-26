@@ -22,37 +22,34 @@
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
 
-
 @this(
     hmrcStandardPage: HmrcStandardPage,
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
     problemLinkHelper: HmrcReportTechnicalIssueHelper,
-    )
+)
 
 @(pageTitle: Option[String] = None,showSignOut: Boolean = true)(contentBlock: Html)(implicit messages: Messages, requestHeader: RequestHeader)
 
 @content = {
-            @contentBlock
-            @problemLinkHelper()
-            }
+    @contentBlock
+    @problemLinkHelper()
+}
 
 @signOutUrl = @{(icedsubscriptionfrontend.controllers.routes.SignOutController.signOut.url)}
 
-
 @hmrcStandardPage(
-        HmrcStandardPageParams(
-            serviceURLs = ServiceURLs(
+    HmrcStandardPageParams(
+        serviceURLs = ServiceURLs(
             serviceUrl = Some(controllers.routes.SubscriptionController.start.url),
             signOutUrl = if(showSignOut) Some(signOutUrl) else None,
-            ),
-            banners = Banners(displayHmrcBanner = false),
-            templateOverrides = TemplateOverrides(
+        ),
+        templateOverrides = TemplateOverrides(
             additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = signOutUrl))
-            ),
-            pageTitle = pageTitle,
-            isWelshTranslationAvailable = true
-
-    ))(content)
+        ),
+        pageTitle = pageTitle,
+        isWelshTranslationAvailable = true
+    )
+)(content)
 
 @{
 //$COVERAGE-OFF$
