@@ -19,19 +19,16 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcReportTechnicalIssueHelper
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTimeoutDialogHelper
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
 
 @this(
-        hmrcLayout: HmrcLayout,
-        hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-        problemLinkHelper: HmrcReportTechnicalIssueHelper,
-        hmrcLanguageSelect: HmrcLanguageSelect
+    hmrcStandardPage: HmrcStandardPage,
+    hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
+    problemLinkHelper: HmrcReportTechnicalIssueHelper,
 )
 
-@(
-    pageTitle: Option[String] = None,
-    showSignOut: Boolean = true
-
-)(contentBlock: Html)(implicit messages: Messages, requestHeader: RequestHeader)
+@(pageTitle: Option[String] = None,showSignOut: Boolean = true)(contentBlock: Html)(implicit messages: Messages, requestHeader: RequestHeader)
 
 @content = {
     @contentBlock
@@ -40,10 +37,20 @@
 
 @signOutUrl = @{(icedsubscriptionfrontend.controllers.routes.SignOutController.signOut.url)}
 
-@hmrcLayout(
-    pageTitle = pageTitle,
-    additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = signOutUrl)),
-    signOutUrl = if(showSignOut) Some(signOutUrl) else None,
-    isWelshTranslationAvailable = true,
-    serviceUrl = Some(controllers.routes.SubscriptionController.start.url)
-    )(content)
+@hmrcStandardPage(
+    HmrcStandardPageParams(
+        serviceURLs = ServiceURLs(
+            serviceUrl = Some(controllers.routes.SubscriptionController.start.url),
+            signOutUrl = if(showSignOut) Some(signOutUrl) else None,
+        ),
+        templateOverrides = TemplateOverrides(
+            additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = signOutUrl))
+        ),
+        pageTitle = pageTitle,
+        isWelshTranslationAvailable = true
+    )
+)(content)
+
+@{
+//$COVERAGE-OFF$
+}
