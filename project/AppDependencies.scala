@@ -1,5 +1,4 @@
-import play.core.PlayVersion
-import sbt._
+import sbt.*
 
 object AppDependencies {
 
@@ -14,8 +13,6 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "bootstrap-test-play-30" % bootstrapVersion,
     "org.scalamock"     %% "scalamock"              % "5.2.0",
     "org.jsoup"         %  "jsoup"                  % "1.16.1"
-//    "com.typesafe.play" %% "play-test"              % PlayVersion.current
   ).map(_ % Test)
 
-  val itDependencies: Seq[ModuleID] = Seq()
 }
