@@ -47,7 +47,7 @@ class AuthService @Inject()(val authConnector: AuthConnector)(implicit ec: Execu
   // relying on any correspondence between predicate order and
   // the exception that is thrown in a particular scenario...
   def authenticate()(implicit hc: HeaderCarrier): Future[AuthResult] =
-    authorised(AuthProviders(AuthProvider.GovernmentGateway, AuthProvider.Verify))
+    authorised(AuthProviders(AuthProvider.GovernmentGateway))
       .retrieve(allEnrolments and credentialRole and affinityGroup and credentials) { retrievals =>
         import UserType._
 

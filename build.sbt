@@ -3,7 +3,7 @@ import scoverage.ScoverageKeys
 val appName = "iced-subscription-frontend"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.8"
+ThisBuild / scalaVersion := "2.13.12"
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(
@@ -31,12 +31,4 @@ lazy val microservice = Project(appName, file("."))
     scalacOptions ++= Seq("-Wconf:src=routes/.*:s", "-Wconf:cat=unused-imports&src=html/.*:s")
     // ***************
   )
-  .configs(IntegrationTest)
   .settings(resolvers += Resolver.jcenterRepo)
-
-lazy val it = project
-  .enablePlugins(PlayScala)
-  .dependsOn(microservice % "test->test") // the "test->test" allows reusing test code and test dependencies
-  .settings(libraryDependencies ++= AppDependencies.itDependencies)
-
-

@@ -16,7 +16,7 @@
 
 package base
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.TryValues

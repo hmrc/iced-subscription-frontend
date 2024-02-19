@@ -36,7 +36,7 @@ class AuthServiceSpec extends SpecBase with MockAuthConnector {
     def stubAuth()
       : CallHandler[Future[Enrolments ~ Option[CredentialRole] ~ Option[AffinityGroup] ~ Option[Credentials]]] =
       MockAuthConnector.authorise(
-        AuthProviders(AuthProvider.GovernmentGateway, AuthProvider.Verify),
+        AuthProviders(AuthProvider.GovernmentGateway),
         allEnrolments and credentialRole and affinityGroup and credentials)
 
     def activeEnrolment(key: String): Enrolment = Enrolment(key = key)
