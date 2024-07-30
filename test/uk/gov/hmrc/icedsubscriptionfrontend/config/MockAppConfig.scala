@@ -18,8 +18,9 @@ package uk.gov.hmrc.icedsubscriptionfrontend.config
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 
-trait MockAppConfig extends MockFactory {
+trait MockAppConfig extends TestSuite with MockFactory {
   val mockAppConfig: AppConfig = mock[AppConfig]
 
   object MockAppConfig {

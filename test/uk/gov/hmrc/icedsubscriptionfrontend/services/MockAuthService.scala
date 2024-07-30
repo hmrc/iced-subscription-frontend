@@ -18,11 +18,12 @@ package uk.gov.hmrc.icedsubscriptionfrontend.services
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-trait MockAuthService extends MockFactory {
+trait MockAuthService extends TestSuite with MockFactory {
   val mockAuthService: AuthService = mock[AuthService]
 
   object MockAuthService {
