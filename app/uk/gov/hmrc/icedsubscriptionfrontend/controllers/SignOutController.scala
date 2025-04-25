@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,13 @@ class SignOutController @Inject()(
 
   def signOutToRestart: Action[AnyContent] = doSignOut(controllers.routes.SubscriptionController.start)
 
-  private def doSignOut(continue: Call): Action[AnyContent] = Action(Redirect(continue.url).withNewSession)
+  private def doSignOut(continue: Call): Action[AnyContent] =
+    Action(
+      Redirect(
+        appConfig.basGatewaySignOutUrl,
+        Map("continue" -> Seq(s"${appConfig.loginReturnBase}$continue"), "origin" -> Seq(appConfig.appName))
+      )
+    )
 
   def signedOut(): Action[AnyContent] = Action { implicit request =>
     Ok(signedOutPage())

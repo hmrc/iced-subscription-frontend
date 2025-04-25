@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ trait AppConfig {
   def eoriCommonComponentStartUrl: String
   def sessionTimeoutSeconds: Int
   def sessionCountdownSeconds: Int
+  def basGatewaySignOutUrl: String
 }
 
 @Singleton
@@ -42,4 +43,6 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
 
   lazy val sessionTimeoutSeconds: Int   = config.get[Int]("session.timeoutSeconds")
   lazy val sessionCountdownSeconds: Int = config.get[Int]("session.countdownSeconds")
+
+  lazy val basGatewaySignOutUrl: String = config.get[String]("bas-gateway.sign.out.url")
 }
