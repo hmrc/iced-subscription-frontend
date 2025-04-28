@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,5 +34,6 @@ trait MockAppConfig extends TestSuite with MockFactory {
 
     def sessionTimeoutSeconds: CallHandler[Int]   = (() => mockAppConfig.sessionTimeoutSeconds).expects()
     def sessionCountdownSeconds: CallHandler[Int] = (() => mockAppConfig.sessionCountdownSeconds).expects()
+    def basGatewaySignOutUrl: CallHandler[String] = (() => mockAppConfig.basGatewaySignOutUrl).expects()
   }
 }
