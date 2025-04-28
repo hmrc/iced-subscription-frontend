@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,14 @@ package uk.gov.hmrc.icedsubscriptionfrontend.controllers
 
 import base.SpecBase
 import play.api.http.Status
-import play.api.mvc.{Result, Session}
+import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.icedsubscriptionfrontend.config.MockAppConfig
 import uk.gov.hmrc.icedsubscriptionfrontend.views.html.SignedOutPage
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
-import scala.concurrent.{Await, Future}
+import java.net.URLDecoder
+import scala.concurrent.Future
 
 class SignOutControllerSpec extends SpecBase with MockAppConfig {
 
@@ -32,46 +33,52 @@ class SignOutControllerSpec extends SpecBase with MockAppConfig {
 
   private val controller = new SignOutController(signedOutPage, stubMessagesControllerComponents(), mockAppConfig)
 
+
+  private def setupMockAppConfig(): Unit = {
+    val appName    = "iced-subscription-frontend"
+    val returnUrl = "http://localhost:9837"
+    val basGatewaySignOutUrl = "http://localhost:9553/bas-gateway/sign-out-without-state"
+
+    MockAppConfig.basGatewaySignOutUrl returns basGatewaySignOutUrl
+    MockAppConfig.loginReturnBase returns returnUrl
+    MockAppConfig.appName returns appName
+  }
+
+  private def decode(url: String): String =
+    URLDecoder.decode(url, "UTF-8")
+
   class Test {
   }
 
   "GET /sign-out" must {
     "return 303" in {
+      setupMockAppConfig()
       val result = controller.signOut(fakeRequest)
 
       status(result) shouldBe 303
     }
 
     "redirect to the signed-out page" in {
+      setupMockAppConfig()
       val result = controller.signOut(fakeRequest)
 
-      redirectLocation(result) shouldBe Some("/safety-and-security-subscription/signed-out")
-    }
-
-    "start a new session" in {
-      val result = controller.signOut(fakeRequest.withSession(("test", "test")))
-
-      Await.result(result, defaultAwaitTimeout.duration).newSession shouldBe Some(Session())
+      decode(redirectLocation(result).get) shouldBe "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http://localhost:9837/safety-and-security-subscription/signed-out&origin=iced-subscription-frontend"
     }
   }
 
   "GET /sign-out-to-restart" must {
     "return 303" in {
+      setupMockAppConfig()
       val result = controller.signOutToRestart(fakeRequest)
 
       status(result) shouldBe 303
     }
 
     "redirect to start" in {
+      setupMockAppConfig()
       val result = controller.signOutToRestart(fakeRequest)
 
-      redirectLocation(result) shouldBe Some("/safety-and-security-subscription/start")
-    }
-
-    "start a new session" in {
-      val result = controller.signOutToRestart(fakeRequest.withSession(("test", "test")))
-
-      Await.result(result, defaultAwaitTimeout.duration).newSession shouldBe Some(Session())
+      decode(redirectLocation(result).get) shouldBe "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http://localhost:9837/safety-and-security-subscription/start&origin=iced-subscription-frontend"
     }
   }
 

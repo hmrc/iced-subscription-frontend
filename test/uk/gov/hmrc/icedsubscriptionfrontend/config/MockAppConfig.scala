@@ -34,5 +34,6 @@ trait MockAppConfig extends TestSuite with MockFactory {
 
     def sessionTimeoutSeconds: CallHandler[Int]   = (() => mockAppConfig.sessionTimeoutSeconds).expects()
     def sessionCountdownSeconds: CallHandler[Int] = (() => mockAppConfig.sessionCountdownSeconds).expects()
+    def basGatewaySignOutUrl: CallHandler[String] = (() => mockAppConfig.basGatewaySignOutUrl).expects()
   }
 }
