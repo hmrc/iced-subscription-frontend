@@ -30,3 +30,6 @@ lazy val microservice = Project(appName, file("."))
     scalacOptions ++= Seq("-Wconf:src=routes/.*:s", "-Wconf:cat=unused-imports&src=html/.*:s")
     // ***************
   )
+
+addCommandAlias("runAllChecks", ";clean;compile;coverage;test;coverageReport")
+
