@@ -3,7 +3,7 @@ import scoverage.ScoverageKeys
 val appName = "iced-subscription-frontend"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / scalaVersion := "2.13.17"
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(
