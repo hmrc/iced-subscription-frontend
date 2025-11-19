@@ -3,7 +3,7 @@ import scoverage.ScoverageKeys
 val appName = "iced-subscription-frontend"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / scalaVersion := "2.13.17"
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(
@@ -30,3 +30,6 @@ lazy val microservice = Project(appName, file("."))
     scalacOptions ++= Seq("-Wconf:src=routes/.*:s", "-Wconf:cat=unused-imports&src=html/.*:s")
     // ***************
   )
+
+addCommandAlias("runAllChecks", ";clean;compile;coverage;test;coverageReport")
+
